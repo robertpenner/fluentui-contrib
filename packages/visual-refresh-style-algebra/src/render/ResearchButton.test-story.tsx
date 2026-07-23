@@ -5,7 +5,13 @@ import type { ButtonCase } from '../domain/ButtonCase';
 import { resolveSemanticButton } from '../semantic/resolveSemanticButton';
 import { CleanRoomButton } from './CleanRoomButton';
 
-export const ResearchButton = ({ input, label = 'Continue' }: { input: ButtonCase; label?: string }): JSXElement => (
+export const ResearchButton = ({
+  input,
+  label = 'Continue',
+}: {
+  input: ButtonCase;
+  label?: string;
+}): JSXElement => (
   <FluentProvider theme={webLightTheme}>
     <CleanRoomButton
       architecture="semantic"

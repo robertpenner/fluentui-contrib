@@ -1,11 +1,41 @@
-# visual-refresh-style-algebra
+# Visual Refresh style algebra
 
-This library was generated with [Nx](https://nx.dev).
+A private, clean-room research package for studying Visual Refresh styling as composable transformations. It models a finite button domain, resolves it through two architectures, compares normalized semantic contracts, renders both through one native-button adapter, and subjects the model to properties, controlled mutations, stories, and browser assertions.
 
-## Building
+This package is an experiment, not a production dependency or a statement of private Fluent specifications. Policy assumptions are named and replaceable. It must remain private and isolated from published package behavior.
 
-Run `nx build visual-refresh-style-algebra` to build the library.
+## Research map
 
-## Running unit tests
+- [Research charter](docs/research-charter.md): question, hypotheses, method, and evidence rules.
+- [Clean-room model](docs/model.md): domain, validity, contract, policies, and omissions.
+- [Resolver architectures](docs/architectures.md): layered overrides versus semantic composition.
+- [Executable laws](docs/laws.md): sixteen deterministic fast-check properties.
+- [Mutation experiments](docs/mutations.md): seven teaching faults and minimized regressions.
+- [Browser evidence](docs/browser-evidence.md): curated stories and cross-engine assertions.
+- [Findings](docs/findings.md): metrics, interpretation, limitations, and next experiments.
 
-Run `nx test visual-refresh-style-algebra` to execute the unit tests via [Jest](https://jestjs.io).
+## Structure
+
+`ButtonCase` separates product, visual language, density, appearance, interaction state, color mode, content, icon placement, anatomy, composition, and direction. `ButtonStyleContract` is the semantic boundary. The layered resolver applies named stages with field-level write history; the semantic resolver derives independent concerns. Provenance is excluded from equality, and both contracts feed `CleanRoomButton`.
+
+## Run the program
+
+Run commands from the repository root:
+
+```sh
+yarn nx run visual-refresh-style-algebra:lint
+yarn nx run visual-refresh-style-algebra:type-check
+yarn nx run visual-refresh-style-algebra:test
+VISUAL_REFRESH_PBT_RUNS=1000 yarn nx run visual-refresh-style-algebra:test
+yarn nx run visual-refresh-style-algebra:build
+yarn nx run visual-refresh-style-algebra:build-storybook
+yarn nx run visual-refresh-style-algebra:component-test --skipInstall
+```
+
+Start the inspection UI with:
+
+```sh
+yarn nx run visual-refresh-style-algebra:storybook
+```
+
+The default property profile uses seed `0x5eed` and 100 runs. Mutation experiments are opt-in transformations exercised by their own test file; normal resolvers never activate them.
