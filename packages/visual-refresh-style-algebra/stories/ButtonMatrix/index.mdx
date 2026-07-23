@@ -1,0 +1,36 @@
+import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
+import * as ButtonMatrixStories from "./index.stories";
+
+<Meta of={ButtonMatrixStories} />
+
+<Title />
+
+This page is the next step after [Start here](?path=/docs/packages-visual-refresh-style-algebra-start-here--docs) and [Button comparison](?path=/docs/packages-visual-refresh-style-algebra-button-comparison--docs). It samples interactions that are difficult to understand from one baseline button.
+
+## Why a curated matrix exists
+
+The model contains 27,840 valid button cases. Rendering all of them would produce noise, not understanding. This matrix selects cases that cross product, visual language, density, appearance, interaction state, color mode, content, anatomy, composition, and direction.
+
+It is a browser inspection instrument, not the exhaustive proof surface. Property tests cover generated cases; this page helps a person judge a few high-information combinations.
+
+## Read it from simple to structural
+
+1. **Standalone cases:** read each title and dimension line, then compare the Layered and Semantic renderings within that card.
+2. **Split buttons:** compare the LTR and RTL examples. Focus on the joined seam and the two outer edges, not merely on color.
+3. **Rejected case:** finish with the unsupported Teams tint input. The model should explain why it is outside the supported domain instead of silently inventing a style.
+
+## Live matrix
+
+<Stories includePrimary title={null} />
+
+## What working as intended looks like
+
+- Every Layered/Semantic pair should agree even when density, state, color mode, icon placement, or anatomy changes.
+- Compact buttons should change geometry without unexpectedly changing their semantic color policy.
+- The forced-colors focus case should retain an accessible icon-only label, a visible boundary, and focus policy expressed with system roles.
+- In both split-button directions, the joined corners should be square and the exposed outer corners should retain the visual-language radius. RTL should mirror the physical composition without changing its logical meaning.
+- The final Teams tint case should display a rejection reason and no fabricated button output.
+
+A mismatch within a pair points toward architecture equivalence. A broken split seam points toward logical-corner or direction policy. A rendered unsupported case points toward the validity boundary.
+
+Continue to [Counterexamples](?path=/docs/packages-visual-refresh-style-algebra-counterexamples--docs) to see how a generated failure becomes a permanent, readable regression fixture.

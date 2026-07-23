@@ -1,0 +1,39 @@
+import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
+import * as ForcedColorsStories from "./index.stories";
+
+<Meta of={ForcedColorsStories} />
+
+<Title />
+
+The [walkthrough](?path=/docs/packages-visual-refresh-style-algebra-start-here--docs) introduces the distinction this page investigates: semantic accessibility policy says what must survive, while emission says how component, slot, selector, and cascade context represent that policy.
+
+## The question this page answers
+
+When several forced-colors media-query rules look alike, which repetitions are exact duplicates, and which encode context that must not be erased?
+
+The five cards span Button, ToggleButton, and split-button slots across Fluent, SharePoint, and Teams policy. The emitted rules are synthetic inspection data. They are not injected into the rendered buttons and do not certify operating-system high-contrast behavior.
+
+## Read each card from top to bottom
+
+1. **Case and target:** the heading and metadata identify the full button case plus the component/slot emission scope.
+2. **Rendered agreement:** Layered and Semantic should compute the same button contract before emission is considered.
+3. **Metrics:** compare semantic decisions, emitted rules, exact duplicates, safely normalized rules, unsafe pairs, and distinct scopes.
+4. **Diagnostics:** red text explains why superficially similar rules were intentionally kept separate. Here, red means “unsafe to merge,” not “the story crashed.”
+5. **Expandable evidence:** inspect the semantic contract first, then unnormalized rules, normalized rules with diagnostics, and finally layered provenance.
+
+## Live emission instrument
+
+<Stories includePrimary title={null} />
+
+## What working as intended looks like
+
+- The Layered and Semantic renderings should agree within every card.
+- The semantic forced-colors contract should use approved system roles and preserve visible boundary, focus, and disabled distinguishability obligations where applicable.
+- Normalization should remove the exact duplicate in each synthetic case, while rules with different selectors, slots, specificity, precedence, order, or declarations remain separate.
+- `safelyNormalizedRules` should reflect only proven-equivalent removals. A lower rule count is not automatically a better result.
+- Unsafe-to-merge diagnostics should name the contextual dimensions that blocked compression.
+- Layered history should show forced colors as the final owner of protected appearance and focus fields, with no ordinary write after that protection.
+
+An ordinary product color in the semantic contract is an accessibility-policy failure. A changed modeled cascade after normalization is a normalizer failure. Repeated rules that remain after normalization may be legitimate context, not unfinished cleanup.
+
+These results classify the synthetic corpus only. The next experiment is to adapt real Griffel output for representative Button-family fixtures into the same emission model and rerun these laws unchanged.

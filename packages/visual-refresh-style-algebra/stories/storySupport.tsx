@@ -75,6 +75,9 @@ const useStyles = makeStyles({
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
     gap: tokens.spacingHorizontalM,
+    '@media (max-width: 480px)': {
+      gridTemplateColumns: 'minmax(0, 1fr)',
+    },
   },
   rejected: {
     color: tokens.colorPaletteRedForeground1,

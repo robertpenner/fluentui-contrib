@@ -1,0 +1,38 @@
+import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
+import * as CounterexampleStories from "./index.stories";
+
+<Meta of={CounterexampleStories} />
+
+<Title>Reading a regression fixture</Title>
+
+Return to [Start here](?path=/docs/packages-visual-refresh-style-algebra-start-here--docs) for the contract and law vocabulary, or review the [Curated matrix](?path=/docs/packages-visual-refresh-style-algebra-curated-matrix--docs) before inspecting the raw data here.
+
+## What a counterexample means
+
+Property tests generate valid button cases and challenge a law. When a law fails, the generator shrinks the input toward a smaller case that still exposes the fault. That minimized input is a **counterexample**: a concrete explanation of where the current rule was wrong or incomplete.
+
+This page preserves the RTL split-button case that exposed a logical-corner mutation. A repaired counterexample is expected to pass forever. The useful artifact is not a permanently broken button; it is a compact fixture that prevents the same reasoning error from returning.
+
+## Read the output left to right
+
+1. **Rendered pair:** the serialized fixture is rendered through both architectures using the shared renderer.
+2. **Input and differences:** the first data panel repeats the exact input and lists normalized contract differences.
+3. **Layered contract:** the second panel shows the final contract computed by ordered writes.
+4. **Semantic contract:** the third panel shows the independently composed result.
+5. **Write history:** the final panel records which layered stage wrote each field and which owner it replaced.
+
+## Live counterexample inspector
+
+<Stories includePrimary title={null} />
+
+## What working as intended looks like
+
+- The Layered and Semantic buttons should render the same result.
+- The `differences` array in the first data panel should be empty.
+- For this `splitButtonEnd` RTL case, the logical-start corners should retain the radius and the joined logical-end corners should be zero.
+- The layered and semantic contracts should agree after provenance is excluded from comparison.
+- The write history should remain populated. Multiple writes are useful evidence about ownership and precedence even when the final contracts agree.
+
+If `differences` becomes non-empty, start with its field paths, then use the two contracts to compare final values and the write history to identify the responsible layer. This is faster and more reliable than guessing from pixels alone.
+
+Continue to [Forced-colors emission](?path=/docs/packages-visual-refresh-style-algebra-forced-colors-emission--docs) for the point where one semantic accessibility policy expands into contextual CSS-like rules.
