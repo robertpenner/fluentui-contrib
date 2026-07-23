@@ -1,6 +1,6 @@
 # Visual Refresh style algebra
 
-A private, clean-room research package for studying Visual Refresh styling as composable transformations. It models a finite button domain, resolves it through two architectures, compares normalized semantic contracts, renders both through one native-button adapter, and subjects the model to properties, controlled mutations, stories, and browser assertions.
+A private, clean-room research package for studying Visual Refresh styling as composable transformations. It models a finite button domain, resolves it through two architectures, compares normalized semantic contracts, renders both through one native-button adapter, and subjects the model to properties, controlled mutations, stories, and browser assertions. A focused refinement separates forced-colors accessibility policy from CSS/Griffel-like emission and tests conservative media-query normalization.
 
 This package is an experiment, not a production dependency or a statement of private Fluent specifications. Policy assumptions are named and replaceable. It must remain private and isolated from published package behavior.
 
@@ -17,6 +17,8 @@ This package is an experiment, not a production dependency or a statement of pri
 ## Structure
 
 `ButtonCase` separates product, visual language, density, appearance, interaction state, color mode, content, icon placement, anatomy, composition, and direction. `ButtonStyleContract` is the semantic boundary. The layered resolver applies named stages with field-level write history; the semantic resolver derives independent concerns. Provenance is excluded from equality, and both contracts feed `CleanRoomButton`.
+
+`ForcedColorsContract` separately captures system roles, focus, visible boundaries, and disabled distinguishability. `EmittedStyleRule` then represents media, selector, component/slot scope, declarations, precedence, order, specificity, and provenance. The synthetic emission experiment demonstrates both safe exact deduplication and unsafe contextual lookalikes; it is not captured Griffel output.
 
 ## Run the program
 
@@ -38,4 +40,4 @@ Start the inspection UI with:
 yarn nx run visual-refresh-style-algebra:storybook
 ```
 
-The default property profile uses seed `0x5eed` and 100 runs. Mutation experiments are opt-in transformations exercised by their own test file; normal resolvers never activate them.
+The default property profile uses seed `0x5eed` and 100 runs. The program now contains 29 named laws, including 13 focused forced-colors semantic/emission laws. Mutation experiments are opt-in transformations exercised by their own test files; normal resolvers and emitters never activate them.

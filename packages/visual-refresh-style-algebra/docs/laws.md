@@ -22,3 +22,27 @@ Property tests use fast-check with seed `0x5eed`, 100 runs by default, and `VISU
 | 16  | Specialization does not silently discard validation obligations.               |
 
 The suite separates invariants from visual snapshots. It does not prove pixel identity, font metrics, assistive-technology output, or correctness of assumed policy values.
+
+## Forced-colors refinement laws
+
+Thirteen additional fast-check properties run entirely in forced-colors mode, which gives this environment deliberate
+coverage rather than relying on its frequency in the general generator:
+
+1. Semantic forced-colors totality.
+2. Approved system-role restriction.
+3. Interactive focus-visible preservation.
+4. Visible-boundary preservation.
+5. Disabled-state distinguishability.
+6. Product and density preservation.
+7. Button, ToggleButton, and split-slot extension preservation.
+8. Layered semantic idempotence, excluding provenance.
+9. Protected-precedence rejection.
+10. Emission-semantic preservation within one declared scope.
+11. Safe exact-duplicate reduction.
+12. Rejection of unsafe selector, slot, precedence, and declaration merges.
+13. Semantic-compression diagnostics without automatic cross-scope merging.
+
+All thirteen pass. During development, idempotence initially failed because the test compared provenance, contrary to
+the established equality boundary. Unsafe-merge generation also failed because one shrunk input did not actually
+change a declaration. These were invalid test oracles, not semantic implementation failures; both were corrected
+without weakening the laws.

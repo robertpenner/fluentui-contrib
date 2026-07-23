@@ -26,11 +26,11 @@ native disabled button. Other snapshots represent an enabled button in the named
 
 The validity predicate excludes only documented combinations:
 
-| Constraint | Excluded combinations | Reason |
-| --- | --- | --- |
-| Content and icon | `text` with anything but `none`; `iconOnly` with anything but `only`; `textAndIcon` with anything but `before` or `after` | These relationships are the initial anatomy hypothesis requested for the experiment. |
-| Appearance domain | Any appearance not returned by `supportedAppearances(product, visualLanguage)` | Appearance addition and deletion are modeled as changes to the accepted input domain, not fallback styling. |
-| Reconstructed anatomy | `visualRefreshReconstructed` with `fluent2` | Reconstruction is treated as a Visual Refresh responsibility in version 1 of the model. |
+| Constraint            | Excluded combinations                                                                                                     | Reason                                                                                                      |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Content and icon      | `text` with anything but `none`; `iconOnly` with anything but `only`; `textAndIcon` with anything but `before` or `after` | These relationships are the initial anatomy hypothesis requested for the experiment.                        |
+| Appearance domain     | Any appearance not returned by `supportedAppearances(product, visualLanguage)`                                            | Appearance addition and deletion are modeled as changes to the accepted input domain, not fallback styling. |
+| Reconstructed anatomy | `visualRefreshReconstructed` with `fluent2`                                                                               | Reconstruction is treated as a Visual Refresh responsibility in version 1 of the model.                     |
 
 No case is excluded by density, state, color mode, composition context, or direction. If a real example contradicts
 these constraints, it should be recorded as a counterexample before changing the domain.
@@ -55,6 +55,31 @@ are not claims about a private specification.
 
 Provenance explains a result but is excluded from semantic equality. Validation obligations identify work that still
 requires testing; emitting an obligation does not satisfy it.
+
+## Forced-colors accessibility contract
+
+`ForcedColorsContract` is a named semantic sub-resolution for the forced-colors environment. It owns foreground,
+background, visible-boundary, and focus system roles plus explicit focus visibility, boundary visibility, and disabled
+distinguishability guarantees. Both button resolvers consume this policy; it does not know about selectors, media
+queries, generated classes, or CSS ordering.
+
+The approved role vocabulary is `Canvas`, `CanvasText`, `ButtonFace`, `ButtonText`, `ButtonBorder`, `Highlight`,
+`HighlightText`, and `GrayText`. The current button policy uses `ButtonFace` for the background, `ButtonText` and
+`ButtonBorder` for enabled content and boundaries, `Highlight` for focus, and `GrayText` for disabled content and
+boundaries. The remaining approved roles are reserved for experiments and are not emitted by the current policy.
+
+Forced colors is an environmental mode, not a product theme. Product and interaction stages may determine the input
+snapshot, but layered forced-colors fields become protected after resolution. A later ordinary write is rejected.
+
+## CSS emission boundary
+
+`EmittedStyleRule` represents media condition, selector scope, component and slot, declarations, precedence, order,
+specificity, semantic decision, and provenance. `normalizeForcedColorsEmission` merges exact duplicates or compatible
+declarations only when all modeled scope and cascade dimensions agree. Different media text is preserved because this
+experiment deliberately does not parse CSS media queries.
+
+The synthetic emission corpus models repeated style-hook output for experimentation. It is not captured Griffel CSS
+and must not be used as evidence about Griffel's exact behavior.
 
 ## Named policy data
 

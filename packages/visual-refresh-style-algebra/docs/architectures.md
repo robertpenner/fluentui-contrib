@@ -38,4 +38,20 @@ Risks:
 
 ## Order result
 
-Forced colors must follow interaction and product coloring because it replaces product roles with system roles. Context geometry and interaction colors commute in the present model because they write disjoint concerns. These are tested facts about this model, not universal CSS claims.
+Forced colors must follow interaction and product coloring because it replaces product roles with system roles. The
+layered model now protects appearance and focus fields after that stage; an ordinary later write is rejected rather
+than allowed to corrupt the accessibility result. Context geometry and interaction colors commute in the present
+model because they write disjoint concerns. These are tested facts about this model, not universal CSS claims.
+
+## Semantic policy versus emission
+
+`resolveForcedColorsContract` answers what the accessibility outcome must be. `emitForcedColors` answers how one
+component/slot target could represent that result as media-query rules. The semantic contract can remain equal while
+emission differs legitimately by selector, slot, specificity, precedence, or order. Consequently, emitter equality is
+never used as the oracle for semantic equivalence.
+
+The normalizer is conservative. It can expose repeated semantic decisions without erasing contextual variation. This
+separates three explanations for repeated media blocks: an emitter may repeat truly equivalent rules; an accessibility
+policy may be copied because no semantic boundary exists; or similar declarations may encode necessary contextual
+differences. The current synthetic corpus demonstrates the first and third. It cannot establish which explanation
+dominates actual Griffel output.
