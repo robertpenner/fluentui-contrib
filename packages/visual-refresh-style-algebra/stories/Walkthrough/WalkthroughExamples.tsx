@@ -88,7 +88,8 @@ const useStyles = makeStyles({
   },
   flow: {
     display: 'grid',
-    gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr)',
+    gridTemplateColumns:
+      'minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr)',
     gap: tokens.spacingHorizontalS,
     alignItems: 'stretch',
     '@media (max-width: 720px)': {
@@ -260,7 +261,9 @@ const summarizeContract = (): readonly string[] => {
     `${contract.geometry.blockSize}px tall`,
     `${contract.appearance.foregroundRole} on ${contract.appearance.backgroundRole}`,
     `${contract.shape.radiusStartStart}px corners`,
-    contract.focus.visible ? `visible ${contract.focus.colorRole} focus` : 'no focus indicator',
+    contract.focus.visible
+      ? `visible ${contract.focus.colorRole} focus`
+      : 'no focus indicator',
   ];
 };
 
@@ -271,10 +274,12 @@ export const CaseToContractExample = () => {
   return (
     <FluentProvider theme={webLightTheme} className={styles.surface}>
       <p className={styles.eyebrow}>First intuition</p>
-      <h3 className={styles.heading}>Treat styling as a question with a structured answer</h3>
+      <h3 className={styles.heading}>
+        Treat styling as a question with a structured answer
+      </h3>
       <p className={styles.body}>
-        A button case describes the situation. A resolver applies named policy. The contract records the meaning that a
-        renderer must preserve.
+        A button case describes the situation. A resolver applies named policy.
+        The contract records the meaning that a renderer must preserve.
       </p>
       <ul className={styles.chips} aria-label="Button case dimensions">
         {caseDimensions.map(([label, value]) => (
@@ -325,7 +330,9 @@ export const ArchitectureExample = () => {
             contract={layered.contract}
             label="Continue"
           />
-          <span className={styles.nodeValue}>{`${layered.writeHistory.length} recorded field writes`}</span>
+          <span
+            className={styles.nodeValue}
+          >{`${layered.writeHistory.length} recorded field writes`}</span>
         </section>
         <section className={mergeClasses(styles.lane, styles.laneSemantic)}>
           <h3 className={styles.laneTitle}>Semantic resolver</h3>
@@ -341,14 +348,25 @@ export const ArchitectureExample = () => {
             contract={semantic}
             label="Continue"
           />
-          <span className={styles.nodeValue}>No intermediate field ownership</span>
+          <span className={styles.nodeValue}>
+            No intermediate field ownership
+          </span>
         </section>
       </div>
       <div className={styles.result}>
-        <span className={mergeClasses(styles.status, differences.length === 0 ? styles.pass : styles.fail)}>
-          {differences.length === 0 ? 'Same semantic result' : `${differences.length} semantic differences`}
+        <span
+          className={mergeClasses(
+            styles.status,
+            differences.length === 0 ? styles.pass : styles.fail
+          )}
+        >
+          {differences.length === 0
+            ? 'Same semantic result'
+            : `${differences.length} semantic differences`}
         </span>
-        <span className={styles.body}>The experiment compares meaning, not implementation steps.</span>
+        <span className={styles.body}>
+          The experiment compares meaning, not implementation steps.
+        </span>
       </div>
     </FluentProvider>
   );
@@ -360,7 +378,8 @@ export const LawExample = () => {
   const contract = faultEnabled
     ? resolveButtonWithMutation(exampleCase, 'leakProductColorIntoForcedColors')
     : resolveSemanticButton(exampleCase);
-  const usesSystemBackground = contract.appearance.backgroundRole === 'ButtonFace';
+  const usesSystemBackground =
+    contract.appearance.backgroundRole === 'ButtonFace';
 
   return (
     <FluentProvider theme={webLightTheme} className={styles.surface}>
@@ -368,7 +387,8 @@ export const LawExample = () => {
       <div className={styles.lawGrid}>
         <div>
           <p className={styles.lawStatement}>
-            In forced colors, ordinary product color roles must not leak into the result.
+            In forced colors, ordinary product color roles must not leak into
+            the result.
           </p>
         </div>
         <div>
@@ -379,7 +399,12 @@ export const LawExample = () => {
           />
           <div className={styles.observation} aria-live="polite">
             <span>{`Resolved background: ${contract.appearance.backgroundRole}`}</span>
-            <span className={mergeClasses(styles.status, usesSystemBackground ? styles.pass : styles.fail)}>
+            <span
+              className={mergeClasses(
+                styles.status,
+                usesSystemBackground ? styles.pass : styles.fail
+              )}
+            >
               {usesSystemBackground ? 'Law passes' : 'Law catches the fault'}
             </span>
           </div>
@@ -396,28 +421,38 @@ export const LawExample = () => {
 };
 
 const ruleLabel = (rule: EmittedStyleRule): string =>
-  `${rule.selectorScope} | ${rule.semanticDecision} | ${Object.keys(rule.declarations).join(', ')}`;
+  `${rule.selectorScope} | ${rule.semanticDecision} | ${Object.keys(
+    rule.declarations
+  ).join(', ')}`;
 
 export const EmissionExample = () => {
   const styles = useStyles();
   const semantic = resolveForcedColorsContract(exampleCase);
-  const original = createForcedColorsEmissionExperiment(semantic, { component: 'Button', slot: 'root' });
+  const original = createForcedColorsEmissionExperiment(semantic, {
+    component: 'Button',
+    slot: 'root',
+  });
   const normalized = normalizeForcedColorsEmission(original);
   const metrics = measureForcedColorsEmission(original, normalized);
 
   return (
     <FluentProvider theme={webLightTheme} className={styles.surface}>
       <p className={styles.eyebrow}>Meaning first, CSS second</p>
-      <h3 className={styles.heading}>Compression is useful only when context survives</h3>
+      <h3 className={styles.heading}>
+        Compression is useful only when context survives
+      </h3>
       <p className={styles.body}>
-        This synthetic example deliberately contains one exact duplicate and one lookalike with a different selector.
-        The normalizer removes the duplicate and keeps the contextual rule.
+        This synthetic example deliberately contains one exact duplicate and one
+        lookalike with a different selector. The normalizer removes the
+        duplicate and keeps the contextual rule.
       </p>
       <div className={styles.emissionFlow}>
         <section className={styles.lane}>
           <span className={styles.count}>{metrics.semanticDecisions}</span>
           <h3 className={styles.laneTitle}>Semantic decisions</h3>
-          <p className={styles.body}>Appearance, visible boundary, and focus policy for this case.</p>
+          <p className={styles.body}>
+            Appearance, visible boundary, and focus policy for this case.
+          </p>
         </section>
         <section className={styles.lane}>
           <span className={styles.count}>{metrics.emittedRules}</span>
@@ -425,11 +460,16 @@ export const EmissionExample = () => {
           <ul className={styles.ruleList}>
             {original.rules.map((rule, index) => (
               <li
-                key={`${rule.selectorScope}-${rule.sourceRules.join('-')}-${index}`}
+                key={`${rule.selectorScope}-${rule.sourceRules.join(
+                  '-'
+                )}-${index}`}
                 className={mergeClasses(
                   styles.rule,
-                  rule.sourceRules.includes('synthetic-product-style-hook-copy') && styles.duplicate,
-                  rule.sourceRules.includes('synthetic-contextual-lookalike') && styles.contextual,
+                  rule.sourceRules.includes(
+                    'synthetic-product-style-hook-copy'
+                  ) && styles.duplicate,
+                  rule.sourceRules.includes('synthetic-contextual-lookalike') &&
+                    styles.contextual
                 )}
               >
                 {ruleLabel(rule)}
@@ -440,7 +480,9 @@ export const EmissionExample = () => {
         <section className={styles.lane}>
           <span className={styles.count}>{normalized.rules.length}</span>
           <h3 className={styles.laneTitle}>Normalized rules</h3>
-          <p className={styles.body}>{`${metrics.safelyNormalizedRules} exact duplicate removed; selector-sensitive lookalike retained.`}</p>
+          <p
+            className={styles.body}
+          >{`${metrics.safelyNormalizedRules} exact duplicate removed; selector-sensitive lookalike retained.`}</p>
         </section>
       </div>
       <div className={styles.legend}>
