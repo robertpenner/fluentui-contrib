@@ -1,18 +1,20 @@
-import { Meta, Title } from "@storybook/addon-docs/blocks";
+import { Meta, Title } from '@storybook/addon-docs/blocks';
 import {
   ArchitectureExample,
   CaseToContractExample,
   EmissionExample,
   LawExample,
-} from "./WalkthroughExamples";
+} from './WalkthroughExamples';
 
 <Meta title="Packages/visual-refresh-style-algebra/Start here" />
 
-<Title>Visual Refresh style algebra, one idea at a time</Title>
+<Title>From a styling change to a testable system</Title>
 
-This research asks a practical question: **can we describe what styling must mean before deciding how to express it in CSS?**
+A button change that begins as a new height or radius can spread through Fluent defaults, Visual Refresh changes, derived components, product requirements, interaction states, forced colors, and composite controls. **Forced colors** is the browser mode that adapts authored colors when a person uses an operating-system high-contrast theme. Once those layers overlap, it becomes difficult to tell which differences are intentional, which guarantees must survive, and which rule caused a regression.
 
-That shift gives us a way to compare implementations, state accessibility guarantees, and investigate duplicated CSS without treating every generated rule as equally meaningful. You do not need algebra or property-testing experience to follow the approach.
+[Why this research exists](?path=/docs/packages-visual-refresh-style-algebra-why-this-research-exists--docs) explains that practical problem and the tradeoff between retaining Fluent styling and reimplementing product styling.
+
+This walkthrough introduces one response: describe **what must remain true** before deciding how to express it in CSS. That gives us a way to compare implementations, protect accessibility requirements, and investigate duplicated output without treating every generated rule as equally meaningful. You do not need algebra or property-testing experience to follow the approach.
 
 ## 1. Start with a situation, not a stylesheet
 
@@ -26,16 +28,16 @@ The word _semantic_ matters here. `ButtonFace` means “use the system's button 
 
 ## 2. Separate meaning from the route used to compute it
 
-The package intentionally computes the same contract in two different ways:
+The package intentionally computes the same result in two different ways:
 
 - The **layered resolver** begins with Fluent and applies ordered overrides. This resembles how a customization stack evolves in practice.
-- The **semantic resolver** derives geometry, appearance, focus, anatomy, and capabilities independently, then combines them.
+- The **semantic resolver** organizes geometry, appearance, focus, anatomy, and capabilities as separate decisions, then combines them.
 
-Neither architecture wins because its code looks cleaner. The useful question is whether they produce the same observable contract across valid cases.
+The second implementation is a research comparator, not a recommendation to bypass Fluent styles. Neither architecture wins because its code looks cleaner. The useful question is whether a change in organization preserves the same user-facing result and must-always rules.
 
 <ArchitectureExample />
 
-This is why the technical stories show two buttons that look the same. Matching output is the expected result. The layered side additionally reveals precedence and field ownership; the semantic side makes policy boundaries easier to see.
+This is why the technical stories show two buttons that look the same. Matching output is the expected result. The layered side additionally reveals which rule wrote a decision and what it replaced; the semantic side makes replaceable choices easier to see.
 
 ## 3. Turn design intent into laws
 
@@ -56,7 +58,7 @@ The toggle introduces a deliberate teaching fault. The rendered button is less i
 
 ## 4. Keep accessibility policy above CSS emission
 
-Forced-colors behavior has two distinct levels:
+When an operating-system high-contrast theme activates forced-colors mode, authored colors may be replaced by a restricted system palette. Supporting that user need has two distinct levels:
 
 1. **Semantic policy:** foreground, background, boundary, focus, and disabled distinguishability.
 2. **Emission:** media queries, selectors, slots, declarations, specificity, precedence, and order.
@@ -71,13 +73,15 @@ The experiment therefore normalizes conservatively. It removes only rules whose 
 
 Once this page feels comfortable, use the other stories for specific questions:
 
-- [**Button comparison**](?path=/docs/packages-visual-refresh-style-algebra-button-comparison--docs): What visibly changes between the Fluent 2 baseline, Visual Refresh, and Teams reference policy?
-- [**Curated matrix**](?path=/docs/packages-visual-refresh-style-algebra-curated-matrix--docs): Do selected products, states, densities, appearances, anatomy policies, and directions remain coherent?
-- [**Counterexamples**](?path=/docs/packages-visual-refresh-style-algebra-counterexamples--docs): What minimized input exposed a previous fault, and what did each resolver write?
-- [**Forced-colors emission**](?path=/docs/packages-visual-refresh-style-algebra-forced-colors-emission--docs): Which semantic decisions produced each synthetic rule, and why was a rule merged or retained?
+- [**Button comparison**](?path=/docs/packages-visual-refresh-style-algebra-button-comparison--docs): Is a visible difference intentional, or did the implementation change the result by accident?
+- [**Curated matrix**](?path=/docs/packages-visual-refresh-style-algebra-curated-matrix--docs): Does an agreed change survive states, products, directions, accessibility, and compound controls?
+- [**Counterexamples**](?path=/docs/packages-visual-refresh-style-algebra-counterexamples--docs): Which input exposed a fault, which result differed, and which layered rule wrote it?
+- [**Forced-colors emission**](?path=/docs/packages-visual-refresh-style-algebra-forced-colors-emission--docs): Is repeated high-contrast output redundant, necessary context, or evidence of a missing shared requirement?
 
 ## What this work can and cannot claim
 
 The model makes assumptions explicit and turns them into executable questions. It can show that two resolvers agree under the modeled contract, that deliberate faults are detected, and that some synthetic duplicate rules are safe to remove.
 
 It does **not** prove pixel-perfect production behavior, screen-reader output, the complete CSS cascade, browser paint-time forced-color behavior, or that Griffel can apply the same normalization. The smallest next experiment is to capture real Griffel output for a few public Button-family fixtures and feed it into the existing emission model unchanged.
+
+It also cannot decide what Teams, SharePoint, or another product should require. The model can expose a disagreement and test an agreed decision; product alignment remains a human responsibility.

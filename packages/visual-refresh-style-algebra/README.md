@@ -1,11 +1,21 @@
 # Visual Refresh style algebra
 
-A private, clean-room research package for studying Visual Refresh styling as composable transformations. It models a finite button domain, resolves it through two architectures, compares normalized semantic contracts, renders both through one native-button adapter, and subjects the model to properties, controlled mutations, stories, and browser assertions. A focused refinement separates forced-colors accessibility policy from CSS/Griffel-like emission and tests conservative media-query normalization.
+A button refresh can begin with a new height or radius and end in a difficult system problem: Fluent defaults,
+Visual Refresh changes, derived components, product requirements, interaction states, forced colors, and composite
+controls can all influence the result. This private, clean-room package investigates how to preserve the useful shared
+foundation while making legitimate product differences cheaper to express and easier to debug.
+
+The experiment models a finite button domain, resolves it through two implementations, compares their user-facing
+contracts, renders both through one native-button adapter, and challenges the model with properties, controlled
+mutations, stories, and browser assertions. A focused refinement separates forced-colors accessibility requirements
+from CSS/Griffel-like emission and tests conservative media-query normalization.
 
 This package is an experiment, not a production dependency or a statement of private Fluent specifications. Policy assumptions are named and replaceable. It must remain private and isolated from published package behavior.
 
 ## Research map
 
+- [Why this research exists](docs/motivation.md): UXE motivation, implementation tradeoffs, product alignment, and
+  override elasticity.
 - [Research charter](docs/research-charter.md): question, hypotheses, method, and evidence rules.
 - [Clean-room model](docs/model.md): domain, validity, contract, policies, and omissions.
 - [Resolver architectures](docs/architectures.md): layered overrides versus semantic composition.

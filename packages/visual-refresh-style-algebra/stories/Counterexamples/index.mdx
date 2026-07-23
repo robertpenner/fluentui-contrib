@@ -1,5 +1,5 @@
-import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
-import * as CounterexampleStories from "./index.stories";
+import { Meta, Stories, Title } from '@storybook/addon-docs/blocks';
+import * as CounterexampleStories from './index.stories';
 
 <Meta of={CounterexampleStories} />
 
@@ -12,6 +12,10 @@ Return to [Start here](?path=/docs/packages-visual-refresh-style-algebra-start-h
 Property tests generate valid button cases and challenge a law. When a law fails, the generator shrinks the input toward a smaller case that still exposes the fault. That minimized input is a **counterexample**: a concrete explanation of where the current rule was wrong or incomplete.
 
 This page preserves the RTL split-button case that exposed a logical-corner mutation. A repaired counterexample is expected to pass forever. The useful artifact is not a permanently broken button; it is a compact fixture that prevents the same reasoning error from returning.
+
+## What decision this can inform
+
+Use this inspector to decide where to investigate a regression. The smallest failing input identifies the conditions that matter, the contract difference identifies what changed, and the write history identifies which layered rule last owned the result. It turns “the button looks wrong somewhere in the stack” into a specific ownership question.
 
 ## Read the output left to right
 

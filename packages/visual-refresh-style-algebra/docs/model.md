@@ -90,6 +90,23 @@ Fluent 2 and compact values are **model assumptions** intended to be replaced wh
 Spacing, radius, typography, and focus dimensions are also model assumptions. Their purpose is to produce coherent,
 auditable test outputs, not to infer unlisted Visual Refresh values.
 
+## Decision-ownership rubric
+
+The model makes a styling decision explicit so evidence can challenge where it belongs. The following rubric connects
+the experiment to the practical goal of reducing fragile overrides:
+
+| Observed pattern                                                               | Candidate interpretation                                               |
+| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| Every product preserves a behavior or accessibility result                     | Shared foundational guarantee                                          |
+| A value varies predictably with density, direction, state, or composition      | Parameter or named policy                                              |
+| Products routinely replace a declaration to express legitimate differentiation | Product-owned visual policy                                            |
+| Removing a style repeatedly breaks accessibility                               | Explicit accessibility obligation rather than incidental CSS           |
+| Derived components repeatedly correct inherited styles                         | Inheritance or composition boundary may be wrong                       |
+| Similar declarations differ only because of selector or cascade context        | Possibly necessary emission detail, not automatically safe duplication |
+
+This rubric generates hypotheses, not automatic refactors. Production ownership decisions require evidence from real
+components and agreement about product requirements.
+
 ## Architecture boundaries
 
 The layered resolver will write a complete intermediate contract through ordered stages and retain field-level write

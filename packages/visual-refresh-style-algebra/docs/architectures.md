@@ -1,5 +1,19 @@
 # Resolver architectures
 
+## The production tradeoff behind the experiment
+
+Natalie Wainwright's UXE Crit examples described two uncomfortable choices when a product diverges substantially from
+Fluent's default appearance:
+
+| Strategy                                               | Value retained                                                                  | Cost introduced                                                                                                  |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Layer Visual Refresh and product changes over Fluent   | Existing defaults, accessibility handling, browser workarounds, and later fixes | The product must understand, neutralize, and debug interactions among increasingly broad style layers            |
+| Reimplement styling while retaining component behavior | Direct ownership and a result that can be easier to follow                      | The product must rediscover styling obligations and no longer inherits future Fluent styling fixes automatically |
+
+The experiment adds a third analytical possibility: describe the required outcome independently of either
+implementation, then test both implementations against it. This does not eliminate the production tradeoff. It makes
+the inherited guarantees, replaceable choices, and effects of each strategy easier to inspect.
+
 ## A: layered overrides
 
 `resolveLayeredButtonWithHistory` starts from a complete Fluent base contract, then applies Visual Refresh, product, context, interaction, and forced-colors stages in an explicit order. Every field write records its layer and replaced owner. This architecture resembles an override system and makes precedence observable.
@@ -20,6 +34,9 @@ Risks:
 
 `resolveSemanticButton` derives geometry, shape, appearance, typography, anatomy, supported domain, obligations, focus, and capabilities independently, then assembles one contract. Concern resolvers depend on the input case and named policy data rather than a partially mutated contract.
 
+This resolver is a clean-room comparator, not a proposal to bypass Fluent styles in production. Its role is to test
+whether the same modeled outcome can be expressed without depending on the layered resolver's write order.
+
 Strengths:
 
 - localizes policy decisions by semantic concern;
@@ -35,6 +52,10 @@ Risks:
 ## Equality boundary
 
 `normalizeContract` removes provenance before comparison. The experiment asks whether the architectures agree on semantic output, not whether they explain or compute it identically. Both then feed `CleanRoomButton`, preventing renderer differences from confounding the comparison.
+
+Equality is necessary but not sufficient. Two implementations can agree on an incomplete or incorrect policy. The
+independent laws, mutation checks, browser scenarios, and evidence labels challenge the shared outcome from different
+directions.
 
 ## Order result
 

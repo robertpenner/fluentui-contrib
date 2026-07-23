@@ -1,17 +1,23 @@
-import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
-import * as ForcedColorsStories from "./index.stories";
+import { Meta, Stories, Title } from '@storybook/addon-docs/blocks';
+import * as ForcedColorsStories from './index.stories';
 
 <Meta of={ForcedColorsStories} />
 
 <Title />
 
-The [walkthrough](?path=/docs/packages-visual-refresh-style-algebra-start-here--docs) introduces the distinction this page investigates: semantic accessibility policy says what must survive, while emission says how component, slot, selector, and cascade context represent that policy.
+The [walkthrough](?path=/docs/packages-visual-refresh-style-algebra-start-here--docs) introduces the distinction this page investigates: an accessibility requirement says what must survive, while generated CSS says how each component, slot, selector, and cascade context carries that requirement.
+
+Here, **high-contrast theming** is the user need: a person selects an operating-system theme with stronger color separation. **Forced colors** is the browser mode that responds by replacing many authored colors with a restricted palette of system color roles. This page studies how components preserve boundaries, focus, and state distinctions under that mode.
 
 ## The question this page answers
 
-When several forced-colors media-query rules look alike, which repetitions are exact duplicates, and which encode context that must not be erased?
+When several forced-colors media-query rules supporting high-contrast themes look alike, which repetitions can be removed safely, and which protect a different component, slot, state, or cascade position?
 
 The five cards span Button, ToggleButton, and split-button slots across Fluent, SharePoint, and Teams policy. The emitted rules are synthetic inspection data. They are not injected into the rendered buttons and do not certify operating-system high-contrast behavior.
+
+## What decision this can inform
+
+Use this page to classify repeated output before proposing cleanup. An exact duplicate may indicate an emitter optimization. Repetition across Button-family components may indicate a missing shared accessibility policy. Similar rules with different selector or cascade context may be necessary and unsafe to merge.
 
 ## Read each card from top to bottom
 

@@ -1,0 +1,39 @@
+import { Meta, Title } from "@storybook/addon-docs/blocks";
+import { MotivationMap } from "./MotivationExample";
+
+<Meta title="Packages/visual-refresh-style-algebra/Why this research exists" />
+
+<Title>Why a button refresh becomes a systems problem</Title>
+
+A button update can look local in a design review and still cross Fluent defaults, Visual Refresh changes, derived components, product requirements, interaction states, accessibility modes, and composite controls.
+
+Natalie Wainwright's UXE Crit examples motivated this research by showing how those layers accumulate. The result is not merely a large stylesheet. It is a system in which teams can struggle to tell which differences are intentional, which guarantees must survive, and which rule caused a regression.
+
+<MotivationMap />
+
+## The choice product teams face
+
+One option is to keep Fluent's styling and layer Visual Refresh and product changes over it. That preserves Fluent defaults, accessibility handling, browser workarounds, and future fixes. As differentiation grows, the product must also understand, neutralize, and debug more inherited styling.
+
+The other option is to retain the component's behavior while reimplementing much of its styling. That gives the product direct control and can make the result easier to follow. It also transfers responsibility for the styling decisions, accessibility requirements, browser fixes, and unusual composition cases previously carried by Fluent.
+
+This research does not assume that either choice always wins. It asks a more useful question:
+
+> What is the smallest shared component foundation that preserves universal behavior and accessibility while making legitimate product differences inexpensive and diagnosable?
+
+## What tests can and cannot settle
+
+Tests can check whether an agreed requirement survives product, density, state, direction, accessibility, and composition changes. They can reveal competing owners, order-sensitive rules, and small counterexamples.
+
+Tests cannot decide what Teams, SharePoint, or another product should require. When visual direction is still evolving or products have not aligned, the model can expose the unresolved decision but cannot manufacture consensus.
+
+The presentation adds delivery pressure to that alignment problem: the aesthetic changed during implementation while consumers needed stable code for general availability, protecting product code mattered, and UXE capacity was small. A scalable foundation must therefore reduce rework when visual policy changes, not merely make the first implementation pass.
+
+## How to use this Storybook
+
+- Start with [**Button comparison**](?path=/docs/packages-visual-refresh-style-algebra-button-comparison--docs) when reviewing whether a visible difference is intentional or a regression.
+- Use the [**Curated matrix**](?path=/docs/packages-visual-refresh-style-algebra-curated-matrix--docs) when checking states, directions, accessibility, and compound controls together.
+- Open [**Counterexamples**](?path=/docs/packages-visual-refresh-style-algebra-counterexamples--docs) when you need to understand how a difficult failure becomes traceable.
+- Inspect [**Forced-colors emission**](?path=/docs/packages-visual-refresh-style-algebra-forced-colors-emission--docs) when repeated high-contrast rules may represent duplication, required context, or a missing shared policy.
+
+Continue to [**Start here**](?path=/docs/packages-visual-refresh-style-algebra-start-here--docs) for a progressive explanation of the model and its testing approach.

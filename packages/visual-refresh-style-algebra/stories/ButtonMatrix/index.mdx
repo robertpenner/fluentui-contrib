@@ -1,5 +1,5 @@
-import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
-import * as ButtonMatrixStories from "./index.stories";
+import { Meta, Stories, Title } from '@storybook/addon-docs/blocks';
+import * as ButtonMatrixStories from './index.stories';
 
 <Meta of={ButtonMatrixStories} />
 
@@ -12,6 +12,10 @@ This page is the next step after [Start here](?path=/docs/packages-visual-refres
 The model contains 27,840 valid button cases. Rendering all of them would produce noise, not understanding. This matrix selects cases that cross product, visual language, density, appearance, interaction state, color mode, content, anatomy, composition, and direction.
 
 It is a browser inspection instrument, not the exhaustive proof surface. Property tests cover generated cases; this page helps a person judge a few high-information combinations.
+
+## What decision this can inform
+
+Use the matrix to decide whether a proposed shared or product-specific change is local, or whether it unexpectedly affects states, content, direction, accessibility, or compound controls. A failure can point toward a missing must-always rule, an incomplete product requirement, or a composition boundary that needs closer inspection.
 
 ## Read it from simple to structural
 

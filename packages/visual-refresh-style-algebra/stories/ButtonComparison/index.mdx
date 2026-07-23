@@ -1,5 +1,5 @@
-import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
-import * as ButtonComparisonStories from "./index.stories";
+import { Meta, Stories, Title } from '@storybook/addon-docs/blocks';
+import * as ButtonComparisonStories from './index.stories';
 
 <Meta of={ButtonComparisonStories} />
 
@@ -12,6 +12,10 @@ import * as ButtonComparisonStories from "./index.stories";
 When button styling is updated for Visual Refresh or adapted for Teams, **which differences are intentional, and which would indicate a regression?**
 
 This page compares three familiar outcomes: the Fluent 2 baseline, Fluent Visual Refresh, and Teams Visual Refresh. It shows what each design direction deliberately changes, such as button height, while holding state, appearance, content, and direction steady.
+
+## What decision this can inform
+
+Use this comparison to decide whether an observed difference belongs to an agreed design direction or product requirement, or whether one implementation changed the result by accident. The page makes a difference reviewable; it does not decide which height or appearance a product should require.
 
 ## Read it in three passes
 
