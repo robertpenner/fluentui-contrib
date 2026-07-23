@@ -61,3 +61,17 @@ export {
 	isValidButtonCase,
 } from './domain/validity';
 export type { InvalidButtonCaseReason } from './domain/validity';
+export { compareContracts } from './comparison/compareContracts';
+export type { ContractDifference } from './comparison/compareContracts';
+export { normalizeContract } from './comparison/normalizeContract';
+export type { ComparableButtonStyleContract } from './comparison/normalizeContract';
+export {
+	resolveLayeredButton,
+	resolveLayeredButtonInOrder,
+	resolveLayeredButtonWithHistory,
+	standardOverrideOrder,
+} from './layered/resolveLayeredButton';
+export type { OverrideStageName } from './layered/resolveLayeredButton';
+export { fieldsWithOverlappingOwnership } from './layered/writeHistory';
+export type { FieldWrite, LayeredState, LayerName } from './layered/writeHistory';
+export { resolveSemanticButton } from './semantic/resolveSemanticButton';
