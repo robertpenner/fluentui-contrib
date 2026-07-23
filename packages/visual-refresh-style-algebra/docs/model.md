@@ -1,0 +1,79 @@
+# Clean-room button model
+
+## Evidence labels
+
+The package uses these labels to keep observations separate from assumptions:
+
+- **Presentation observation:** Visual Refresh can alter shape, spacing, height, typography, color, appearances,
+  child structure, and icon-slot construction. The presentation also supplies the 36 px Visual Refresh and 32 px
+  Teams reference scenario.
+- **Public CAP observation:** `react-cap-theme` applies component custom style hooks and a Teams specialization applies
+  a later button-size override. Its button styles include appearance, state, focus, forced-colors, icon-only, and
+  compound-control rules.
+- **Model assumption:** A replaceable clean-room rule chosen because the presentation does not specify an exact rule.
+- **Tested property:** A claim exercised over generated valid cases. Passing tests are evidence, not proof.
+
+## Configuration axes
+
+`ButtonCase` keeps product, visual language, density, appearance, interaction state, color mode, content anatomy,
+anatomy policy, composition context, and direction independent. The finite values are exported from
+`src/domain/ButtonCase.ts` so exhaustive tests and property generators use the same declarations.
+
+The interaction state is a resolved snapshot, not a behavioral state machine. A `disabled` snapshot represents a
+native disabled button. Other snapshots represent an enabled button in the named state.
+
+## Validity constraints
+
+The validity predicate excludes only documented combinations:
+
+| Constraint | Excluded combinations | Reason |
+| --- | --- | --- |
+| Content and icon | `text` with anything but `none`; `iconOnly` with anything but `only`; `textAndIcon` with anything but `before` or `after` | These relationships are the initial anatomy hypothesis requested for the experiment. |
+| Appearance domain | Any appearance not returned by `supportedAppearances(product, visualLanguage)` | Appearance addition and deletion are modeled as changes to the accepted input domain, not fallback styling. |
+| Reconstructed anatomy | `visualRefreshReconstructed` with `fluent2` | Reconstruction is treated as a Visual Refresh responsibility in version 1 of the model. |
+
+No case is excluded by density, state, color mode, composition context, or direction. If a real example contradicts
+these constraints, it should be recorded as a counterexample before changing the domain.
+
+The supported-appearance table is a **model assumption**. Visual Refresh Fluent adds `tint`; Visual Refresh
+SharePoint removes `transparent`; Visual Refresh Teams does not add `tint`. These choices test domain evolution and
+are not claims about a private specification.
+
+## Semantic output contract
+
+`ButtonStyleContract` is the theory boundary. It contains:
+
+- logical geometry in CSS pixel units;
+- logical corner radii for direction-aware composition;
+- semantic foreground, background, border, and focus roles;
+- typography;
+- ordered slots and accessible-name source;
+- supported appearance and state declarations;
+- downstream validation obligations;
+- focus and native-button capability guarantees;
+- provenance records that name the rules responsible for decisions.
+
+Provenance explains a result but is excluded from semantic equality. Validation obligations identify work that still
+requires testing; emitting an obligation does not satisfy it.
+
+## Named policy data
+
+`blockSizePolicy` is the only location for product and density block sizes. The Visual Refresh Fluent/SharePoint
+standard value of 36 px and Teams standard value of 32 px are **presentation observations represented as policy**.
+Fluent 2 and compact values are **model assumptions** intended to be replaced when stronger evidence exists.
+
+Spacing, radius, typography, and focus dimensions are also model assumptions. Their purpose is to produce coherent,
+auditable test outputs, not to infer unlisted Visual Refresh values.
+
+## Architecture boundaries
+
+The layered resolver will write a complete intermediate contract through ordered stages and retain field-level write
+history. The semantic resolver will derive each concern from named policy functions. Both will feed one rendering
+adapter. React and CSS do not participate in validity or semantic resolution.
+
+## Intentional omissions
+
+This first model does not represent browser layout, font metrics, text measurement, animations, pointer mechanics,
+full Fluent behavior, CSS cascade specificity, theme token implementation, or assistive-technology output. Object
+equality therefore cannot establish visual or behavioral correctness. Storybook and later browser checks provide
+separate observational evidence for a curated subset.
