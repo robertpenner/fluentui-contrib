@@ -80,6 +80,9 @@
       ],
       "@fluentui-contrib/cap-foundations": [
         "packages/cap-foundations/src/index.ts"
+      ],
+      "@fluentui-contrib/visual-refresh-style-algebra": [
+        "packages/visual-refresh-style-algebra/src/index.ts"
       ]
     }
   },

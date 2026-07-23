@@ -1,0 +1,13 @@
+{
+  "name": "@fluentui-contrib/visual-refresh-style-algebra",
+  "version": "0.0.1",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "@swc/helpers": "~0.5.11"
+  },
+  "private": true,
+  "devDependencies": {
+    "fast-check": "^4.9.0"
+  }
+}
