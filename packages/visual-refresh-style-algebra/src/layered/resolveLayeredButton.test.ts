@@ -32,7 +32,8 @@ describe('resolveLayeredButton', () => {
   });
 
   it('reports overlapping ownership and replacements', () => {
-    const { writeHistory } = resolveLayeredButtonWithHistory(discriminatingCase);
+    const { writeHistory } =
+      resolveLayeredButtonWithHistory(discriminatingCase);
     const overlappingFields = fieldsWithOverlappingOwnership(writeHistory);
 
     expect(overlappingFields).toEqual(
@@ -41,33 +42,43 @@ describe('resolveLayeredButton', () => {
         'shape.radiusStartStart',
         'appearance.foregroundRole',
         'focus.colorRole',
-      ]),
+      ])
     );
     expect(writeHistory).toContainEqual(
       expect.objectContaining({
         layer: 'forcedColors',
         field: 'appearance.foregroundRole',
         replacedLayer: 'interaction',
-      }),
+      })
     );
   });
 
   it('allows independent context and interaction stages to commute', () => {
-    const reordered = standardOverrideOrder.map(stage => stage);
+    const reordered = standardOverrideOrder.map((stage) => stage);
     const contextIndex = reordered.indexOf('context');
     const interactionIndex = reordered.indexOf('interaction');
     reordered[contextIndex] = 'interaction';
     reordered[interactionIndex] = 'context';
 
-    expect(normalizeContract(resolveLayeredButtonInOrder(discriminatingCase, reordered).contract)).toEqual(
-      normalizeContract(resolveLayeredButtonWithHistory(discriminatingCase).contract),
+    expect(
+      normalizeContract(
+        resolveLayeredButtonInOrder(discriminatingCase, reordered).contract
+      )
+    ).toEqual(
+      normalizeContract(
+        resolveLayeredButtonWithHistory(discriminatingCase).contract
+      )
     );
   });
 
-  it('makes forced-colors precedence explicit rather than incidental', () => {
-    const wrongOrder = standardOverrideOrder.filter(stage => stage !== 'forcedColors');
+  it('rejects ordinary styling after protected forced-colors resolution', () => {
+    const wrongOrder = standardOverrideOrder.filter(
+      (stage) => stage !== 'forcedColors'
+    );
     wrongOrder.splice(wrongOrder.indexOf('interaction'), 0, 'forcedColors');
 
-    expect(compareContracts(resolveLayeredButtonInOrder(discriminatingCase, wrongOrder).contract, resolveSemanticButton(discriminatingCase))).not.toEqual([]);
+    expect(() =>
+      resolveLayeredButtonInOrder(discriminatingCase, wrongOrder)
+    ).toThrow('Protected field');
   });
 });

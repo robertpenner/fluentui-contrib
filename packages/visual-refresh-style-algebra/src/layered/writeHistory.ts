@@ -1,4 +1,7 @@
-import type { ButtonStyleContract, StyleDecision } from '../domain/ButtonStyleContract';
+import type {
+  ButtonStyleContract,
+  StyleDecision,
+} from '../domain/ButtonStyleContract';
 
 export type LayerName =
   | 'fluentBase'
@@ -18,6 +21,7 @@ export interface FieldWrite {
 export interface LayeredState {
   contract: ButtonStyleContract;
   writeHistory: FieldWrite[];
+  protectedFields: Map<string, LayerName>;
 }
 
 export const writeField = <Value>(
@@ -25,9 +29,18 @@ export const writeField = <Value>(
   layer: LayerName,
   field: string,
   value: Value,
-  assign: (contract: ButtonStyleContract, value: Value) => void,
+  assign: (contract: ButtonStyleContract, value: Value) => void
 ): void => {
-  const previousWrite = [...state.writeHistory].reverse().find(write => write.field === field);
+  const protectedBy = state.protectedFields.get(field);
+  if (protectedBy !== undefined && protectedBy !== layer) {
+    throw new Error(
+      `Protected field ${field} cannot be overwritten by ${layer}; owned by ${protectedBy}`
+    );
+  }
+
+  const previousWrite = [...state.writeHistory]
+    .reverse()
+    .find((write) => write.field === field);
   assign(state.contract, value);
   state.writeHistory.push({
     layer,
@@ -37,11 +50,24 @@ export const writeField = <Value>(
   });
 };
 
-export const addDecision = (state: LayeredState, decision: StyleDecision): void => {
+export const protectField = (
+  state: LayeredState,
+  layer: LayerName,
+  field: string
+): void => {
+  state.protectedFields.set(field, layer);
+};
+
+export const addDecision = (
+  state: LayeredState,
+  decision: StyleDecision
+): void => {
   state.contract.provenance = [...state.contract.provenance, decision];
 };
 
-export const fieldsWithOverlappingOwnership = (writeHistory: readonly FieldWrite[]): readonly string[] => {
+export const fieldsWithOverlappingOwnership = (
+  writeHistory: readonly FieldWrite[]
+): readonly string[] => {
   const owners = new Map<string, Set<LayerName>>();
 
   for (const write of writeHistory) {

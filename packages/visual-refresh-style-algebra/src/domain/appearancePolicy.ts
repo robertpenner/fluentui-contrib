@@ -7,7 +7,9 @@ export interface AppearanceRoles {
   borderRole: SemanticColorRole;
 }
 
-type StateAppearancePolicy = Readonly<Record<InteractionState, AppearanceRoles>>;
+type StateAppearancePolicy = Readonly<
+  Record<InteractionState, AppearanceRoles>
+>;
 
 const disabledRoles: AppearanceRoles = {
   foregroundRole: 'neutralForegroundDisabled',
@@ -16,7 +18,9 @@ const disabledRoles: AppearanceRoles = {
 };
 
 /** Complete state table: no state falls through to a prior layer. */
-export const appearanceStatePolicy: Readonly<Record<Appearance, StateAppearancePolicy>> = {
+export const appearanceStatePolicy: Readonly<
+  Record<Appearance, StateAppearancePolicy>
+> = {
   primary: {
     rest: {
       foregroundRole: 'foregroundOnBrand',
@@ -110,16 +114,3 @@ export const appearanceStatePolicy: Readonly<Record<Appearance, StateAppearanceP
     disabled: disabledRoles,
   },
 };
-
-export const forcedColorsPolicy = (interactionState: InteractionState): AppearanceRoles =>
-  interactionState === 'disabled'
-    ? {
-        foregroundRole: 'GrayText',
-        backgroundRole: 'ButtonFace',
-        borderRole: 'GrayText',
-      }
-    : {
-        foregroundRole: 'ButtonText',
-        backgroundRole: 'ButtonFace',
-        borderRole: 'ButtonBorder',
-      };

@@ -1,7 +1,13 @@
 import { appearanceStatePolicy } from '../domain/appearancePolicy';
 import type { ButtonCase } from '../domain/ButtonCase';
 import type { ButtonStyleContract } from '../domain/ButtonStyleContract';
-import { DESIGN_LANGUAGE_VERSION, focusPolicy, shapePolicy, spacingPolicy, typographyPolicy } from '../domain/policies';
+import {
+  DESIGN_LANGUAGE_VERSION,
+  focusPolicy,
+  shapePolicy,
+  spacingPolicy,
+  typographyPolicy,
+} from '../domain/policies';
 import { interactionStates } from '../domain/ButtonCase';
 import { resolveAnatomy } from '../semantic/resolveAnatomy';
 import { resolveCapabilities } from '../semantic/resolveCapabilities';
@@ -10,15 +16,24 @@ import type { LayeredState } from './writeHistory';
 export const applyFluentBase = (input: ButtonCase): LayeredState => {
   const radius = shapePolicy.fluent2;
   const blockSize = 32;
-  const textPadding = input.density === 'compact' ? spacingPolicy.textPadding - spacingPolicy.compactDelta : spacingPolicy.textPadding;
+  const textPadding =
+    input.density === 'compact'
+      ? spacingPolicy.textPadding - spacingPolicy.compactDelta
+      : spacingPolicy.textPadding;
   const anatomy = resolveAnatomy(input);
   const contract: ButtonStyleContract = {
     modelVersion: DESIGN_LANGUAGE_VERSION,
     geometry: {
       blockSize,
       minInlineSize: blockSize,
-      paddingInlineStart: input.contentKind === 'iconOnly' ? spacingPolicy.iconOnlyPadding : textPadding,
-      paddingInlineEnd: input.contentKind === 'iconOnly' ? spacingPolicy.iconOnlyPadding : textPadding,
+      paddingInlineStart:
+        input.contentKind === 'iconOnly'
+          ? spacingPolicy.iconOnlyPadding
+          : textPadding,
+      paddingInlineEnd:
+        input.contentKind === 'iconOnly'
+          ? spacingPolicy.iconOnlyPadding
+          : textPadding,
       gap: input.contentKind === 'textAndIcon' ? spacingPolicy.gap : 0,
     },
     shape: {
@@ -34,7 +49,12 @@ export const applyFluentBase = (input: ButtonCase): LayeredState => {
       appearanceSupported: true,
       supportedStates: interactionStates,
     },
-    validationObligations: ['nativeButtonSemantics', 'focusVisibility', 'stateCompleteness', 'textOverflow'],
+    validationObligations: [
+      'nativeButtonSemantics',
+      'focusVisibility',
+      'stateCompleteness',
+      'textOverflow',
+    ],
     focus: {
       visible: false,
       colorRole: 'focusStroke',
@@ -44,7 +64,11 @@ export const applyFluentBase = (input: ButtonCase): LayeredState => {
     capabilities: resolveCapabilities(input),
     provenance: [],
   };
-  const state: LayeredState = { contract, writeHistory: [] };
+  const state: LayeredState = {
+    contract,
+    writeHistory: [],
+    protectedFields: new Map(),
+  };
 
   const record = (field: string, value: unknown): void => {
     state.writeHistory.push({ layer: 'fluentBase', field, value });
@@ -55,16 +79,28 @@ export const applyFluentBase = (input: ButtonCase): LayeredState => {
   record('geometry.paddingInlineStart', contract.geometry.paddingInlineStart);
   record('geometry.paddingInlineEnd', contract.geometry.paddingInlineEnd);
   record('geometry.gap', contract.geometry.gap);
-  for (const field of ['radiusStartStart', 'radiusStartEnd', 'radiusEndStart', 'radiusEndEnd'] as const) {
+  for (const field of [
+    'radiusStartStart',
+    'radiusStartEnd',
+    'radiusEndStart',
+    'radiusEndEnd',
+  ] as const) {
     record(`shape.${field}`, contract.shape[field]);
   }
-  for (const field of ['foregroundRole', 'backgroundRole', 'borderRole'] as const) {
+  for (const field of [
+    'foregroundRole',
+    'backgroundRole',
+    'borderRole',
+  ] as const) {
     record(`appearance.${field}`, contract.appearance[field]);
   }
   record('typography', contract.typography);
   record('anatomy', contract.anatomy);
   record('supportedDomain.appearanceSupported', true);
-  record('supportedDomain.supportedStates', contract.supportedDomain.supportedStates);
+  record(
+    'supportedDomain.supportedStates',
+    contract.supportedDomain.supportedStates
+  );
   record('validationObligations', contract.validationObligations);
   record('focus.visible', false);
   record('focus.colorRole', contract.focus.colorRole);

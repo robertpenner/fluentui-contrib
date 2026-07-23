@@ -56,6 +56,7 @@ export type {
   SemanticColorRole,
   SystemColorRole,
 } from './domain/SemanticColorRole';
+export type { ForcedColorsContract } from './domain/ForcedColorsContract';
 export { validationObligations } from './domain/ValidationObligation';
 export type { ValidationObligation } from './domain/ValidationObligation';
 export {
@@ -83,6 +84,25 @@ export type {
   LayerName,
 } from './layered/writeHistory';
 export { resolveSemanticButton } from './semantic/resolveSemanticButton';
+export { resolveForcedColorsContract } from './semantic/resolveForcedColorsContract';
+export { emitForcedColors } from './emission/emitForcedColors';
+export { createForcedColorsEmissionExperiment } from './emission/createForcedColorsEmissionExperiment';
+export {
+  evaluateEmission,
+  measureForcedColorsEmission,
+  normalizeForcedColorsEmission,
+} from './emission/normalizeForcedColorsEmission';
+export { FORCED_COLORS_MEDIA } from './emission/ForcedColorsEmission';
+export type {
+  EmissionDiagnostic,
+  EmissionResult,
+  EmittedStyleRule,
+  ForcedColorsComponent,
+  ForcedColorsDecision,
+  ForcedColorsEmissionMetrics,
+  ForcedColorsEmissionTarget,
+  ForcedColorsSlot,
+} from './emission/ForcedColorsEmission';
 export {
   assertAccessibleLabel,
   CleanRoomButton,
