@@ -5,19 +5,19 @@ import * as ButtonComparisonStories from "./index.stories";
 
 <Title />
 
-[Start with the walkthrough](?path=/docs/packages-visual-refresh-style-algebra-start-here--docs) if the terms _button case_, _style contract_, _layered resolver_, or _semantic resolver_ are new to you.
+[Start with the walkthrough](?path=/docs/packages-visual-refresh-style-algebra-start-here--docs) for a step-by-step introduction to the research behind this comparison.
 
 ## The question this page answers
 
-How can product and visual-language policy change a button while two different resolver architectures still agree on the result?
+When button styling is updated for Visual Refresh or adapted for Teams, **which differences are intentional, and which would indicate a regression?**
 
-This is the smallest technical comparison in the package. It holds interaction, appearance, content, and direction steady, then compares three reference policies. Every card describes one button case and renders its contract twice through the same clean-room renderer.
+This page compares three familiar outcomes: the Fluent 2 baseline, Fluent Visual Refresh, and Teams Visual Refresh. It shows what each design direction deliberately changes, such as button height, while holding state, appearance, content, and direction steady.
 
 ## Read it in three passes
 
-1. **Read the card title.** It names the policy difference being isolated: Fluent 2, Fluent Visual Refresh, or Teams Visual Refresh.
-2. **Read the dimension line.** This is the complete input case. Most dimensions intentionally stay constant so that differences between cards remain interpretable.
-3. **Compare Layered with Semantic inside the card.** These labels name the route used to compute the contract. They do not name two desired visual variants.
+1. **Read the card title.** It names the design direction being shown: Fluent 2, Fluent Visual Refresh, or Teams Visual Refresh.
+2. **Read the details line.** It records the conditions used for that button. Most conditions intentionally stay constant, making differences between cards easier to explain.
+3. **Compare the two buttons inside the card.** They are produced by different implementations of the same styling rules and should look and behave the same. In this research, those implementations are called **Layered** and **Semantic**. You do not need to understand their internals to use this page.
 
 ## Live comparison
 
@@ -25,9 +25,9 @@ This is the smallest technical comparison in the package. It holds interaction, 
 
 ## What working as intended looks like
 
-- Within every card, the Layered and Semantic buttons should be visually indistinguishable. Agreement is the result under test, not accidental duplication.
+- Within every card, the two buttons should be visually indistinguishable. Seeing the same button twice is intentional: it checks that changing the implementation does not change the user-facing result.
 - The Fluent Visual Refresh reference should be 36 px tall. The Fluent 2 baseline and Teams Visual Refresh reference should remain 32 px tall.
-- Differences between cards may be intentional policy differences. Differences within a Layered/Semantic pair indicate resolver divergence or a renderer problem.
-- The card labels and dimensions should make every visible difference traceable to an input or named policy, rather than to an unexplained CSS override.
+- Differences between cards may be intentional design differences. A difference within a pair indicates an implementation mismatch or a rendering problem.
+- The card labels and details should make every visible difference traceable to a stated design condition rather than an unexplained CSS override.
 
-This page is deliberately narrow. Continue to the [Curated matrix](?path=/docs/packages-visual-refresh-style-algebra-curated-matrix--docs) to see whether the same agreement survives more interacting dimensions.
+This page is deliberately narrow. Continue to the [Curated matrix](?path=/docs/packages-visual-refresh-style-algebra-curated-matrix--docs) to see whether the two implementations remain consistent when more conditions interact.
