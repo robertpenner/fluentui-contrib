@@ -5,7 +5,7 @@ import rootConfig from '../../../.storybook/main';
 
 const config: StorybookConfig = {
   ...rootConfig,
-  stories: ['../stories/**/index.stories.@(js|jsx|ts|tsx|mdx)'],
+  stories: ['../stories/**/index.stories.@(js|jsx|ts|tsx)', '../stories/**/index.mdx'],
 };
 
 export default config;

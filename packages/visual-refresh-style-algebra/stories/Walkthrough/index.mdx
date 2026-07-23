@@ -1,0 +1,83 @@
+import { Meta, Title } from '@storybook/addon-docs/blocks';
+import {
+  ArchitectureExample,
+  CaseToContractExample,
+  EmissionExample,
+  LawExample,
+} from './WalkthroughExamples';
+
+<Meta title="Packages/visual-refresh-style-algebra/Start here" />
+
+<Title>Visual Refresh style algebra, one idea at a time</Title>
+
+This research asks a practical question: **can we describe what styling must mean before deciding how to express it in CSS?**
+
+That shift gives us a way to compare implementations, state accessibility guarantees, and investigate duplicated CSS without treating every generated rule as equally meaningful. You do not need algebra or property-testing experience to follow the approach.
+
+## 1. Start with a situation, not a stylesheet
+
+A button does not have one universal style. Its result depends on product, visual language, density, appearance, interaction state, environment, content, composition, and direction.
+
+The model gathers those conditions into a **button case**. A resolver turns the case into a **style contract**: a structured answer describing geometry, color roles, focus, anatomy, and behavior. CSS comes later.
+
+<CaseToContractExample />
+
+The word _semantic_ matters here. `ButtonFace` means “use the system's button surface in forced colors.” It does not prescribe a hex value, a class name, or where a media query must appear.
+
+## 2. Separate meaning from the route used to compute it
+
+The package intentionally computes the same contract in two different ways:
+
+- The **layered resolver** begins with Fluent and applies ordered overrides. This resembles how a customization stack evolves in practice.
+- The **semantic resolver** derives geometry, appearance, focus, anatomy, and capabilities independently, then combines them.
+
+Neither architecture wins because its code looks cleaner. The useful question is whether they produce the same observable contract across valid cases.
+
+<ArchitectureExample />
+
+This is why the technical stories show two buttons that look the same. Matching output is the expected result. The layered side additionally reveals precedence and field ownership; the semantic side makes policy boundaries easier to see.
+
+## 3. Turn design intent into laws
+
+A screenshot can show one result. A **law** states what must remain true across many results.
+
+Examples from this research include:
+
+- compact density may change geometry, but not semantic color;
+- RTL composition must preserve the correct outer corners;
+- an icon-only button must retain an accessible-name source;
+- forced colors must preserve focus, a visible boundary, and approved system roles.
+
+The property tests generate valid button cases and challenge each law repeatedly. A passing run is evidence over those generated cases, not a mathematical proof or browser certification.
+
+<LawExample />
+
+The toggle introduces a deliberate teaching fault. The rendered button is less important than the contract observation: a product token appears where only system roles are allowed. That is the kind of regression a law can catch even when visual inspection is unreliable.
+
+## 4. Keep accessibility policy above CSS emission
+
+Forced-colors behavior has two distinct levels:
+
+1. **Semantic policy:** foreground, background, boundary, focus, and disabled distinguishability.
+2. **Emission:** media queries, selectors, slots, declarations, specificity, precedence, and order.
+
+The first says what must be preserved. The second says how a styling system represents it. Repeated `@media (forced-colors: active)` blocks may indicate harmless emitter duplication, a missing semantic abstraction, or necessary contextual variation.
+
+<EmissionExample />
+
+The experiment therefore normalizes conservatively. It removes only rules whose modeled context is equivalent. Similar declarations remain separate when selector, component, slot, specificity, precedence, order, or declaration behavior differs.
+
+## 5. Read the technical stories as instruments
+
+Once this page feels comfortable, use the other stories for specific questions:
+
+- [**Button comparison**](?path=/docs/packages-visual-refresh-style-algebra-button-comparison--docs): What visibly changes between the Fluent 2 baseline, Visual Refresh, and Teams reference policy?
+- [**Curated matrix**](?path=/docs/packages-visual-refresh-style-algebra-curated-matrix--docs): Do selected products, states, densities, appearances, anatomy policies, and directions remain coherent?
+- [**Counterexamples**](?path=/docs/packages-visual-refresh-style-algebra-counterexamples--docs): What minimized input exposed a previous fault, and what did each resolver write?
+- [**Forced-colors emission**](?path=/docs/packages-visual-refresh-style-algebra-forced-colors-emission--docs): Which semantic decisions produced each synthetic rule, and why was a rule merged or retained?
+
+## What this work can and cannot claim
+
+The model makes assumptions explicit and turns them into executable questions. It can show that two resolvers agree under the modeled contract, that deliberate faults are detected, and that some synthetic duplicate rules are safe to remove.
+
+It does **not** prove pixel-perfect production behavior, screen-reader output, the complete CSS cascade, browser paint-time forced-color behavior, or that Griffel can apply the same normalization. The smallest next experiment is to capture real Griffel output for a few public Button-family fixtures and feed it into the existing emission model unchanged.
