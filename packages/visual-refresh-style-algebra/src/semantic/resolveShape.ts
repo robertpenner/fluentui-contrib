@@ -21,8 +21,8 @@ const joinedShape = (
     (compositionContext === 'splitButtonEnd' && direction === 'rtl');
 
   return outerEdgeIsStart
-    ? { radiusStartStart: radius, radiusStartEnd: radius, radiusEndStart: 0, radiusEndEnd: 0 }
-    : { radiusStartStart: 0, radiusStartEnd: 0, radiusEndStart: radius, radiusEndEnd: radius };
+    ? { radiusStartStart: radius, radiusStartEnd: 0, radiusEndStart: radius, radiusEndEnd: 0 }
+    : { radiusStartStart: 0, radiusStartEnd: radius, radiusEndStart: 0, radiusEndEnd: radius };
 };
 
 export const resolveShape = (input: ButtonCase): Shape => {

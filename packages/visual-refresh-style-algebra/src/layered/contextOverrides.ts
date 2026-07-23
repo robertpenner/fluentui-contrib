@@ -1,4 +1,5 @@
 import type { ButtonCase } from '../domain/ButtonCase';
+import { deriveValidationObligations } from '../semantic/deriveValidationObligations';
 import { resolveGeometry } from '../semantic/resolveGeometry';
 import { resolveShape } from '../semantic/resolveShape';
 import { addDecision, type LayeredState, writeField } from './writeHistory';
@@ -17,9 +18,18 @@ export const applyContextOverrides = (state: LayeredState, input: ButtonCase): L
       contract.shape[field] = value;
     });
   }
+  writeField(state, 'context', 'validationObligations', deriveValidationObligations(input), (contract, value) => {
+    contract.validationObligations = value;
+  });
   addDecision(state, {
     rule: 'content-and-composition-override',
-    fields: ['geometry.paddingInlineStart', 'geometry.paddingInlineEnd', 'geometry.gap', 'shape'],
+    fields: [
+      'geometry.paddingInlineStart',
+      'geometry.paddingInlineEnd',
+      'geometry.gap',
+      'shape',
+      'validationObligations',
+    ],
     explanation: `${input.contentKind}/${input.iconPlacement}/${input.direction}/${input.compositionContext} patches spacing and corners`,
     evidence: 'modelAssumption',
   });

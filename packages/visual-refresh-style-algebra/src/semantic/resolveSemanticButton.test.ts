@@ -23,8 +23,8 @@ describe('resolveSemanticButton', () => {
     expect(contract.geometry.paddingInlineStart).toBeLessThan(contract.geometry.paddingInlineEnd);
     expect(contract.shape).toEqual({
       radiusStartStart: 8,
-      radiusStartEnd: 8,
-      radiusEndStart: 0,
+      radiusStartEnd: 0,
+      radiusEndStart: 8,
       radiusEndEnd: 0,
     });
     expect(contract.appearance).toEqual({

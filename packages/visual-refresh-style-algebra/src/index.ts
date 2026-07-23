@@ -63,6 +63,7 @@ export {
 export type { InvalidButtonCaseReason } from './domain/validity';
 export { compareContracts } from './comparison/compareContracts';
 export type { ContractDifference } from './comparison/compareContracts';
+export { formatCounterexample } from './comparison/formatCounterexample';
 export { normalizeContract } from './comparison/normalizeContract';
 export type { ComparableButtonStyleContract } from './comparison/normalizeContract';
 export {
