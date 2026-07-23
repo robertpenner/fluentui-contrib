@@ -4,11 +4,12 @@
     "outDir": "../../dist/out-tsc",
     "declaration": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": [
     "jest.config.ts",
     "src/**/*.test.ts",
     "src/**/*.test.tsx",
+    "src/**/*.component-browser-spec.tsx",
     "files/**",
     "**/*.stories.ts",
     "**/*.stories.js",

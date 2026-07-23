@@ -52,6 +52,14 @@
           "quiet": true
         }
       }
+    },
+    "component-test": {
+      "executor": "@fluentui-contrib/nx-plugin:playwright",
+      "options": {
+        "testingType": "component",
+        "output": "{workspaceRoot}/dist/.playwright/packages/visual-refresh-style-algebra",
+        "config": "packages/visual-refresh-style-algebra/playwright.config.ts"
+      }
     }
   }
 }

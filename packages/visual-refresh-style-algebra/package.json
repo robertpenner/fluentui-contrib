@@ -6,6 +6,11 @@
   "dependencies": {
     "@swc/helpers": "~0.5.11"
   },
+  "peerDependencies": {
+    "@fluentui/react-components": ">=9.70.0 <10.0.0",
+    "@types/react": ">=16.8.0 <20.0.0",
+    "react": ">=16.8.0 <20.0.0"
+  },
   "private": true,
   "devDependencies": {
     "fast-check": "^4.9.0"

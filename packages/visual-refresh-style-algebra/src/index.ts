@@ -76,3 +76,6 @@ export type { OverrideStageName } from './layered/resolveLayeredButton';
 export { fieldsWithOverlappingOwnership } from './layered/writeHistory';
 export type { FieldWrite, LayeredState, LayerName } from './layered/writeHistory';
 export { resolveSemanticButton } from './semantic/resolveSemanticButton';
+export { assertAccessibleLabel, CleanRoomButton } from './render/CleanRoomButton';
+export type { CleanRoomButtonProps } from './render/CleanRoomButton';
+export { contractToStyles } from './render/contractToStyles';
