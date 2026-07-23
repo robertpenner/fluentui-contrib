@@ -81,6 +81,19 @@ experiment deliberately does not parse CSS media queries.
 The synthetic emission corpus models repeated style-hook output for experimentation. It is not captured Griffel CSS
 and must not be used as evidence about Griffel's exact behavior.
 
+The runtime capture is a separate evidence source. It renders public Button, ToggleButton, and SplitButton components
+under `CAP_STYLE_HOOKS`, associates their generated class names with accessible CSSOM rules, and adapts matching
+forced-colors rules one-to-one into `EmittedStyleRule`. Stylesheet index supplies modeled precedence and source order
+supplies modeled order. The adapter calculates selector specificity but does not reproduce the complete browser
+cascade, stylesheet origin, layers, or paint-time forced-color substitution. Specificity is ordered relative to the
+captured corpus; selector lists retain their maximum branch specificity rather than the specificity of a particular
+matching branch.
+
+Fixture capture additionally records the element's generated classes and indexes of captured selectors for which
+`Element.matches()` is true in the resting DOM. Differential capture compares class, rule, and matching-selector
+multisets independently. A selector match does not prove that its enclosing media query is active or that its
+declarations win the browser cascade; paint-time checks are a separate browser experiment.
+
 ## Named policy data
 
 `blockSizePolicy` is the only location for product and density block sizes. The Visual Refresh Fluent/SharePoint

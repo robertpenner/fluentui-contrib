@@ -1,5 +1,5 @@
-import { Meta, Stories, Title } from '@storybook/addon-docs/blocks';
-import * as ForcedColorsStories from './index.stories';
+import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
+import * as ForcedColorsStories from "./index.stories";
 
 <Meta of={ForcedColorsStories} />
 
@@ -13,13 +13,13 @@ Here, **high-contrast theming** is the user need: a person selects an operating-
 
 When several forced-colors media-query rules supporting high-contrast themes look alike, which repetitions can be removed safely, and which protect a different component, slot, state, or cascade position?
 
-The five cards span Button, ToggleButton, and split-button slots across Fluent, SharePoint, and Teams policy. The emitted rules are synthetic inspection data. They are not injected into the rendered buttons and do not certify operating-system high-contrast behavior.
+This page contains two stories. The five clean-room cards span Button, ToggleButton, and split-button slots across Fluent, SharePoint, and Teams policy using synthetic emission. The real-capture story renders public CAP Button-family components, reads their runtime Griffel CSSOM rules, and compares enabled, disabled, selected, and alternate-appearance fixtures. Separate tests emulate forced colors in Chromium, Firefox, and WebKit for selected paint relationships; neither story certifies a real operating-system high-contrast session.
 
 ## What decision this can inform
 
 Use this page to classify repeated output before proposing cleanup. An exact duplicate may indicate an emitter optimization. Repetition across Button-family components may indicate a missing shared accessibility policy. Similar rules with different selector or cascade context may be necessary and unsafe to merge.
 
-## Read each card from top to bottom
+## Read the synthetic cards from top to bottom
 
 1. **Case and target:** the heading and metadata identify the full button case plus the component/slot emission scope.
 2. **Rendered agreement:** Layered and Semantic should compute the same button contract before emission is considered.
@@ -39,7 +39,10 @@ Use this page to classify repeated output before proposing cleanup. An exact dup
 - `safelyNormalizedRules` should reflect only proven-equivalent removals. A lower rule count is not automatically a better result.
 - Unsafe-to-merge diagnostics should name the contextual dimensions that blocked compression.
 - Layered history should show forced colors as the final owner of protected appearance and focus fields, with no ordinary write after that protection.
+- The real Griffel capture should report 55 Button rules, 55 ToggleButton rules, 70 SplitButton primary-action rules, and 55 SplitButton menu-action rules for the current dependency versions.
+- The real capture should normalize all 235 rules to the same count. Its many unsafe-to-merge diagnostics are evidence that superficially similar atomic rules retain different selector or cascade context.
+- Differential capture should keep generated-class, related-rule, and currently matching-selector changes separate. All three current fixture pairs should report class and rule replacement rather than a zero-difference result.
 
 An ordinary product color in the semantic contract is an accessibility-policy failure. A changed modeled cascade after normalization is a normalizer failure. Repeated rules that remain after normalization may be legitimate context, not unfinished cleanup.
 
-These results classify the synthetic corpus only. The next experiment is to adapt real Griffel output for representative Button-family fixtures into the same emission model and rerun these laws unchanged.
+The synthetic result proves that the normalizer can remove known-safe duplicates. The first real CAP/Griffel corpus finds no such duplicates. Differential capture shows substantial atomic policy replacement for disabled, selected, and alternate appearances. Cross-engine forced-colors emulation separately preserves disabled and selected paint distinctions, while WebKit computes one alternate-appearance relationship differently from Chromium and Firefox. Focus, hover, additional appearances, and real operating-system high-contrast palettes remain future experiments.

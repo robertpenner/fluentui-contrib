@@ -1,14 +1,14 @@
-import { Meta, Title } from '@storybook/addon-docs/blocks';
+import { Meta, Title } from "@storybook/addon-docs/blocks";
 import {
   ArchitectureExample,
   CaseToContractExample,
   EmissionExample,
   LawExample,
-} from './WalkthroughExamples';
+} from "./WalkthroughExamples";
 
 <Meta title="Packages/visual-refresh-style-algebra/Start here" />
 
-<Title>From a styling change to a testable system</Title>
+<Title>Fluent and Visual Refresh: from styling changes to testable laws</Title>
 
 A button change that begins as a new height or radius can spread through Fluent defaults, Visual Refresh changes, derived components, product requirements, interaction states, forced colors, and composite controls. **Forced colors** is the browser mode that adapts authored colors when a person uses an operating-system high-contrast theme. Once those layers overlap, it becomes difficult to tell which differences are intentional, which guarantees must survive, and which rule caused a regression.
 
@@ -82,6 +82,6 @@ Once this page feels comfortable, use the other stories for specific questions:
 
 The model makes assumptions explicit and turns them into executable questions. It can show that two resolvers agree under the modeled contract, that deliberate faults are detected, and that some synthetic duplicate rules are safe to remove.
 
-It does **not** prove pixel-perfect production behavior, screen-reader output, the complete CSS cascade, browser paint-time forced-color behavior, or that Griffel can apply the same normalization. The smallest next experiment is to capture real Griffel output for a few public Button-family fixtures and feed it into the existing emission model unchanged.
+The runtime experiment captures Griffel output for public CAP Button-family fixtures and feeds it into the existing emission model unchanged. None of the 235 captured rules can be removed by the conservative normalizer. Differential fixtures show that disabled, selected, and alternate appearances replace generated atomic classes and rule context rather than merely activating one shared rule. Separate browser-emulation checks confirm selected and disabled paint relationships, but do **not** prove pixel-perfect production behavior, screen-reader output, the complete CSS cascade, or a real operating-system high-contrast session.
 
 It also cannot decide what Teams, SharePoint, or another product should require. The model can expose a disagreement and test an agreed decision; product alignment remains a human responsibility.

@@ -28,7 +28,7 @@ This package is an experiment, not a production dependency or a statement of pri
 
 `ButtonCase` separates product, visual language, density, appearance, interaction state, color mode, content, icon placement, anatomy, composition, and direction. `ButtonStyleContract` is the semantic boundary. The layered resolver applies named stages with field-level write history; the semantic resolver derives independent concerns. Provenance is excluded from equality, and both contracts feed `CleanRoomButton`.
 
-`ForcedColorsContract` separately captures system roles, focus, visible boundaries, and disabled distinguishability. `EmittedStyleRule` then represents media, selector, component/slot scope, declarations, precedence, order, specificity, and provenance. The synthetic emission experiment demonstrates both safe exact deduplication and unsafe contextual lookalikes; it is not captured Griffel output.
+`ForcedColorsContract` separately captures system roles, focus, visible boundaries, and disabled distinguishability. `EmittedStyleRule` then represents media, selector, component/slot scope, declarations, precedence, order, specificity, and provenance. A synthetic emission experiment demonstrates safe exact deduplication. A second instrument captures real runtime Griffel output from public CAP Button-family style hooks, feeds it into the same normalizer, and compares enabled, disabled, selected, and alternate-appearance fixtures without conflating emission with browser paint.
 
 ## Run the program
 

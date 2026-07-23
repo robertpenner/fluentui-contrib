@@ -2048,7 +2048,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@fluentui-contrib/react-cap-theme@workspace:packages/react-cap-theme":
+"@fluentui-contrib/react-cap-theme@workspace:*, @fluentui-contrib/react-cap-theme@workspace:packages/react-cap-theme":
   version: 0.0.0-use.local
   resolution: "@fluentui-contrib/react-cap-theme@workspace:packages/react-cap-theme"
   dependencies:
@@ -2338,8 +2338,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@fluentui-contrib/visual-refresh-style-algebra@workspace:packages/visual-refresh-style-algebra"
   dependencies:
+    "@fluentui-contrib/react-cap-theme": "workspace:*"
+    "@fluentui/react-components": "npm:^9.70.0"
+    "@fluentui/react-icons": "npm:^2.0.249"
+    "@fluentui/react-shared-contexts": "npm:^9.24.1"
     "@swc/helpers": "npm:~0.5.11"
+    "@types/react": "npm:18.3.1"
+    "@types/react-dom": "npm:18.3.0"
     fast-check: "npm:^4.9.0"
+    parsel-js: "npm:^1.1.2"
+    react: "npm:18.3.1"
+    react-dom: "npm:18.3.1"
   peerDependencies:
     "@fluentui/react-components": ">=9.70.0 <10.0.0"
     "@types/react": ">=16.8.0 <20.0.0"

@@ -6,7 +6,7 @@ The raw Cartesian input space contains 138,240 tuples. The explicit validity pre
 
 Across all valid cases, the layered architecture records 38 to 51 field writes per resolution. Eighteen fields have multiple owners somewhere in the domain: anatomy, capabilities, supported appearance, validation obligations, focus visibility/color, four geometry fields, four logical corners, and three appearance color roles. These values are executable regression metrics, not performance benchmarks.
 
-The program contains 16 named property laws and seven controlled mutations. The deep validation profile runs each property for 1,000 generated cases with a deterministic seed. Browser assertions cover five scenarios in each of three engines.
+The program contains 16 named property laws and seven controlled mutations. The deep validation profile runs each property for 1,000 generated cases with a deterministic seed. Browser assertions cover eight scenarios in each of three engines.
 
 The forced-colors refinement adds thirteen fast-check laws and six shrinking mutation checks. Its representative
 five-case synthetic corpus contains four semantic decision categories and 25 emitted media-query rules across four
@@ -14,22 +14,33 @@ component/slot scopes. Five exact duplicates are safely removed. Fourteen local 
 but remain separate because selector, slot, specificity, precedence, order, or declarations differ. No field is
 written after forced-colors protection in the standard layered pipeline.
 
+The runtime CAP/Griffel corpus captures 235 forced-colors CSS rules: 55 for Button root, 55 for ToggleButton root, 70
+for SplitButton primary action, and 55 for SplitButton menu action. The one-to-one adapter preserves all 235 rules.
+The normalizer removes none and reports 1,400 contextual lookalike pairs that remain separate. A focused Chromium test
+locks those counts and verifies that modeled cascade evaluation is unchanged.
+
+Differential Chromium capture compares primary enabled/disabled Button, primary unselected/selected ToggleButton, and
+primary/secondary Button fixtures. Every pair changes generated classes and related forced-colors rule sets. Disabled
+changes 116 to 128 classes and 55 to 62 rules; selected changes 117 to 121 classes and 55 to 57 rules; secondary changes
+116 to 71 classes and 55 to 25 rules. The corresponding rule-set deltas are 47 added/40 removed, 23 added/21 removed,
+and 5 added/35 removed. These dependency-sensitive counts are locked separately from the 235-rule normalization corpus.
+
 ## Response to the motivating UXE concerns
 
 Natalie Wainwright's UXE Crit presentation described practical failure modes around layered Visual Refresh styling.
 This clean-room program responds to those concerns unevenly by design. Some have executable evidence here; others need
 production Fluent data or product decisions.
 
-| Motivating concern                                                       | Evidence produced here                                                                                   | What remains unanswered                                                                               |
-| ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| A visible bug is difficult to trace through many style layers            | Field-level provenance, 38-51 recorded writes per case, 18 multiply owned fields, and minimized fixtures | Provenance from actual Fluent, Visual Refresh, and product styling                                    |
-| Product dimensions diverge within one nominal system                     | Visual Refresh 36 px and Teams 32 px are represented as named, presentation-derived policy               | Complete and aligned requirements for Fluent, Teams, SharePoint, and other products                   |
-| Derived components multiply inherited styling and corrective overrides   | ToggleButton and split-button preservation cases challenge shared guarantees                             | The real inheritance and composition cost of production Button-family components                      |
-| High-contrast rules are difficult to override and do not compose cleanly | One protected forced-colors contract is separated from contextual CSS-like emission and tested with laws | Captured Griffel output and browser paint-time behavior under operating-system high-contrast settings |
-| A base-component change propagates into composite components             | Composition context, direction, and split-button geometry are modeled explicitly                         | Propagation through production toolbars, drawers, dialogs, carousels, and other composites            |
-| Reimplementing styles can lose accessibility or browser fixes            | Explicit focus, boundary, naming, native-button, state, and composition obligations                      | A complete inventory of guarantees encoded by production Fluent styles                                |
-| Repeated media queries may represent waste or necessary context          | Five exact duplicates are removed while fourteen contextual lookalikes are retained                      | Whether the same proportions or normalization opportunities occur in real Griffel output              |
-| Redesigns can force design-system and feature-code rework                | Named policies and laws separate replaceable choices from guarantees that must survive                   | Change-cost measurements from actual Visual Refresh and consumer migrations                           |
+| Motivating concern                                                       | Evidence produced here                                                                                   | What remains unanswered                                                                                      |
+| ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| A visible bug is difficult to trace through many style layers            | Field-level provenance, 38-51 recorded writes per case, 18 multiply owned fields, and minimized fixtures | Provenance from actual Fluent, Visual Refresh, and product styling                                           |
+| Product dimensions diverge within one nominal system                     | Visual Refresh 36 px and Teams 32 px are represented as named, presentation-derived policy               | Complete and aligned requirements for Fluent, Teams, SharePoint, and other products                          |
+| Derived components multiply inherited styling and corrective overrides   | ToggleButton and split-button preservation cases challenge shared guarantees                             | The real inheritance and composition cost of production Button-family components                             |
+| High-contrast rules are difficult to override and do not compose cleanly | A protected forced-colors contract is tested separately from synthetic and runtime CAP/Griffel emission  | Browser paint-time behavior under operating-system high-contrast settings and complete production-app output |
+| A base-component change propagates into composite components             | Composition context, direction, and split-button geometry are modeled explicitly                         | Propagation through production toolbars, drawers, dialogs, carousels, and other composites                   |
+| Reimplementing styles can lose accessibility or browser fixes            | Explicit focus, boundary, naming, native-button, state, and composition obligations                      | A complete inventory of guarantees encoded by production Fluent styles                                       |
+| Repeated media queries may represent waste or necessary context          | Synthetic duplicates normalize safely; none of 235 captured CAP/Griffel rules do                         | Whether other components, states, products, or production bundles contain safe normalization opportunities   |
+| Redesigns can force design-system and feature-code rework                | Named policies and laws separate replaceable choices from guarantees that must survive                   | Change-cost measurements from actual Visual Refresh and consumer migrations                                  |
 
 The package does not measure Natalie's reported source-line totals. Lines of CSS are useful motivation but an
 incomplete complexity measure: one duplicated declaration, one hidden accessibility invariant, and one product
@@ -64,21 +75,45 @@ remain separate. The blockers are different selectors, component/slot scope, spe
 conflicting declarations. Different textual media conditions also remain separate because the model has no CSS media
 parser and cannot prove equivalence.
 
-### Interpretation of the Griffel observation
+### Runtime Griffel capture result
 
-The evidence points to a combination, not one universal cause. Exact duplicates demonstrate an emitter-optimization
-opportunity under the model. Repetition of the same semantic decisions across Button, ToggleButton, and split slots
-suggests a possible semantic abstraction gap. Many lookalikes are legitimate contextual variation and cannot be
-merged. Because the corpus is synthetic, this experiment does not establish the proportions in actual Griffel CSS.
+The runtime instrument renders public Button, ToggleButton, and SplitButton components under public CAP style hooks.
+It captures matching `@media (forced-colors: active)` CSSOM rules by generated class, preserves each CSS rule as one
+`EmittedStyleRule`, and runs the existing normalizer unchanged. The current Chromium corpus contains 235 rules and no
+safe reductions. Its 1,400 retained lookalike pairs differ by selector or another modeled cascade dimension.
+
+This changes the interpretation of the synthetic result. Exact duplicates remain a demonstrated normalization
+opportunity in the model, but they do not establish an optimization opportunity in the selected real Griffel output.
+The captured repetition is presently evidence of atomic, state-specific, and component/slot context rather than safe
+textual waste. Repeated appearance, boundary, and focus decisions across the Button family can still motivate a shared
+semantic policy, but semantic repetition does not imply mergeable CSS.
+
+### Differential capture and paint result
+
+The differential instrument records three independent observations: generated class names, forced-colors rules related
+to those classes, and selectors matching the fixture's resting DOM. This separation matters because selector matching
+does not establish that the enclosing media query is active or that a declaration wins the browser cascade.
+
+The disabled and selected comparisons each retain fourteen matching rules but replace twelve and thirteen of their
+matching rule identities, respectively. The secondary Button has thirty related forced-colors rules but no selector
+matching its resting state, compared with fourteen for primary. The initial hypothesis that disabled policy would be
+expressed mainly by activating shared pseudo-class rules was therefore false for the current CAP hooks: all three
+variants replace substantial atomic class and rule context.
+
+In separate Chromium, Firefox, and WebKit checks with `forced-colors: active`, enabled primary Button and selected
+primary ToggleButton share a computed paint profile, while disabled primary remains distinct. Chromium and Firefox
+also map unselected primary ToggleButton and secondary Button to the same profile and reuse the disabled foreground as
+its visible border. WebKit computes the unselected and secondary profiles differently. These are relational assertions
+rather than hardcoded RGB values, so the test records engine behavior without treating one emulated palette as universal.
 
 Candidate seams suggested by the evidence are: a shared internal Fluent button-family forced-colors policy; a CAP
 specialization boundary that runs before protected accessibility resolution; and a Griffel diagnostic or conservative
 normalization key containing canonical media, selector, cascade dimensions, and provenance. None is yet an API
 recommendation.
 
-The smallest valuable follow-up is to capture actual Griffel output for one Button, one ToggleButton, and one split
-button fixture through public style hooks, adapt those rules into `EmissionResult`, and rerun the existing normalizer
-and laws unchanged. That experiment can classify real duplication before proposing any Fluent, CAP, or Griffel change.
+The smallest valuable follow-up is now to exercise focus and hover transitions, add the remaining appearances, and
+repeat selected paint checks in real operating-system high-contrast themes. That work should retain the same boundary:
+emission diffs explain generated policy context, while browser and operating-system checks evaluate final paint.
 
 ## Results
 

@@ -9,18 +9,29 @@
   SharePoint, Teams, standard/compact density, all supported appearance families, focus/disabled states,
   Button/ToggleButton/split targets, and LTR/RTL. Each case exposes the semantic contract, synthetic unnormalized
   emission, normalized emission, diagnostics, rendered output, and layered provenance/write history.
+- **Real Griffel capture** renders public CAP Button, ToggleButton, and SplitButton fixtures, reads their runtime
+  forced-colors CSSOM rules, adapts them into the same emission model, and displays captured, normalized, and
+  differential output for disabled, selected, and alternate-appearance fixtures.
 
 ## Browser assertions
 
-Playwright component tests run the shared native-button renderer in Chromium, Firefox, and WebKit. They assert native disabled semantics, focus-visible styling, forced-color system-role mapping, icon-only accessible labels, reconstructed anatomy, conditional padding, split-button corners, and RTL behavior.
+Playwright component tests run the shared native-button renderer in Chromium, Firefox, and WebKit. They assert native disabled semantics, focus-visible styling, forced-color system-role mapping, icon-only accessible labels, reconstructed anatomy, conditional padding, split-button corners, and RTL behavior. Runtime capture laws run in all three engines; Chromium additionally locks the dependency-sensitive corpus and differential counts. Forced-colors emulation in all three engines verifies that selected primary paint matches enabled primary paint and disabled paint remains distinct. Chromium and Firefox also map unselected ToggleButton and secondary Button to the same profile; WebKit computes those profiles differently.
 
 The browser suite is deliberately small and scenario-based. Property tests cover combinatorial semantics cheaply; browser tests verify that the renderer preserves selected semantics in actual engines.
 
 ## Boundary of evidence
 
-These checks do not constitute visual-regression baselines, screen-reader certification, contrast measurement, or validation of production Fluent components. They test the clean-room renderer only.
+These checks do not constitute visual-regression baselines, screen-reader certification, contrast measurement, or validation of a production application. Most test the clean-room renderer; the CSSOM capture separately inspects public Fluent components with CAP style hooks.
 
 Playwright component testing in this package does not faithfully reproduce OS high-contrast settings and browser
 paint-time forced-color substitution across all three engines. The browser checks therefore assert deterministic
 system-role mapping and rendered structure, while semantic and emission properties carry the normalization argument.
-The synthetic media-query rules are inspection artifacts and are not injected into the rendered button.
+The synthetic media-query rules are inspection artifacts and are not injected into the rendered button. The real
+capture reads generated rules loaded for selected elements and identifies selectors matching the resting DOM. It does
+not prove which declarations win in every pseudo-state. Browser forced-colors emulation exercises substitution and
+computed styles, but it is not a real operating-system high-contrast session and does not certify equivalent paint
+across engines or every system palette.
+
+The live development story currently emits Griffel diagnostics for `borderColor` shorthand in the loaded CAP style
+hooks. The capture experiment does not suppress or reinterpret those diagnostics; they are an observed input-version
+limitation rather than evidence that capture or normalization failed.

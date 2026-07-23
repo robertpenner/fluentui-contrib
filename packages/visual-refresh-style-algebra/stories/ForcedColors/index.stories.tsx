@@ -8,3 +8,4 @@ const meta = {
 
 export default meta;
 export { ForcedColorsEmission } from './ForcedColors.stories';
+export { RealGriffelCapture } from './RealGriffelCapture';

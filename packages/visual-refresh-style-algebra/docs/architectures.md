@@ -74,5 +74,11 @@ never used as the oracle for semantic equivalence.
 The normalizer is conservative. It can expose repeated semantic decisions without erasing contextual variation. This
 separates three explanations for repeated media blocks: an emitter may repeat truly equivalent rules; an accessibility
 policy may be copied because no semantic boundary exists; or similar declarations may encode necessary contextual
-differences. The current synthetic corpus demonstrates the first and third. It cannot establish which explanation
-dominates actual Griffel output.
+differences. The synthetic corpus demonstrates the first and third. The first runtime CAP/Griffel capture demonstrates
+the third: none of its 235 captured rules can be removed under the modeled equivalence key. That result applies to the
+selected fixtures and loaded style hooks, not Griffel output universally.
+
+Differential capture then compares generated classes, related forced-colors rules, and currently matching selectors
+as separate sets. Disabled, selected, and alternate-appearance fixtures all replace atomic classes and rule context;
+they are not represented solely by activating a shared pseudo-class rule. This describes the current CAP hooks and
+dependency versions, not a required Griffel architecture.
