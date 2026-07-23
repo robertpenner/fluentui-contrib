@@ -1,4 +1,8 @@
 import type { ButtonCase } from '../domain/ButtonCase';
+import type {
+  EmittedStyleRule,
+  ForcedColorsEmissionTarget,
+} from '../emission/ForcedColorsEmission';
 
 const baseRegressionCase: ButtonCase = {
   product: 'fluent',
@@ -59,4 +63,32 @@ export const unsupportedAppearanceRegression: ButtonCase = {
   ...baseRegressionCase,
   product: 'teams',
   appearance: 'tint',
+};
+
+export const forcedColorsFocusExtensionRegression: ButtonCase = {
+  ...forcedColorsMutationRegression,
+  interactionState: 'focusVisible',
+};
+
+export const forcedColorsDisabledRegression: ButtonCase = {
+  ...forcedColorsMutationRegression,
+  interactionState: 'disabled',
+};
+
+export const toggleButtonTargetRegression: ForcedColorsEmissionTarget = {
+  component: 'ToggleButton',
+  slot: 'root',
+};
+
+export const emissionRuleRegression: EmittedStyleRule = {
+  media: '(forced-colors: active)',
+  selectorScope: '.Button[data-slot="root"]',
+  declarations: { color: 'ButtonText' },
+  precedence: 100,
+  order: 0,
+  specificity: 20,
+  sourceRules: ['regression-base'],
+  component: 'Button',
+  slot: 'root',
+  semanticDecision: 'appearance',
 };
