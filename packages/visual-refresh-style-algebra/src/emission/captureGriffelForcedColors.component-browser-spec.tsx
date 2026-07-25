@@ -122,12 +122,18 @@ test('differential capture distinguishes state and appearance policy classes', a
   const output = component.getByTestId('griffel-differential-data');
   await expect(output).not.toHaveText('[]');
   const differences = JSON.parse((await output.textContent()) ?? '[]');
+  // These counts moved when CAP's primary ToggleButton forced-colors block
+  // restated `forced-color-adjust: auto`. Restating it gives the declaration the
+  // same Griffel key as the `none` CAP's Button block contributes, so
+  // `mergeClasses` now collapses the pair instead of leaving both on the root —
+  // hence the smaller baselines — and the alternate-appearance capture keeps the
+  // toggle's own forced-colors rules instead of losing them to the Button's.
   const expectedMetrics = new Map<string, Record<string, number>>([
     [
       'Disabled state',
       {
-        baselineClasses: 116,
-        candidateClasses: 128,
+        baselineClasses: 114,
+        candidateClasses: 126,
         baselineRules: 55,
         candidateRules: 62,
         baselineMatching: 14,
@@ -143,32 +149,32 @@ test('differential capture distinguishes state and appearance policy classes', a
     [
       'Selected state',
       {
-        baselineClasses: 117,
-        candidateClasses: 121,
+        baselineClasses: 115,
+        candidateClasses: 119,
         baselineRules: 55,
         candidateRules: 57,
         baselineMatching: 14,
         candidateMatching: 14,
-        addedClasses: 27,
-        removedClasses: 23,
-        addedRules: 23,
-        removedRules: 21,
-        activatedRules: 13,
-        deactivatedRules: 13,
+        addedClasses: 28,
+        removedClasses: 24,
+        addedRules: 24,
+        removedRules: 22,
+        activatedRules: 14,
+        deactivatedRules: 14,
       },
     ],
     [
       'Alternate appearance',
       {
-        baselineClasses: 116,
-        candidateClasses: 71,
+        baselineClasses: 114,
+        candidateClasses: 81,
         baselineRules: 55,
-        candidateRules: 25,
+        candidateRules: 29,
         baselineMatching: 14,
         candidateMatching: 0,
-        addedClasses: 22,
-        removedClasses: 67,
-        addedRules: 5,
+        addedClasses: 26,
+        removedClasses: 59,
+        addedRules: 9,
         removedRules: 35,
         activatedRules: 0,
         deactivatedRules: 14,

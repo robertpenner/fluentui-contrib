@@ -30,6 +30,15 @@ const highContrastPrimaryStyles: GriffelStyle = {
     backgroundColor: 'ButtonFace',
     ...shorthands.borderColor('ButtonBorder'),
     color: 'ButtonText',
+    // Upstream's `usePrimaryHighContrastStyles` deliberately hands substitution
+    // back to the platform for primary ToggleButtons, so an unselected toggle
+    // stays distinguishable from a selected one. CAP replaces that block but
+    // used to omit this line, leaving the `forced-color-adjust: none` that CAP's
+    // *Button* primary block contributes still matching the root at equal
+    // specificity. Nothing deduped the two, so the winner was decided by
+    // stylesheet insertion order — the same button computed `auto` or `none`
+    // depending on what else the page had rendered first.
+    forcedColorAdjust: 'auto',
     ':focus': shorthands.borderColor('ButtonBorder'),
   },
 };
