@@ -149,6 +149,11 @@ export type {
   ButtonSurfaceState,
 } from './observation/observeButtonSurface';
 export {
+  capColors,
+  capGeometry,
+  observeCapSurface,
+} from './observation/capSurface';
+export {
   asButtonAppearance,
   capButtonAppearances,
   CapButtonFamilyFixtures,

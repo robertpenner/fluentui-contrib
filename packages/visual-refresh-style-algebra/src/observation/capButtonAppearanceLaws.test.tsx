@@ -4,19 +4,13 @@ import {
   CapButtonFixtures,
   CapFixtureProvider,
   capButtonAppearances,
-  capTheme,
   type CapButtonAppearance,
 } from '../fixtures/capButtonFamily';
 import {
   buttonColorModes,
-  observeButtonSurface,
-  projectSurface,
-  resolveThemeValues,
-  surfaceColorProperties,
-  surfaceGeometryProperties,
-  type ButtonSurface,
   type ButtonSurfaceObservation,
 } from './observeButtonSurface';
+import { capColors, capGeometry, observeCapSurface } from './capSurface';
 
 /**
  * Metamorphic laws for the production CAP Button.
@@ -48,19 +42,11 @@ const surfaceFor = (
   appearance: CapButtonAppearance,
   condition: Condition
 ): ButtonSurfaceObservation =>
-  observeButtonSurface(document, buttonFor(appearance, condition));
+  observeCapSurface(buttonFor(appearance, condition));
 
-// Colours are compared after token substitution: `colorTransparentStroke` and
-// `transparent` name the same paint, and a law about what the user sees must not
-// treat that difference as a change.
-const colors = (surface: ButtonSurface): ButtonSurface =>
-  resolveThemeValues(
-    projectSurface(surface, surfaceColorProperties),
-    capTheme as unknown as Readonly<Record<string, string>>
-  );
+const colors = capColors;
 
-const geometry = (surface: ButtonSurface): ButtonSurface =>
-  projectSurface(surface, surfaceGeometryProperties);
+const geometry = capGeometry;
 
 // Rendered per test rather than once: Testing Library's automatic cleanup empties
 // the container after every test. Griffel's inserted rules survive, so the

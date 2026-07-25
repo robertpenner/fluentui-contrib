@@ -130,6 +130,15 @@ export const CapToggleButtonFixtures: React.FC = () => (
         >
           {appearance}
         </ToggleButton>
+        <ToggleButton
+          appearance={asButtonAppearance(appearance)}
+          checked
+          disabled
+          disabledFocusable
+          data-testid={`toggle-${appearance}-checkedDisabledFocusable`}
+        >
+          {appearance}
+        </ToggleButton>
       </React.Fragment>
     ))}
   </>
