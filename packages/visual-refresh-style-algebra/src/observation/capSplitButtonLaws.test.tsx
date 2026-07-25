@@ -152,9 +152,7 @@ const dividerFor = (
   });
 
 const cases = capButtonAppearances.flatMap((appearance) =>
-  capSplitButtonConditions.map(
-    (condition) => [appearance, condition] as const
-  )
+  capSplitButtonConditions.map((condition) => [appearance, condition] as const)
 );
 
 beforeEach(() => {
@@ -170,35 +168,51 @@ beforeEach(() => {
 });
 
 describe('CAP SplitButton inherited Button guarantees', () => {
-  it.each(directions)('renders both actions as native buttons in %s', (direction) => {
-    for (const [appearance, condition] of cases) {
-      for (const action of actions) {
-        const element = elementFor(direction, appearance, condition, action);
+  it.each(directions)(
+    'renders both actions as native buttons in %s',
+    (direction) => {
+      for (const [appearance, condition] of cases) {
+        for (const action of actions) {
+          const element = elementFor(direction, appearance, condition, action);
 
-        expect(element.tagName).toBe('BUTTON');
-        expect(element.getAttribute('type')).toBe('button');
-      }
-    }
-  });
-
-  it.each(directions)('draws a focus indicator on both actions in %s', (direction) => {
-    for (const [appearance, condition] of cases) {
-      for (const action of actions) {
-        const { effective } = surfaceFor(direction, appearance, condition, action);
-
-        for (const mode of buttonColorModes) {
-          expect(effective[mode].focusVisible['outline-style']).toBe('solid');
+          expect(element.tagName).toBe('BUTTON');
+          expect(element.getAttribute('type')).toBe('button');
         }
       }
     }
-  });
+  );
+
+  it.each(directions)(
+    'draws a focus indicator on both actions in %s',
+    (direction) => {
+      for (const [appearance, condition] of cases) {
+        for (const action of actions) {
+          const { effective } = surfaceFor(
+            direction,
+            appearance,
+            condition,
+            action
+          );
+
+          for (const mode of buttonColorModes) {
+            expect(effective[mode].focusVisible['outline-style']).toBe('solid');
+          }
+        }
+      }
+    }
+  );
 
   it.each(directions)(
     'suppresses hover and pressed feedback on both disabled actions in %s',
     (direction) => {
       for (const appearance of capButtonAppearances) {
         for (const action of actions) {
-          const { effective } = surfaceFor(direction, appearance, 'disabled', action);
+          const { effective } = surfaceFor(
+            direction,
+            appearance,
+            'disabled',
+            action
+          );
 
           for (const mode of buttonColorModes) {
             const rest = paintedColors(direction, action, effective[mode].rest);
@@ -222,7 +236,12 @@ describe('CAP SplitButton propagation laws', () => {
     (direction) => {
       for (const appearance of capButtonAppearances) {
         for (const action of actions) {
-          const disabled = elementFor(direction, appearance, 'disabled', action);
+          const disabled = elementFor(
+            direction,
+            appearance,
+            'disabled',
+            action
+          );
 
           expect(disabled.hasAttribute('disabled')).toBe(true);
 
@@ -266,7 +285,12 @@ describe('CAP SplitButton joined-edge laws', () => {
   it.each(directions)('squares the joined edge in %s', (direction) => {
     for (const [appearance, condition] of cases) {
       for (const action of actions) {
-        const { effective } = surfaceFor(direction, appearance, condition, action);
+        const { effective } = surfaceFor(
+          direction,
+          appearance,
+          condition,
+          action
+        );
         const geometry = capGeometry(effective.ordinary.rest);
 
         for (const corner of joinedCorners[direction][action]) {
@@ -279,7 +303,12 @@ describe('CAP SplitButton joined-edge laws', () => {
   it.each(directions)('keeps the outer corners rounded in %s', (direction) => {
     for (const [appearance, condition] of cases) {
       for (const action of actions) {
-        const { effective } = surfaceFor(direction, appearance, condition, action);
+        const { effective } = surfaceFor(
+          direction,
+          appearance,
+          condition,
+          action
+        );
         const geometry = capGeometry(effective.ordinary.rest);
 
         for (const corner of outerCorners[direction][action]) {

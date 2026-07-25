@@ -1,5 +1,5 @@
-import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
-import * as ToggleButtonLawsStories from "./index.stories";
+import { Meta, Stories, Title } from '@storybook/addon-docs/blocks';
+import * as ToggleButtonLawsStories from './index.stories';
 
 <Meta of={ToggleButtonLawsStories} />
 
@@ -21,10 +21,10 @@ One law does not hold, and it is **not** CAP's to fix.
 
 Fluent applies its checked high-contrast styling whenever `checked` is set, disabled or not. A checked, disabled toggle therefore carries two boundary declarations under `forced-colors: active`:
 
-- `Highlight`, meaning *selected*, from Fluent's checked high-contrast styles
-- `GrayText`, meaning *disabled*, from CAP's disabled styles
+- `Highlight`, meaning _selected_, from Fluent's checked high-contrast styles
+- `GrayText`, meaning _disabled_, from CAP's disabled styles
 
-The two carry different Griffel keys, so `mergeClasses` cannot drop either. Both land in the media bucket at equal specificity. The winner is then decided purely by **which component rendered first** — and it comes out differently for the resting and hovered surfaces: the toggle reads as *selected* at rest and as *disabled* under the pointer.
+The two carry different Griffel keys, so `mergeClasses` cannot drop either. Both land in the media bucket at equal specificity. The winner is then decided purely by **which component rendered first** — and it comes out differently for the resting and hovered surfaces: the toggle reads as _selected_ at rest and as _disabled_ under the pointer.
 
 CAP cannot settle this from its own style hook. Restating the disabled declarations reuses the very same atomic classes, so no later insertion is produced and nothing changes. A partial restatement fixes hover while leaving the resting surface untouched, which trades one inconsistency for another.
 

@@ -57,7 +57,8 @@ const toggleFor = (
 const surfaceFor = (
   appearance: CapButtonAppearance,
   condition: ToggleCondition
-): ButtonSurfaceObservation => observeCapSurface(toggleFor(appearance, condition));
+): ButtonSurfaceObservation =>
+  observeCapSurface(toggleFor(appearance, condition));
 
 // Rendered per test: Testing Library's automatic cleanup empties the container
 // after every test, while Griffel's inserted rules survive.
@@ -227,9 +228,14 @@ describe('CAP ToggleButton specialization laws', () => {
 
       for (const mode of buttonColorModes) {
         expect(
-          capColors(surfaceFor(appearance, 'checkedDisabledFocusable').effective[mode].rest)
+          capColors(
+            surfaceFor(appearance, 'checkedDisabledFocusable').effective[mode]
+              .rest
+          )
         ).toEqual(
-          capColors(surfaceFor(appearance, 'checkedDisabled').effective[mode].rest)
+          capColors(
+            surfaceFor(appearance, 'checkedDisabled').effective[mode].rest
+          )
         );
       }
     }

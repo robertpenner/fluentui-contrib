@@ -152,8 +152,7 @@ export const capSplitButtonConditions = [
   'disabledFocusable',
 ] as const;
 
-export type CapSplitButtonCondition =
-  (typeof capSplitButtonConditions)[number];
+export type CapSplitButtonCondition = (typeof capSplitButtonConditions)[number];
 
 export interface CapSplitButtonFixturesProps {
   /**

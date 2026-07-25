@@ -108,7 +108,7 @@ rather than hardcoded RGB values, so the test records engine behavior without tr
 
 That last difference has since been reduced to a minimal fixture and split into two separate findings, one product
 defect and one engine capability. CAP's primary ToggleButton forced-colors block restated upstream's three system
-colours but dropped its `forced-color-adjust: auto`, while CAP's *Button* primary block contributes
+colours but dropped its `forced-color-adjust: auto`, while CAP's _Button_ primary block contributes
 `forced-color-adjust: none` to the same root at the same specificity. Nothing deduped the pair, so the winning
 declaration was decided by Griffel's insertion order: the same button computed `auto` alone and `none` when another CAP
 fixture rendered first. Restating the opt-in fixes it and makes `mergeClasses` collapse the pair. With the policy
@@ -166,20 +166,20 @@ Next experiments should replace assumptions with cited public evidence, add cont
 ## Production audit
 
 The clean-room work above has now been run against production. Every law in this package is asserted over the real
-`@fluentui-contrib/react-cap-theme` styles, and the outcome is published as a classified audit: see the *CAP production
-audit* page in Storybook, backed by `src/audit/productionAudit.ts`.
+`@fluentui-contrib/react-cap-theme` styles, and the outcome is published as a classified audit: see the _CAP production
+audit_ page in Storybook, backed by `src/audit/productionAudit.ts`.
 
 Two things that the clean-room framing could not have produced are worth recording here. First, two of the four confirmed
-defects are decided by *stylesheet insertion order* rather than by any declaration a reader can point at: all Griffel
+defects are decided by _stylesheet insertion order_ rather than by any declaration a reader can point at: all Griffel
 classes carry identical specificity, so two surviving declarations for the same property are resolved by what else the
 page rendered first. A law asserted under a single render order reports either outcome as correct, which is why the
 forced-colors laws are asserted under more than one order, each in its own page. Second, two findings are defects in the
-*instrument* rather than in the product, and both made a law pass rather than fail. They are published at the same rank
+_instrument_ rather than in the product, and both made a law pass rather than fail. They are published at the same rank
 as the product defects, because a suite that passes vacuously converts silence into evidence.
 
 The next-family nomination is measured rather than intuited, and it lets the last open question above be answered
 concretely: the census counts, per family, the markers of the mechanisms this audit actually found, and `react-tags` is
-nominated because it scores highest on those markers *and* because `InteractionTag` is structurally the same object as
+nominated because it scores highest on those markers _and_ because `InteractionTag` is structurally the same object as
 SplitButton — two actions, a joined seam, shared disabled propagation. Whether that ownership overlap predicts real
 maintenance defects is now a testable prediction rather than a hypothesis, since the transferred laws either fail there
 or they do not.

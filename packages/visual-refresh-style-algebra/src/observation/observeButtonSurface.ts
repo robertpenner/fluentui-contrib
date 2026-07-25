@@ -154,7 +154,9 @@ export const resolveThemeValues = (
             return resolve(String(declared), depth - 1);
           }
 
-          return fallback === undefined ? matched : resolve(fallback.trim(), depth - 1);
+          return fallback === undefined
+            ? matched
+            : resolve(fallback.trim(), depth - 1);
         });
 
   return Object.fromEntries(
@@ -251,7 +253,9 @@ const targetsOwnSurface = (
     return false;
   }
 
-  if (pseudoElementOf(key.slice(match.index + match[0].length)) !== pseudoElement) {
+  if (
+    pseudoElementOf(key.slice(match.index + match[0].length)) !== pseudoElement
+  ) {
     return false;
   }
 
@@ -389,7 +393,8 @@ export const expandOutlineShorthand = (
     ([property]) => property !== 'outline'
   );
 
-  return { ...Object.fromEntries(withoutShorthand), ...expanded };};
+  return { ...Object.fromEntries(withoutShorthand), ...expanded };
+};
 
 /**
  * Reduces the rules Griffel inserted for an element into what the element's own

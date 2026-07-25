@@ -90,7 +90,8 @@ const CheckedDisabledConflict: React.FC = () => {
   return (
     <table className={styles.table}>
       <caption>
-        Checked + disabled boundary colour under <code>forced-colors: active</code>
+        Checked + disabled boundary colour under{' '}
+        <code>forced-colors: active</code>
       </caption>
       <thead>
         <tr>

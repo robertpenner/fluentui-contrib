@@ -42,7 +42,7 @@ The classification table is the substance of the report. Three things are worth
 saying about it up front.
 
 **Two confirmed CAP defects, both invisible to review.** The dropped border
-shorthands and the erased focus ring were both *legible* code: someone reading
+shorthands and the erased focus ring were both _legible_ code: someone reading
 the style hook would see a border colour and a focus reset and would be right
 about what they were reading. They were wrong only about what the build and the
 cascade would do with them. Neither is the kind of thing a careful reviewer
@@ -58,7 +58,7 @@ either result as correct. Laws in this suite that touch forced colors are
 therefore asserted under more than one render order, each in its own page.
 
 **The most dangerous findings were in the instrument.** Two of the entries below
-are defects in the observer, not in CAP. Both made a law *pass* — one by folding
+are defects in the observer, not in CAP. Both made a law _pass_ — one by folding
 a `::after` divider into the element's own box, one by attributing LTR and RTL
 rules to the same element. A law suite that reports failures honestly but passes
 vacuously is worse than no law suite, because it converts silence into evidence.

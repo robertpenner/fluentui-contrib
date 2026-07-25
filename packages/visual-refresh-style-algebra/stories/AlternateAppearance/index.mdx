@@ -1,5 +1,5 @@
-import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
-import * as AlternateAppearanceStories from "./index.stories";
+import { Meta, Stories, Title } from '@storybook/addon-docs/blocks';
+import * as AlternateAppearanceStories from './index.stories';
 
 <Meta of={AlternateAppearanceStories} />
 
@@ -31,15 +31,23 @@ const usePrimaryHighContrastStyles = makeStyles({
 ```
 
 CAP replaces that block. Its copy restated the three colours — and dropped
-`forced-color-adjust: auto`. That mattered, because CAP's *Button* primary block
+`forced-color-adjust: auto`. That mattered, because CAP's _Button_ primary block
 contributes `forced-color-adjust: none`, and CAP's ToggleButton hook runs the
 Button hook first. With nothing restating the opt-in, the two declarations sat on
 the same root at the same specificity, `mergeClasses` had no matching key to
 collapse, and the winner was decided by **stylesheet insertion order**:
 
 ```css
-@media (forced-colors: active) { .f1h3a8gf { forced-color-adjust: none } }  /* CAP Button, primary */
-@media (forced-colors: active) { .fg4l7m0  { forced-color-adjust: auto } }  /* Fluent ToggleButton, primary */
+@media (forced-colors: active) {
+  .f1h3a8gf {
+    forced-color-adjust: none;
+  }
+} /* CAP Button, primary */
+@media (forced-colors: active) {
+  .fg4l7m0 {
+    forced-color-adjust: auto;
+  }
+} /* Fluent ToggleButton, primary */
 ```
 
 The same button computed `auto` or `none` depending on what else the page had
@@ -62,7 +70,7 @@ reason is now readable rather than mysterious:
   perform substitution**. The canary in the fixture below carries authored
   colours and no forced-colors treatment; in WebKit it survives untouched.
 - The unselected toggle therefore lands on the system-colour keywords CAP names
-  *explicitly* (`ButtonFace`, `ButtonText`, `ButtonBorder`), which every engine
+  _explicitly_ (`ButtonFace`, `ButtonText`, `ButtonBorder`), which every engine
   resolves.
 - The secondary Button has **no forced-colors treatment of its own**, so with no
   substitution it simply keeps its authored greys.
@@ -80,7 +88,7 @@ assertion true of any future engine that changes its mind, and stops one
 emulated system palette from being treated as universal.
 
 Both render orders are asserted, each in its own page, because Griffel's cascade
-*is* its insertion order: mounting both orders on one page would let the first
+_is_ its insertion order: mounting both orders on one page would let the first
 decide the outcome for the second.
 
 `forced-color-adjust` assertions are skipped where the engine does not implement
@@ -88,7 +96,7 @@ the property at all, which is checked with `CSS.supports` rather than assumed.
 
 ## What this page cannot tell you
 
-The table below reports what *your* browser resolved, right now. It is not a
+The table below reports what _your_ browser resolved, right now. It is not a
 screenshot of high contrast mode and not a claim about any particular Windows
 theme. Enable your platform's high contrast setting to change what the media
 query reports; whether untreated surfaces then change colour is up to the

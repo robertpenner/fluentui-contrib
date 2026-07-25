@@ -1,5 +1,5 @@
-import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
-import * as SplitButtonLawsStories from "./index.stories";
+import { Meta, Stories, Title } from '@storybook/addon-docs/blocks';
+import * as SplitButtonLawsStories from './index.stories';
 
 <Meta of={SplitButtonLawsStories} />
 
@@ -13,7 +13,7 @@ The [Button laws](?path=/docs/packages-visual-refresh-style-algebra-cap-button-l
 
 **Inherited.** Both actions are native `<button type="button">`. Both draw a focus indicator, in ordinary and forced colors. Both suppress hover and pressed feedback when disabled.
 
-**Propagation.** Disabling the SplitButton disables *both* actions; making it disabled-focusable leaves *both* reachable and both marked `aria-disabled`. Losing the menu button silently is worse than losing it visibly. Both actions also present the same background, text colour, and outer boundary for a given state.
+**Propagation.** Disabling the SplitButton disables _both_ actions; making it disabled-focusable leaves _both_ reachable and both marked `aria-disabled`. Losing the menu button silently is worse than losing it visibly. Both actions also present the same background, text colour, and outer boundary for a given state.
 
 **The seam.** The joined corners are squared and the outer corners are not, in LTR and in RTL. A divider colour is declared on the primary action's `::after` in every appearance, condition, and colour mode, and it is never `transparent`.
 
@@ -21,14 +21,18 @@ The [Button laws](?path=/docs/packages-visual-refresh-style-algebra-cap-button-l
 
 **A pseudo-element is a separate box.** The divider lives on `::after`; folding its declarations into the primary action's own surface made the button look as though it painted a right border it does not have. Surfaces are now selected per pseudo-element.
 
-**An ancestor is part of the claim.** Griffel keys its direction-specific SplitButton rules on a *static* class and distinguishes them only by an ancestor:
+**An ancestor is part of the claim.** Griffel keys its direction-specific SplitButton rules on a _static_ class and distinguishes them only by an ancestor:
 
 ```css
-.f14uur2j .fui-SplitButton__primaryActionButton { border-top-right-radius: 0 }
-.fc1btbj  .fui-SplitButton__primaryActionButton { border-top-left-radius: 0 }
+.f14uur2j .fui-SplitButton__primaryActionButton {
+  border-top-right-radius: 0;
+}
+.fc1btbj .fui-SplitButton__primaryActionButton {
+  border-top-left-radius: 0;
+}
 ```
 
-Matching on the key compound alone attributed both the LTR and the RTL variant to the same element — which reported *every* corner as squared, and would have hidden a genuine RTL regression behind a passing test. The observer now verifies the ancestor before attributing the rule.
+Matching on the key compound alone attributed both the LTR and the RTL variant to the same element — which reported _every_ corner as squared, and would have hidden a genuine RTL regression behind a passing test. The observer now verifies the ancestor before attributing the rule.
 
 Both were defects in the instrument, not the product; they are worth recording because a silently over-permissive observer is the failure mode that makes a law suite worthless.
 

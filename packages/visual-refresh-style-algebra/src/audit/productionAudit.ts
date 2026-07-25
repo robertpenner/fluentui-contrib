@@ -96,7 +96,7 @@ export const auditFindings: readonly AuditFinding[] = [
       'A checked, disabled ToggleButton reads as selected at rest and as disabled on hover, ' +
       'under forced colors.',
     mechanism:
-      "Fluent applies its checked high-contrast styles whenever `checked` is set, disabled or " +
+      'Fluent applies its checked high-contrast styles whenever `checked` is set, disabled or ' +
       "not. CAP's disabled declarations and Fluent's checked ones carry different Griffel keys, " +
       'so `mergeClasses` collapses neither; both land in the same bucket at the same ' +
       'specificity, and the winner falls to insertion order — which differs between the rest and ' +
@@ -116,8 +116,8 @@ export const auditFindings: readonly AuditFinding[] = [
       "An unselected primary ToggleButton's forced-colors substitution policy was decided by " +
       'what else the page had rendered first.',
     mechanism:
-      "Upstream opts primary ToggleButtons back into substitution with `forced-color-adjust: " +
-      "auto`. CAP replaced the block, restated its three system colours, and dropped that line. " +
+      'Upstream opts primary ToggleButtons back into substitution with `forced-color-adjust: ' +
+      'auto`. CAP replaced the block, restated its three system colours, and dropped that line. ' +
       "CAP's *Button* primary block contributes `forced-color-adjust: none` to the same root at " +
       'the same specificity; nothing deduped the pair, so Griffel insertion order decided it. ' +
       'The same button computed `auto` alone and `none` after another CAP fixture rendered.',
@@ -237,7 +237,8 @@ export const auditFindings: readonly AuditFinding[] = [
     id: 'observer-over-attributed-ancestors',
     family: 'SplitButton',
     classification: 'model-assumption',
-    summary: 'The observer attributed ancestor-scoped rules without checking the ancestor.',
+    summary:
+      'The observer attributed ancestor-scoped rules without checking the ancestor.',
     mechanism:
       'Griffel keys its direction-specific SplitButton rules on a *static* class and ' +
       'distinguishes LTR from RTL only by an ancestor class. Matching the key compound alone ' +
@@ -268,7 +269,9 @@ export const auditFindings: readonly AuditFinding[] = [
  * - `rawShorthands` — declarations of `borderColor` / `borderStyle` /
  *   `borderWidth` / `borderInline*` / `borderBlock*` written directly rather
  *   than through `shorthands.*`. This is the mechanism of the first defect: the
- *   declaration is dropped at build time.
+ *   declaration is dropped at build time. The nomination's strongest claim rests
+ *   on this column, so the companion test re-derives it from disk rather than
+ *   trusting the recorded number.
  * - `focusOverrides` — references to `outline`, `:focus-visible`, or
  *   `createCustomFocusIndicatorStyle`. This is the surface area of the second
  *   defect: a restated reset that lands in a later bucket erases the indicator.
@@ -287,28 +290,160 @@ export interface StyleMarkerCensusRow {
 }
 
 export const styleMarkerCensus: readonly StyleMarkerCensusRow[] = [
-  { family: 'react-accordion', rawShorthands: 0, focusOverrides: 2, forcedColorsBlocks: 0, hardcodedPixels: 3 },
-  { family: 'react-avatar', rawShorthands: 0, focusOverrides: 0, forcedColorsBlocks: 0, hardcodedPixels: 0 },
-  { family: 'react-badge', rawShorthands: 0, focusOverrides: 8, forcedColorsBlocks: 0, hardcodedPixels: 0 },
-  { family: 'react-button', rawShorthands: 0, focusOverrides: 24, forcedColorsBlocks: 15, hardcodedPixels: 31 },
-  { family: 'react-card', rawShorthands: 0, focusOverrides: 3, forcedColorsBlocks: 3, hardcodedPixels: 2 },
-  { family: 'react-carousel', rawShorthands: 0, focusOverrides: 0, forcedColorsBlocks: 0, hardcodedPixels: 4 },
-  { family: 'react-checkbox', rawShorthands: 0, focusOverrides: 2, forcedColorsBlocks: 0, hardcodedPixels: 2 },
-  { family: 'react-combobox', rawShorthands: 0, focusOverrides: 9, forcedColorsBlocks: 4, hardcodedPixels: 5 },
-  { family: 'react-dialog', rawShorthands: 0, focusOverrides: 0, forcedColorsBlocks: 0, hardcodedPixels: 0 },
-  { family: 'react-drawer', rawShorthands: 0, focusOverrides: 0, forcedColorsBlocks: 0, hardcodedPixels: 0 },
-  { family: 'react-image', rawShorthands: 0, focusOverrides: 0, forcedColorsBlocks: 0, hardcodedPixels: 0 },
-  { family: 'react-input', rawShorthands: 0, focusOverrides: 5, forcedColorsBlocks: 2, hardcodedPixels: 3 },
-  { family: 'react-label', rawShorthands: 0, focusOverrides: 0, forcedColorsBlocks: 0, hardcodedPixels: 0 },
-  { family: 'react-link', rawShorthands: 0, focusOverrides: 0, forcedColorsBlocks: 0, hardcodedPixels: 0 },
-  { family: 'react-menu', rawShorthands: 0, focusOverrides: 2, forcedColorsBlocks: 7, hardcodedPixels: 6 },
-  { family: 'react-popover', rawShorthands: 0, focusOverrides: 0, forcedColorsBlocks: 0, hardcodedPixels: 0 },
-  { family: 'react-search', rawShorthands: 0, focusOverrides: 6, forcedColorsBlocks: 0, hardcodedPixels: 0 },
-  { family: 'react-tabs', rawShorthands: 0, focusOverrides: 3, forcedColorsBlocks: 0, hardcodedPixels: 7 },
-  { family: 'react-tags', rawShorthands: 2, focusOverrides: 47, forcedColorsBlocks: 7, hardcodedPixels: 22 },
-  { family: 'react-teaching-popover', rawShorthands: 0, focusOverrides: 3, forcedColorsBlocks: 0, hardcodedPixels: 3 },
-  { family: 'react-toolbar', rawShorthands: 0, focusOverrides: 0, forcedColorsBlocks: 1, hardcodedPixels: 0 },
-  { family: 'react-tooltip', rawShorthands: 0, focusOverrides: 0, forcedColorsBlocks: 0, hardcodedPixels: 0 },
+  {
+    family: 'react-accordion',
+    rawShorthands: 0,
+    focusOverrides: 2,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 3,
+  },
+  {
+    family: 'react-avatar',
+    rawShorthands: 0,
+    focusOverrides: 0,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 0,
+  },
+  {
+    family: 'react-badge',
+    rawShorthands: 0,
+    focusOverrides: 8,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 0,
+  },
+  {
+    family: 'react-button',
+    rawShorthands: 0,
+    focusOverrides: 24,
+    forcedColorsBlocks: 15,
+    hardcodedPixels: 31,
+  },
+  {
+    family: 'react-card',
+    rawShorthands: 0,
+    focusOverrides: 3,
+    forcedColorsBlocks: 3,
+    hardcodedPixels: 2,
+  },
+  {
+    family: 'react-carousel',
+    rawShorthands: 0,
+    focusOverrides: 0,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 4,
+  },
+  {
+    family: 'react-checkbox',
+    rawShorthands: 0,
+    focusOverrides: 2,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 2,
+  },
+  {
+    family: 'react-combobox',
+    rawShorthands: 0,
+    focusOverrides: 9,
+    forcedColorsBlocks: 4,
+    hardcodedPixels: 5,
+  },
+  {
+    family: 'react-dialog',
+    rawShorthands: 0,
+    focusOverrides: 0,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 0,
+  },
+  {
+    family: 'react-drawer',
+    rawShorthands: 0,
+    focusOverrides: 0,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 0,
+  },
+  {
+    family: 'react-image',
+    rawShorthands: 0,
+    focusOverrides: 0,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 0,
+  },
+  {
+    family: 'react-input',
+    rawShorthands: 0,
+    focusOverrides: 5,
+    forcedColorsBlocks: 2,
+    hardcodedPixels: 3,
+  },
+  {
+    family: 'react-label',
+    rawShorthands: 0,
+    focusOverrides: 0,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 0,
+  },
+  {
+    family: 'react-link',
+    rawShorthands: 0,
+    focusOverrides: 0,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 0,
+  },
+  {
+    family: 'react-menu',
+    rawShorthands: 0,
+    focusOverrides: 2,
+    forcedColorsBlocks: 7,
+    hardcodedPixels: 6,
+  },
+  {
+    family: 'react-popover',
+    rawShorthands: 0,
+    focusOverrides: 0,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 0,
+  },
+  {
+    family: 'react-search',
+    rawShorthands: 0,
+    focusOverrides: 6,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 0,
+  },
+  {
+    family: 'react-tabs',
+    rawShorthands: 0,
+    focusOverrides: 3,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 7,
+  },
+  {
+    family: 'react-tags',
+    rawShorthands: 2,
+    focusOverrides: 47,
+    forcedColorsBlocks: 7,
+    hardcodedPixels: 22,
+  },
+  {
+    family: 'react-teaching-popover',
+    rawShorthands: 0,
+    focusOverrides: 3,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 3,
+  },
+  {
+    family: 'react-toolbar',
+    rawShorthands: 0,
+    focusOverrides: 0,
+    forcedColorsBlocks: 1,
+    hardcodedPixels: 0,
+  },
+  {
+    family: 'react-tooltip',
+    rawShorthands: 0,
+    focusOverrides: 0,
+    forcedColorsBlocks: 0,
+    hardcodedPixels: 0,
+  },
 ];
 
 /** The family the evidence nominates for the next algebra-based investigation. */

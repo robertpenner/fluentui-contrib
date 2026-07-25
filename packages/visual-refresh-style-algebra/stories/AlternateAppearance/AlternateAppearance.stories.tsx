@@ -39,11 +39,20 @@ const useStyles = makeStyles({
 });
 
 const surfaces = [
-  { testId: 'probe-unselected-toggle', label: 'ToggleButton, primary, unselected' },
+  {
+    testId: 'probe-unselected-toggle',
+    label: 'ToggleButton, primary, unselected',
+  },
   { testId: 'probe-selected-toggle', label: 'ToggleButton, primary, selected' },
   { testId: 'probe-secondary-button', label: 'Button, secondary' },
-  { testId: 'probe-system-color-reference', label: 'reference: ButtonFace / ButtonText' },
-  { testId: 'probe-substitution-canary', label: 'canary: authored rgb(1, 2, 3)' },
+  {
+    testId: 'probe-system-color-reference',
+    label: 'reference: ButtonFace / ButtonText',
+  },
+  {
+    testId: 'probe-substitution-canary',
+    label: 'canary: authored rgb(1, 2, 3)',
+  },
 ] as const;
 
 interface Reading {
@@ -86,7 +95,9 @@ const useReadings = (): {
       let canaryBackground: string | undefined;
 
       for (const { testId, label } of surfaces) {
-        const element = targetDocument.querySelector(`[data-testid="${testId}"]`);
+        const element = targetDocument.querySelector(
+          `[data-testid="${testId}"]`
+        );
 
         if (!element) {
           continue;

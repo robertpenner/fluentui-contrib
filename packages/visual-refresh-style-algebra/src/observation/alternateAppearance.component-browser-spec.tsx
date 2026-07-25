@@ -23,7 +23,8 @@ type PaintProfile = Record<string, string>;
 const profileOf = (root: Locator, testId: string): Promise<PaintProfile> =>
   root.getByTestId(testId).evaluate(
     (element, properties) => {
-      const style = element.ownerDocument.defaultView?.getComputedStyle(element);
+      const style =
+        element.ownerDocument.defaultView?.getComputedStyle(element);
 
       return Object.fromEntries(
         properties.map((property) => [
@@ -107,9 +108,7 @@ function expectAlternateAppearanceOutcome({
   );
 
   expect(systemColored).toEqual(['color', 'background-color']);
-  expect(secondary['background-color']).not.toBe(
-    reference['background-color']
-  );
+  expect(secondary['background-color']).not.toBe(reference['background-color']);
 }
 
 /**
@@ -205,15 +204,18 @@ test.describe('alternate appearance under forced colors', () => {
         )
       ).toBe(true);
 
-      // Recorded so a future engine change reads as a described difference
-      // rather than a bare red boolean.
-      console.log(
-        `${browserName} (${name}): substitutes=${substitutes} unselected=${JSON.stringify(
+      // Recorded on the test itself so a future engine change reads as a
+      // described difference rather than a bare red boolean. An annotation
+      // rather than a log: it reaches the report without adding three lines of
+      // noise to every CI run.
+      test.info().annotations.push({
+        type: 'measured profile',
+        description: `${browserName} (${name}): substitutes=${substitutes} unselected=${JSON.stringify(
           unselected
         )} secondary=${JSON.stringify(secondary)} divergent=${JSON.stringify(
           divergent
-        )}`
-      );
+        )}`,
+      });
 
       expectAlternateAppearanceOutcome({
         substitutes,

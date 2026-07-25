@@ -143,9 +143,11 @@ describe('summarizeButtonSurface', () => {
       rule('.a:hover::after', { 'border-right-color': 'dividerHover' }),
     ];
 
-    expect(summarizeButtonSurface(rules, ['a']).declared.ordinary.rest).toEqual({
-      'border-right-color': 'own',
-    });
+    expect(summarizeButtonSurface(rules, ['a']).declared.ordinary.rest).toEqual(
+      {
+        'border-right-color': 'own',
+      }
+    );
 
     const divider = summarizeButtonSurface(rules, ['a'], {
       pseudoElement: '::after',
@@ -310,10 +312,7 @@ describe('resolveThemeValues', () => {
 
   it('follows a token that aliases another token', () => {
     expect(
-      resolveThemeValues(
-        { color: 'var(--a)' },
-        { a: 'var(--b)', b: '#ffffff' }
-      )
+      resolveThemeValues({ color: 'var(--a)' }, { a: 'var(--b)', b: '#ffffff' })
     ).toEqual({ color: '#ffffff' });
   });
 

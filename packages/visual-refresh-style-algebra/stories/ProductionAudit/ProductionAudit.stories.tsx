@@ -115,7 +115,9 @@ const ClassificationTag: React.FC<{ value: AuditClassification }> = ({
   }[value];
 
   return (
-    <span className={`${styles.tag} ${tone}`}>{classificationLabel[value]}</span>
+    <span className={`${styles.tag} ${tone}`}>
+      {classificationLabel[value]}
+    </span>
   );
 };
 
@@ -135,8 +137,8 @@ export const ProductionAudit: React.FC = () => {
         <h2 className={styles.heading}>How findings are classified</h2>
         <p className={styles.lede}>
           Five kinds of thing came out of this investigation, and keeping them
-          apart is most of its value. A browser difference filed as a product bug
-          wastes a fix; a product bug filed as a browser difference ships a
+          apart is most of its value. A browser difference filed as a product
+          bug wastes a fix; a product bug filed as a browser difference ships a
           defect.
         </p>
         <table className={styles.table}>
@@ -161,9 +163,9 @@ export const ProductionAudit: React.FC = () => {
         <h2 className={styles.heading}>Findings</h2>
         <p className={styles.lede}>
           Every correction names the executable regression that would fail if it
-          were undone, and the minimized fixture that reproduces it. That pairing
-          is enforced by a test, so this table cannot quietly become a story
-          about work that no longer holds.
+          were undone, and the minimized fixture that reproduces it. That
+          pairing is enforced by a test, so this table cannot quietly become a
+          story about work that no longer holds.
         </p>
         <table className={styles.table}>
           <thead>
@@ -260,8 +262,8 @@ export const ProductionAudit: React.FC = () => {
         </table>
         <p className={styles.lede}>
           <strong className={styles.code}>{nextInvestigation.family}</strong> is
-          nominated. {nextInvestigation.measuredJustification} For comparison, the
-          family this audit covered carries {auditedFocusOverrides} focus
+          nominated. {nextInvestigation.measuredJustification} For comparison,
+          the family this audit covered carries {auditedFocusOverrides} focus
           overrides.
         </p>
         <p className={styles.lede}>{nextInvestigation.ownershipOverlap}</p>
