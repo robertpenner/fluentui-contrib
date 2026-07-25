@@ -63,7 +63,11 @@ const useRootBaseStyles = makeStyles({
 
     ':hover': { color: tokens.colorNeutralForeground1Hover },
     ':hover:active': { color: tokens.colorNeutralForeground1Pressed },
-    ':focus-visible': { outline: 'none', outlineOffset: 0 }, // Remove browser defaults
+    // No `:focus-visible { outline: none }` here. Fluent's reset style already
+    // removes the browser default, and a `makeStyles` copy lands in Griffel's
+    // `:focus-visible` bucket — which comes *after* the bucket holding the
+    // `[data-fui-focus-visible]` focus indicator. At equal specificity the later
+    // bucket wins, so re-stating it here erased the focus ring entirely.
 
     ...typographyStyles.body1Strong,
 
