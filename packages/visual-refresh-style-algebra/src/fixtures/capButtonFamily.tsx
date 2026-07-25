@@ -4,6 +4,7 @@ import {
   type ButtonProps,
   FluentProvider,
   SplitButton,
+  type SplitButtonProps,
   ToggleButton,
   webLightTheme,
 } from '@fluentui/react-components';
@@ -144,28 +145,63 @@ export const CapToggleButtonFixtures: React.FC = () => (
   </>
 );
 
-/** Every CAP SplitButton appearance, enabled and disabled. */
-export const CapSplitButtonFixtures: React.FC = () => (
+/** The SplitButton conditions the propagation laws are stated over. */
+export const capSplitButtonConditions = [
+  'enabled',
+  'disabled',
+  'disabledFocusable',
+] as const;
+
+export type CapSplitButtonCondition =
+  (typeof capSplitButtonConditions)[number];
+
+export interface CapSplitButtonFixturesProps {
+  /**
+   * Distinguishes otherwise identical fixture sets, so the same appearances can
+   * be rendered once per writing direction without their test ids colliding.
+   */
+  readonly prefix?: string;
+}
+
+/**
+ * Every CAP SplitButton appearance, enabled and disabled.
+ *
+ * Both actions carry their own test id: a SplitButton is two buttons sharing an
+ * outline, and propagation laws are precisely claims about the pair, so neither
+ * action can be observed only through the root.
+ */
+export const CapSplitButtonFixtures: React.FC<CapSplitButtonFixturesProps> = ({
+  prefix = 'split',
+}) => (
   <>
-    {capButtonAppearances.map((appearance) => (
-      <React.Fragment key={appearance}>
-        <SplitButton
-          appearance={asButtonAppearance(appearance)}
-          menuButton={{ 'aria-label': `More ${appearance} actions` }}
-          data-testid={`split-${appearance}-enabled`}
-        >
-          {appearance}
-        </SplitButton>
-        <SplitButton
-          appearance={asButtonAppearance(appearance)}
-          disabled
-          menuButton={{ 'aria-label': `More ${appearance} actions, disabled` }}
-          data-testid={`split-${appearance}-disabled`}
-        >
-          {appearance}
-        </SplitButton>
-      </React.Fragment>
-    ))}
+    {capButtonAppearances.map((appearance) =>
+      capSplitButtonConditions.map((condition) => {
+        const id = `${prefix}-${appearance}-${condition}`;
+
+        return (
+          <SplitButton
+            key={id}
+            appearance={asButtonAppearance(appearance)}
+            disabled={condition !== 'enabled'}
+            disabledFocusable={condition === 'disabledFocusable'}
+            primaryActionButton={
+              {
+                'data-testid': `${id}-primary`,
+              } as SplitButtonProps['primaryActionButton']
+            }
+            menuButton={
+              {
+                'aria-label': `More ${appearance} actions`,
+                'data-testid': `${id}-menu`,
+              } as SplitButtonProps['menuButton']
+            }
+            data-testid={id}
+          >
+            {appearance}
+          </SplitButton>
+        );
+      })
+    )}
   </>
 );
 
