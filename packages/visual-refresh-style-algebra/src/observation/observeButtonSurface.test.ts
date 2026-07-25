@@ -133,8 +133,68 @@ describe('summarizeButtonSurface', () => {
       [rule('.other .a-child', { color: 'red' })],
       ['a']
     );
-
     expect(observation.declared.ordinary.rest).toEqual({});
+  });
+
+  it('reads a pseudo-element as a surface of its own', () => {
+    const rules = [
+      rule('.a', { 'border-right-color': 'own' }),
+      rule('.a:after', { 'border-right-color': 'divider' }),
+      rule('.a:hover::after', { 'border-right-color': 'dividerHover' }),
+    ];
+
+    expect(summarizeButtonSurface(rules, ['a']).declared.ordinary.rest).toEqual({
+      'border-right-color': 'own',
+    });
+
+    const divider = summarizeButtonSurface(rules, ['a'], {
+      pseudoElement: '::after',
+    });
+
+    expect(divider.declared.ordinary.rest).toEqual({
+      'border-right-color': 'divider',
+    });
+    expect(divider.declared.ordinary.hover).toEqual({
+      'border-right-color': 'dividerHover',
+    });
+  });
+
+  it('ignores an ancestor-scoped rule unless the ancestor is confirmed', () => {
+    // Griffel keys its direction-specific SplitButton rules on a static class
+    // and distinguishes them only by an ancestor, so attributing them without
+    // checking would apply the LTR and the RTL variant to the same element.
+    const rules = [
+      rule('.ltr .a', { 'border-top-right-radius': '0' }),
+      rule('.rtl .a', { 'border-top-left-radius': '0' }),
+    ];
+
+    expect(summarizeButtonSurface(rules, ['a']).declared.ordinary.rest).toEqual(
+      {}
+    );
+
+    const inLtr = summarizeButtonSurface(rules, ['a'], {
+      hasAncestor: (selector) => selector === '.ltr',
+    });
+
+    expect(inLtr.declared.ordinary.rest).toEqual({
+      'border-top-right-radius': '0',
+    });
+  });
+
+  it('distinguishes a child combinator from a descendant one', () => {
+    const rules = [rule('.parent > .a', { color: 'red' })];
+
+    const asChild = summarizeButtonSurface(rules, ['a'], {
+      hasAncestor: (selector, direct) => direct && selector === '.parent',
+    });
+
+    expect(asChild.declared.ordinary.rest).toEqual({ color: 'red' });
+
+    const asDescendant = summarizeButtonSurface(rules, ['a'], {
+      hasAncestor: (selector, direct) => !direct && selector === '.parent',
+    });
+
+    expect(asDescendant.declared.ordinary.rest).toEqual({});
   });
 
   describe('effective surface', () => {

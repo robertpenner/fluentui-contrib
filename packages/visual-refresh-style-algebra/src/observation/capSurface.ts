@@ -7,6 +7,7 @@ import {
   surfaceGeometryProperties,
   type ButtonSurface,
   type ButtonSurfaceObservation,
+  type SurfaceSelection,
 } from './observeButtonSurface';
 
 const capThemeValues = capTheme as unknown as Readonly<Record<string, string>>;
@@ -24,12 +25,16 @@ export const capColors = (surface: ButtonSurface): ButtonSurface =>
     capThemeValues
   );
 
-/** The size and shape a surface declares, with colour excluded. */
+/** The size and shape a surface declares, with colour excluded and tokens resolved. */
 export const capGeometry = (surface: ButtonSurface): ButtonSurface =>
-  projectSurface(surface, surfaceGeometryProperties);
+  resolveThemeValues(
+    projectSurface(surface, surfaceGeometryProperties),
+    capThemeValues
+  );
 
 /** Observes a rendered CAP fixture through Griffel's cascade. */
 export const observeCapSurface = (
-  element: Element
+  element: Element,
+  selection: SurfaceSelection = {}
 ): ButtonSurfaceObservation =>
-  observeButtonSurface(element.ownerDocument, element);
+  observeButtonSurface(element.ownerDocument, element, selection);

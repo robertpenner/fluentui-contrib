@@ -53,6 +53,34 @@ export interface ButtonSurfaceObservation {
 }
 
 /**
+ * Which box of an element to observe.
+ *
+ * A pseudo-element is a separate box, so its declarations must not be folded
+ * into the element's own surface. The SplitButton divider is exactly this case:
+ * it lives on `::after` and describes the boundary *between* the two actions,
+ * not the boundary of either one.
+ */
+export interface SurfaceSelection {
+  /** A pseudo-element such as `'::after'`; omit to read the element's own box. */
+  readonly pseudoElement?: string;
+  /**
+   * Whether the element has an ancestor matching a selector, so that rules
+   * scoped by a parent can be attributed correctly.
+   *
+   * Griffel emits direction-specific rules keyed on a *static* class — the
+   * SplitButton squares its joined edge through
+   * `.f14uur2j .fui-SplitButton__primaryActionButton`, where only `.f14uur2j`
+   * says which writing direction it is for. Matching on the key compound alone
+   * would attribute both the LTR and the RTL variant to the same element and
+   * report every corner as squared.
+   *
+   * Defaults to rejecting ancestor-scoped rules, which is the safe reading when
+   * no live DOM is available to ask.
+   */
+  readonly hasAncestor?: (selector: string, direct: boolean) => boolean;
+}
+
+/**
  * Colour-carrying properties. A change here is an appearance change, which the
  * laws treat as legitimately appearance-dependent.
  */
@@ -80,6 +108,10 @@ export const surfaceGeometryProperties = [
   'border-bottom-width',
   'border-left-width',
   'border-radius',
+  'border-top-left-radius',
+  'border-top-right-radius',
+  'border-bottom-right-radius',
+  'border-bottom-left-radius',
   'min-width',
   'max-width',
   'font-size',
@@ -118,7 +150,8 @@ export const resolveThemeValues = (
           const declared = theme[token];
 
           if (declared !== undefined) {
-            return resolve(declared, depth - 1);
+            // Some theme entries are numbers — `fontWeightSemibold` is `600`.
+            return resolve(String(declared), depth - 1);
           }
 
           return fallback === undefined ? matched : resolve(fallback.trim(), depth - 1);
@@ -144,28 +177,85 @@ const emptyStates = (): Record<ButtonSurfaceState, Record<string, string>> => ({
 const escapeRegularExpression = (value: string): string =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+const pseudoElementPattern =
+  /::?(after|before|first-line|first-letter|placeholder|backdrop|marker|selection)\b/;
+
+/** The pseudo-element a selector tail addresses, or `''` for the element itself. */
+const pseudoElementOf = (tail: string): string => {
+  const match = pseudoElementPattern.exec(tail);
+
+  return match ? `::${match[1]}` : '';
+};
+
 /**
- * A rule describes the button's own surface only when its subject is the element
- * itself. Griffel also emits descendant rules for icon slots and for the
- * SplitButton divider; those belong to other surfaces and would otherwise be
- * misread as root declarations.
+ * Splits a selector into the compound that names the element and everything that
+ * qualifies it through an ancestor.
+ *
+ * Brackets and parentheses are respected, so a combinator inside `[data-x="a b"]`
+ * or `:is(a > b)` is not mistaken for the structural one.
  */
-const targetsOwnSurface = (selector: string, className: string): boolean => {
-  const subject = selector.split(',')[0].trim();
+const splitAtKeyCompound = (
+  subject: string
+): { ancestor: string; direct: boolean; key: string } => {
+  let depth = 0;
+  let cut = -1;
+
+  for (let index = 0; index < subject.length; index++) {
+    const character = subject[index];
+
+    if (character === '[' || character === '(') {
+      depth++;
+    } else if (character === ']' || character === ')') {
+      depth--;
+    } else if (depth === 0 && /[\s>+~]/.test(character)) {
+      cut = index;
+    }
+  }
+
+  if (cut === -1) {
+    return { ancestor: '', direct: false, key: subject };
+  }
+
+  const separator = subject.slice(0, cut + 1);
+
+  return {
+    ancestor: separator.replace(/[\s>+~]+$/, ''),
+    direct: /[>+~]/.test(separator),
+    key: subject.slice(cut + 1),
+  };
+};
+
+/**
+ * A rule describes a surface when the compound that names the element mentions
+ * one of its classes, addresses the requested pseudo-element (or none, for the
+ * element's own box), and any ancestor qualification actually holds. Griffel
+ * also emits descendant rules for icon slots; those name a different element and
+ * would otherwise be misread as root declarations.
+ */
+const targetsOwnSurface = (
+  selector: string,
+  className: string,
+  pseudoElement: string,
+  hasAncestor: (ancestorSelector: string, direct: boolean) => boolean
+): boolean => {
+  const { ancestor, direct, key } = splitAtKeyCompound(
+    selector.split(',')[0].trim()
+  );
   const token = new RegExp(
     `\\.${escapeRegularExpression(className)}(?![-_a-zA-Z0-9])`,
     'g'
   );
+  const match = token.exec(key);
 
-  for (let match = token.exec(subject); match; match = token.exec(subject)) {
-    const tail = subject.slice(match.index + match[0].length);
-
-    if (!/[\s>+~]/.test(tail)) {
-      return true;
-    }
+  if (!match) {
+    return false;
   }
 
-  return false;
+  if (pseudoElementOf(key.slice(match.index + match[0].length)) !== pseudoElement) {
+    return false;
+  }
+
+  return ancestor === '' || hasAncestor(ancestor, direct);
 };
 
 const classifyState = (selector: string): ButtonSurfaceState => {
@@ -313,7 +403,8 @@ export const expandOutlineShorthand = (
  */
 export const summarizeButtonSurface = (
   rules: readonly CapturedGriffelRule[],
-  classNames: readonly string[]
+  classNames: readonly string[],
+  { pseudoElement = '', hasAncestor = () => false }: SurfaceSelection = {}
 ): ButtonSurfaceObservation => {
   const declared: Record<
     ButtonColorMode,
@@ -326,7 +417,7 @@ export const summarizeButtonSurface = (
   const ownRules = rules
     .filter((rule) =>
       classNames.some((className) =>
-        targetsOwnSurface(rule.selector, className)
+        targetsOwnSurface(rule.selector, className, pseudoElement, hasAncestor)
       )
     )
     .sort(byGriffelCascade);
@@ -369,8 +460,17 @@ export const summarizeButtonSurface = (
 /** Observes the surface of a rendered element from the live CSSOM. */
 export const observeButtonSurface = (
   targetDocument: Document,
-  element: Element
+  element: Element,
+  selection: SurfaceSelection = {}
 ): ButtonSurfaceObservation =>
-  summarizeButtonSurface(captureElementGriffelRules(targetDocument, element), [
-    ...element.classList,
-  ]);
+  summarizeButtonSurface(
+    captureElementGriffelRules(targetDocument, element),
+    [...element.classList],
+    {
+      hasAncestor: (ancestorSelector, direct) =>
+        direct
+          ? Boolean(element.parentElement?.matches(ancestorSelector))
+          : Boolean(element.parentElement?.closest(ancestorSelector)),
+      ...selection,
+    }
+  );

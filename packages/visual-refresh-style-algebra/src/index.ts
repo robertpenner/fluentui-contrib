@@ -147,6 +147,7 @@ export type {
   ButtonSurface,
   ButtonSurfaceObservation,
   ButtonSurfaceState,
+  SurfaceSelection,
 } from './observation/observeButtonSurface';
 export {
   capColors,
@@ -156,6 +157,7 @@ export {
 export {
   asButtonAppearance,
   capButtonAppearances,
+  capSplitButtonConditions,
   CapButtonFamilyFixtures,
   CapButtonFixtures,
   CapFixtureProvider,
@@ -167,4 +169,6 @@ export {
 export type {
   CapButtonAppearance,
   CapFixtureProviderProps,
+  CapSplitButtonCondition,
+  CapSplitButtonFixturesProps,
 } from './fixtures/capButtonFamily';
