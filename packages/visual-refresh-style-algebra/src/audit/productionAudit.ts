@@ -81,12 +81,14 @@ export const auditFindings: readonly AuditFinding[] = [
       'wins, so the restatement erased the ring it was meant to be redundant with.',
     correction:
       'The redundant reset was deleted from `useRootBaseStyles.base`, with the bucket ordering ' +
-      'written down at the site so it is not re-added.',
+      'written down at the site so it is not re-added. Guarded in jsdom by the Button focus laws ' +
+      'and, because the fix is the *deletion* of an `outline: none`, in real engines by the spec ' +
+      'cited below — jsdom cannot show that anything is painted.',
     regression: {
-      file: 'src/observation/capButtonAppearanceLaws.test.tsx',
-      suite: 'CAP Button focus laws',
+      file: 'src/observation/capButtonFocusRing.component-browser-spec.tsx',
+      suite: 'CAP Button focus ring in a painting engine',
     },
-    fixture: 'src/fixtures/capButtonFamily.tsx',
+    fixture: 'src/fixtures/CapFocusRingProbe.tsx',
   },
   {
     id: 'toggle-checked-disabled-contradiction',
