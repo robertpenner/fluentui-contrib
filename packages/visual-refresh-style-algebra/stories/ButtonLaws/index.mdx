@@ -1,0 +1,62 @@
+import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
+import * as ButtonLawsStories from "./index.stories";
+
+<Meta of={ButtonLawsStories} />
+
+<Title />
+
+The [Griffel shorthand diagnostics](?path=/docs/packages-visual-refresh-style-algebra-griffel-shorthand-diagnostics--docs) page asked whether a declaration reached the browser at all. This page asks the next question: **of the declarations that did reach the browser, which one wins?**
+
+## Why a value assertion cannot answer that
+
+A test that pins `background-color` to a token freezes an appearance policy. `primary` is *supposed* to differ from `subtle`, so there is no single value to write down, and any value that is written down turns a design change into a test failure.
+
+A **metamorphic law** asserts a relation between two related fixtures instead of a value. `primary` and `subtle` may differ in colour; they may not differ in geometry, in native semantics, or in whether disabling suppresses interaction feedback. Those relations are the invariants, and they hold across every appearance the product ships.
+
+The laws in `capButtonAppearanceLaws.test.tsx` run against the **production** CAP Button, not a clean-room reconstruction:
+
+| Law | Relation asserted |
+| --- | --- |
+| Native semantics | every appearance renders a `<button type="button">` |
+| Disabled semantics | `disabled` leaves the tab order; `disabledFocusable` keeps it and carries `aria-disabled` |
+| Appearance invariance | changing appearance changes colour, never geometry |
+| Appearance distinctness | no two appearances share the same rest/hover/active colour triple |
+| Disabled suppression | a disabled button's hover and pressed surfaces equal its resting surface |
+| Disabled legibility | a disabled button is distinguishable from the same button enabled |
+| Focus visibility | the focus indicator is drawn, and differs from the resting surface |
+
+## The cascade is the observation
+
+Griffel emits every atomic class at the same specificity. Nothing about a class name or a selector tells you which of two conflicting declarations applies; the answer is the **order of the stylesheets** Griffel inserted them into, recorded on each `<style>` element as `data-make-styles-bucket`.
+
+The observation adapter therefore captures rules per style element, sorts them into Griffel's bucket order (`r`, `d`, `l`, `v`, `w`, `f`, `i`, `h`, `a`, `s`, `k`, `t`, `m`, `c`), and only then folds them into a surface. `griffelBucketOrdering.test.tsx` renders a probe component that exercises every bucket and checks the mirrored ordering against what Griffel actually inserts, so the model cannot silently drift from the library.
+
+Two further normalisations keep the laws honest rather than pedantic:
+
+- **Token resolution.** `colorTransparentStroke` *is* `transparent`. Comparing raw declarations reports a rename as a visual change, so colours are resolved through the CAP theme before comparison.
+- **Shorthand expansion.** `outline: 2px solid …` and `outline-style: none` are the same property in different clothes. The shorthand is expanded into the longhands it sets — including the ones it silently resets.
+
+## The defect this found
+
+The focus-visibility law failed for **every** appearance. The captured rules explain why:
+
+```
+[d] .f89hs3r[data-fui-focus-visible] { outline: 2px solid var(--colorStrokeFocus2) }
+[i] .f177yfvr:focus-visible          { outline: none }
+```
+
+Both selectors weigh the same: one class plus one attribute, versus one class plus one pseudo-class. Specificity cannot separate them. Bucket `i` (`:focus-visible`) is inserted *after* bucket `d`, so `outline: none` won and **CAP buttons rendered no outer focus ring at all**.
+
+The `outline: none` came from a line in `useRootBaseStyles` commented "Remove browser defaults". The browser default was already removed — Fluent's own reset style declares `outline-style: none` in bucket `r`, which is inserted before everything. Restating it in `makeStyles` moved the same declaration into a bucket that outranked the product's own focus indicator.
+
+The fix is a deletion. The law is the regression test.
+
+## What the CSSOM cannot tell you
+
+This page reads what the browser was **told**, not what it painted. Contrast ratios, the substitution the operating system performs under forced colors, and per-engine focus-ring rendering are paint questions. They are left to the cross-engine checks and to the [forced colors](?path=/docs/packages-visual-refresh-style-algebra-forced-colors--docs) page.
+
+## Live instrument
+
+Tab through the buttons below to see the focus ring, then read the table: it reports the winning `outline-style` and `outline-color` for each appearance, resolved through the cascade.
+
+<Stories includePrimary title={null} />
