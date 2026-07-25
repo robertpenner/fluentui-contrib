@@ -162,3 +162,24 @@ cost; it cannot supply the alignment.
 Policy values include clean-room assumptions. The renderer does not model the complete CSS cascade, font metrics, layout measurement, animation, full Fluent behavior, browser paint-time forced-color substitution, native accessibility APIs, or assistive-technology output. Random property checks are not exhaustive proofs, and the curated browser matrix is intentionally sparse. Passing semantic properties does not prove browser rendering correctness, and successful model normalization does not prove Griffel can apply the same optimization.
 
 Next experiments should replace assumptions with cited public evidence, add contrast and high-zoom measurements, compare against production components only through public APIs, test bidirectional mixed content, and measure whether ownership overlap predicts real maintenance defects.
+
+## Production audit
+
+The clean-room work above has now been run against production. Every law in this package is asserted over the real
+`@fluentui-contrib/react-cap-theme` styles, and the outcome is published as a classified audit: see the *CAP production
+audit* page in Storybook, backed by `src/audit/productionAudit.ts`.
+
+Two things that the clean-room framing could not have produced are worth recording here. First, two of the four confirmed
+defects are decided by *stylesheet insertion order* rather than by any declaration a reader can point at: all Griffel
+classes carry identical specificity, so two surviving declarations for the same property are resolved by what else the
+page rendered first. A law asserted under a single render order reports either outcome as correct, which is why the
+forced-colors laws are asserted under more than one order, each in its own page. Second, two findings are defects in the
+*instrument* rather than in the product, and both made a law pass rather than fail. They are published at the same rank
+as the product defects, because a suite that passes vacuously converts silence into evidence.
+
+The next-family nomination is measured rather than intuited, and it lets the last open question above be answered
+concretely: the census counts, per family, the markers of the mechanisms this audit actually found, and `react-tags` is
+nominated because it scores highest on those markers *and* because `InteractionTag` is structurally the same object as
+SplitButton — two actions, a joined seam, shared disabled propagation. Whether that ownership overlap predicts real
+maintenance defects is now a testable prediction rather than a hypothesis, since the transferred laws either fail there
+or they do not.

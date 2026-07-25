@@ -1,0 +1,92 @@
+import { Meta, Stories, Title } from '@storybook/addon-docs/blocks';
+import * as ProductionAuditStories from './index.stories';
+
+<Meta of={ProductionAuditStories} />
+
+<Title />
+
+This is the report of the CAP Button-family audit: what was examined, what was
+found, what was changed, and where the evidence lives.
+
+## The claim
+
+CAP re-skins the Fluent Button family. The question this investigation asked was
+not "does it look right" but "which of Fluent's guarantees survive the re-skin?"
+That question has an answer only if the guarantees are written as laws over
+observable style, and the laws are run against the production theme rather than
+a reconstruction of it. Every finding below comes from a law failing against the
+real `@fluentui-contrib/react-cap-theme` styles.
+
+## The four investigations
+
+Each one is a page you can open, read, and re-run:
+
+- **[Griffel shorthand diagnostics](?path=/docs/packages-visual-refresh-style-algebra-griffel-shorthand-diagnostics--docs)**
+  — which declarations the build drops on the floor, and why the drop is silent
+  in practice.
+- **[CAP Button laws](?path=/docs/packages-visual-refresh-style-algebra-cap-button-laws--docs)**
+  — what an appearance is allowed to change, what a state is allowed to change,
+  and what focus must always do.
+- **[CAP ToggleButton laws](?path=/docs/packages-visual-refresh-style-algebra-cap-togglebutton-laws--docs)**
+  — which Button guarantees a ToggleButton inherits, which it specializes, and
+  the one it contradicts.
+- **[CAP SplitButton laws](?path=/docs/packages-visual-refresh-style-algebra-cap-splitbutton-laws--docs)**
+  — propagation across two actions, the joined seam, and what changes under RTL.
+- **[CAP alternate appearance](?path=/docs/packages-visual-refresh-style-algebra-cap-alternate-appearance--docs)**
+  — the cross-engine investigation, and how a law gets stated over an engine
+  capability instead of an engine name.
+
+## What was found
+
+The classification table is the substance of the report. Three things are worth
+saying about it up front.
+
+**Two confirmed CAP defects, both invisible to review.** The dropped border
+shorthands and the erased focus ring were both *legible* code: someone reading
+the style hook would see a border colour and a focus reset and would be right
+about what they were reading. They were wrong only about what the build and the
+cascade would do with them. Neither is the kind of thing a careful reviewer
+catches; both are the kind of thing a law catches immediately.
+
+**Order dependence is a category, not an accident.** All Griffel classes carry
+identical specificity, so when two declarations for the same property survive
+`mergeClasses`, the winner is decided by stylesheet insertion order — which is
+decided by what else the page rendered first. The ToggleButton substitution
+policy defect had this shape: the same button computed `auto` alone and `none`
+in company. A law asserted under a single render order would have reported
+either result as correct. Laws in this suite that touch forced colors are
+therefore asserted under more than one render order, each in its own page.
+
+**The most dangerous findings were in the instrument.** Two of the entries below
+are defects in the observer, not in CAP. Both made a law *pass* — one by folding
+a `::after` divider into the element's own box, one by attributing LTR and RTL
+rules to the same element. A law suite that reports failures honestly but passes
+vacuously is worse than no law suite, because it converts silence into evidence.
+They are published here at the same rank as the product defects.
+
+## Why the audit cannot rot
+
+Every correction in the table names an executable regression and a minimized
+fixture, and a test asserts that pairing: a finding may not claim a correction
+without citing a suite, the cited file must exist, and it must still contain the
+cited suite name. Rename a describe block and the audit fails, rather than
+quietly becoming a story about work that no longer holds.
+
+## Where to look next
+
+The nomination at the bottom of the page is measured, not intuited. Each column
+of the census counts a marker for a mechanism this audit actually found —
+unsupported shorthands the build will drop, focus overrides that can land in a
+later bucket, forced-colors blocks that restate policy at equal specificity —
+and asks where else in the theme the same thing could happen.
+
+`react-tags` is nominated on both axes the issue asks for. On defect yield, it is
+the only family in the theme still carrying raw unsupported border shorthands,
+and it carries roughly twice the focus-override density of the family audited
+here. On ownership overlap, `InteractionTag` composes a primary and a secondary
+action into one control with a joined seam and shared disabled propagation:
+structurally the same object as SplitButton. The laws already written transfer
+almost unchanged, so what the next investigation costs is a fixture, not an
+algebra.
+
+<Stories />
