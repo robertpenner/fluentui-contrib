@@ -174,3 +174,13 @@ export type {
 } from './fixtures/capButtonFamily';
 export { AlternateAppearanceProbe } from './fixtures/AlternateAppearanceProbe';
 export type { AlternateAppearanceProbeProps } from './fixtures/AlternateAppearanceProbe';
+export {
+  auditFindings,
+  nextInvestigation,
+  styleMarkerCensus,
+} from './audit/productionAudit';
+export type {
+  AuditClassification,
+  AuditFinding,
+  StyleMarkerCensusRow,
+} from './audit/productionAudit';
