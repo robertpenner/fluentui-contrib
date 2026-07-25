@@ -172,3 +172,5 @@ export type {
   CapSplitButtonCondition,
   CapSplitButtonFixturesProps,
 } from './fixtures/capButtonFamily';
+export { AlternateAppearanceProbe } from './fixtures/AlternateAppearanceProbe';
+export type { AlternateAppearanceProbeProps } from './fixtures/AlternateAppearanceProbe';
