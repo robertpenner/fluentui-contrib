@@ -106,6 +106,17 @@ also map unselected primary ToggleButton and secondary Button to the same profil
 its visible border. WebKit computes the unselected and secondary profiles differently. These are relational assertions
 rather than hardcoded RGB values, so the test records engine behavior without treating one emulated palette as universal.
 
+That last difference has since been reduced to a minimal fixture and split into two separate findings, one product
+defect and one engine capability. CAP's primary ToggleButton forced-colors block restated upstream's three system
+colours but dropped its `forced-color-adjust: auto`, while CAP's *Button* primary block contributes
+`forced-color-adjust: none` to the same root at the same specificity. Nothing deduped the pair, so the winning
+declaration was decided by Griffel's insertion order: the same button computed `auto` alone and `none` when another CAP
+fixture rendered first. Restating the opt-in fixes it and makes `mergeClasses` collapse the pair. With the policy
+pinned, the remaining WebKit difference is that WebKit matches `(forced-colors: active)` under emulation without
+performing substitution: the toggle lands on the system-colour keywords CAP names explicitly, while the secondary
+Button, which has no forced-colors treatment of its own, keeps its authored values. The agreement seen in Chromium and
+Firefox was therefore the engine's work, not a CAP guarantee. See `stories/AlternateAppearance/index.mdx`.
+
 Candidate seams suggested by the evidence are: a shared internal Fluent button-family forced-colors policy; a CAP
 specialization boundary that runs before protected accessibility resolution; and a Griffel diagnostic or conservative
 normalization key containing canonical media, selector, cascade dimensions, and provenance. None is yet an API
