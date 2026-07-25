@@ -1,0 +1,37 @@
+import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
+import * as ToggleButtonLawsStories from "./index.stories";
+
+<Meta of={ToggleButtonLawsStories} />
+
+<Title />
+
+A ToggleButton is a Button that also carries a selected state. Specialization is only sound if the added state is **additive**: everything the foundational Button guarantees must still hold in every toggle state, and the selected state must itself be perceivable.
+
+The [Button laws](?path=/docs/packages-visual-refresh-style-algebra-cap-button-laws--docs) page explains the observation model — Griffel's buckets are the cascade, and the surfaces here are read the same way.
+
+## Two families of law
+
+**Inherited.** The Button guarantees are re-asserted against toggle fixtures, so a regression in the toggle layer cannot quietly cancel them: every state is still a native `<button type="button">`, the focus indicator is still drawn (including for a checked disabled-focusable toggle, which is still keyboard reachable), selection changes colour but never geometry, and a disabled toggle still suppresses hover and pressed feedback.
+
+**Specialization.** `aria-pressed` reflects the checked state; selection is visible and not merely announced; selection survives forced colors, where authored colour is discarded and a token-only selection would disappear for the users who most need it; and a checked disabled-focusable toggle presents exactly as its disabled twin while remaining reachable.
+
+## The classified exception
+
+One law does not hold, and it is **not** CAP's to fix.
+
+Fluent applies its checked high-contrast styling whenever `checked` is set, disabled or not. A checked, disabled toggle therefore carries two boundary declarations under `forced-colors: active`:
+
+- `Highlight`, meaning *selected*, from Fluent's checked high-contrast styles
+- `GrayText`, meaning *disabled*, from CAP's disabled styles
+
+The two carry different Griffel keys, so `mergeClasses` cannot drop either. Both land in the media bucket at equal specificity. The winner is then decided purely by **which component rendered first** — and it comes out differently for the resting and hovered surfaces: the toggle reads as *selected* at rest and as *disabled* under the pointer.
+
+CAP cannot settle this from its own style hook. Restating the disabled declarations reuses the very same atomic classes, so no later insertion is produced and nothing changes. A partial restatement fixes hover while leaving the resting surface untouched, which trades one inconsistency for another.
+
+The behaviour is therefore **pinned** by a characterization test rather than asserted away, so a fix — wherever it lands — is noticed instead of absorbed. The table below reads the conflict out of the live CSSOM.
+
+## What this page cannot tell you
+
+Whether `Highlight` and `GrayText` are actually distinguishable in a given operating-system high-contrast theme is a paint question. So is the contrast of the selected surface. Both are left to the cross-engine checks.
+
+<Stories includePrimary title={null} />
