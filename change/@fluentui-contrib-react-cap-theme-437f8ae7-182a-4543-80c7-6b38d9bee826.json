@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Fix three Button-family accessibility defects: emit the focus boundary colours Griffel was silently dropping, stop the redundant outline reset from erasing the focus indicator (WCAG 2.4.7), and restate the primary ToggleButton forced-colors substitution policy so it no longer depends on render order",
+  "packageName": "@fluentui-contrib/react-cap-theme",
+  "email": "robertpenner@microsoft.com",
+  "dependentChangeType": "patch"
+}
