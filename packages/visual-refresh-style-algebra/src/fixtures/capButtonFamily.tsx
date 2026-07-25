@@ -40,8 +40,7 @@ export const fluentExpressibleAppearances = capButtonAppearances.filter(
 /** Widens a CAP appearance to the public prop type, marking the typing boundary. */
 export const asButtonAppearance = (
   appearance: CapButtonAppearance
-): ButtonProps['appearance'] =>
-  appearance as ButtonProps['appearance'];
+): ButtonProps['appearance'] => appearance as ButtonProps['appearance'];
 
 export const capTheme = { ...webLightTheme, ...CAP_THEME_TOKENS };
 

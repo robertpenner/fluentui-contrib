@@ -126,9 +126,28 @@ export {
 export {
   captureElementGriffelRules,
   captureGriffelRules,
+  byGriffelCascade,
   declarationsForProperty,
+  griffelBucketOrdering,
 } from './diagnostics/captureGriffelRules';
 export type { CapturedGriffelRule } from './diagnostics/captureGriffelRules';
+export {
+  buttonColorModes,
+  buttonSurfaceStates,
+  expandOutlineShorthand,
+  observeButtonSurface,
+  projectSurface,
+  resolveThemeValues,
+  summarizeButtonSurface,
+  surfaceColorProperties,
+  surfaceGeometryProperties,
+} from './observation/observeButtonSurface';
+export type {
+  ButtonColorMode,
+  ButtonSurface,
+  ButtonSurfaceObservation,
+  ButtonSurfaceState,
+} from './observation/observeButtonSurface';
 export {
   asButtonAppearance,
   capButtonAppearances,

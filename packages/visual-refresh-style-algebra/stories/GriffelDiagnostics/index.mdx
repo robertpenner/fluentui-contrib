@@ -25,11 +25,11 @@ dropped declaration carry?
 The CAP Button focus indicator declared its boundary colour three times using the
 `borderColor` shorthand:
 
-| Where | Declaration | Guarantee lost |
-| --- | --- | --- |
-| Focus indicator, resting | `borderColor: colorStrokeFocus2` | The focus ring's inner boundary kept the resting stroke colour. |
-| Focus indicator, hover | `borderColor: colorStrokeFocus2` | Hovering a focused button did not hold the focus boundary. |
-| Focus indicator, forced colors | `borderColor: Highlight` | Under `forced-colors: active`, the focused boundary stayed `ButtonBorder` instead of `Highlight`. |
+| Where                          | Declaration                      | Guarantee lost                                                                                    |
+| ------------------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Focus indicator, resting       | `borderColor: colorStrokeFocus2` | The focus ring's inner boundary kept the resting stroke colour.                                   |
+| Focus indicator, hover         | `borderColor: colorStrokeFocus2` | Hovering a focused button did not hold the focus boundary.                                        |
+| Focus indicator, forced colors | `borderColor: Highlight`         | Under `forced-colors: active`, the focused boundary stayed `ButtonBorder` instead of `Highlight`. |
 
 Each was replaced with `shorthands.borderColor(...)`, which expands to the four
 longhand properties Griffel does resolve. The intended focus, boundary, selected,
@@ -58,7 +58,7 @@ guard.
 - `forcedColorsFocusBoundaryRules` is non-zero, showing the boundary is also
   declared inside `@media (forced-colors: active)`.
 - The browser console contains no `@griffel/react: You are using unsupported
-  shorthand CSS property` message while this page renders.
+shorthand CSS property` message while this page renders.
 
 ## Evidence boundary
 

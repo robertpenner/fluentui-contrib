@@ -128,10 +128,7 @@ const DiagnosticFixtures: React.FC = () => {
       if (!element) {
         return [];
       }
-      const rules = captureElementGriffelRules(
-        targetDocument.styleSheets,
-        element
-      );
+      const rules = captureElementGriffelRules(targetDocument, element);
       const focusRules = focusBoundaryRules(rules);
       return [
         {

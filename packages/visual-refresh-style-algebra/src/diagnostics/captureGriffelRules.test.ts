@@ -25,17 +25,19 @@ describe('captureGriffelRules', () => {
       }
     `);
 
-    const captured = captureGriffelRules(document.styleSheets, ['fa1']);
+    const captured = captureGriffelRules(document, ['fa1']);
 
     expect(captured).toEqual([
       {
         media: '',
+        bucket: '',
         selector: '.fa1',
         declarations: { 'border-top-color': 'red' },
         cssText: expect.any(String),
       },
       {
         media: '(forced-colors: active)',
+        bucket: '',
         selector: '.fa1',
         declarations: { 'border-top-color': 'Highlight' },
         cssText: expect.any(String),
@@ -46,7 +48,7 @@ describe('captureGriffelRules', () => {
   it('ignores rules that target other atomic classes', () => {
     insertStyleSheet('.fa1 { color: red; } .fa10 { color: blue; }');
 
-    expect(captureGriffelRules(document.styleSheets, ['fa1'])).toHaveLength(1);
+    expect(captureGriffelRules(document, ['fa1'])).toHaveLength(1);
   });
 
   it('captures every class an element carries', () => {
@@ -55,7 +57,7 @@ describe('captureGriffelRules', () => {
     const element = document.querySelector('button');
 
     const captured = captureElementGriffelRules(
-      document.styleSheets,
+      document,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       element!
     );
