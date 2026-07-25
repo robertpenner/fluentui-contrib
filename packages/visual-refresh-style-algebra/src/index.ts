@@ -109,3 +109,38 @@ export {
 } from './render/CleanRoomButton';
 export type { CleanRoomButtonProps } from './render/CleanRoomButton';
 export { contractToStyles } from './render/contractToStyles';
+export {
+  GRIFFEL_UNSUPPORTED_SHORTHAND_PREFIX,
+  parseGriffelShorthandDiagnostic,
+  summarizeGriffelShorthandDiagnostics,
+  unsupportedShorthandProperties,
+} from './diagnostics/GriffelDiagnostic';
+export type {
+  GriffelShorthandDiagnostic,
+  UnsupportedShorthandProperty,
+} from './diagnostics/GriffelDiagnostic';
+export {
+  collectGriffelShorthandDiagnostics,
+  formatGriffelShorthandDiagnostics,
+} from './diagnostics/collectGriffelShorthandDiagnostics';
+export {
+  captureElementGriffelRules,
+  captureGriffelRules,
+  declarationsForProperty,
+} from './diagnostics/captureGriffelRules';
+export type { CapturedGriffelRule } from './diagnostics/captureGriffelRules';
+export {
+  asButtonAppearance,
+  capButtonAppearances,
+  CapButtonFamilyFixtures,
+  CapButtonFixtures,
+  CapFixtureProvider,
+  capTheme,
+  CapSplitButtonFixtures,
+  CapToggleButtonFixtures,
+  fluentExpressibleAppearances,
+} from './fixtures/capButtonFamily';
+export type {
+  CapButtonAppearance,
+  CapFixtureProviderProps,
+} from './fixtures/capButtonFamily';

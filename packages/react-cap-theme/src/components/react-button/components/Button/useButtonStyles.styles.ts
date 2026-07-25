@@ -288,22 +288,22 @@ const useRootDisabledStyles = makeStyles({
 
 const useRootBaseFocusIndicatorStyles = makeStyles({
   base: createCustomFocusIndicatorStyle({
-    borderColor: tokens.colorStrokeFocus2,
+    ...shorthands.borderColor(tokens.colorStrokeFocus2),
     borderRadius: capTokens.borderRadius2XLarge,
     outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,
     zIndex: 1,
     ...innerFocusRing(),
 
-    ':hover': { borderColor: tokens.colorStrokeFocus2 },
+    ':hover': shorthands.borderColor(tokens.colorStrokeFocus2),
     '@media (forced-colors: active)': {
       outlineColor: 'Highlight',
       ...innerFocusRing('ButtonFace'),
-      ':focus': { borderColor: 'Highlight' },
+      ':focus': shorthands.borderColor('Highlight'),
     },
-  }) as unknown as GriffelStyle,
+  }),
   small: createCustomFocusIndicatorStyle({
     borderRadius: tokens.borderRadiusXLarge,
-  }) as unknown as GriffelStyle,
+  }),
 });
 
 const useRootFocusStyles = makeStyles({
@@ -312,9 +312,9 @@ const useRootFocusStyles = makeStyles({
     '@media (forced-colors: active)': {
       outlineColor: 'ButtonBorder',
       ...innerFocusRing('ButtonFace'),
-      ':focus': { ...shorthands.borderColor('ButtonFace') },
+      ':focus': shorthands.borderColor('ButtonFace'),
     },
-  }) as unknown as GriffelStyle,
+  }),
 });
 
 const useRootIconOnlyStyles = makeStyles({

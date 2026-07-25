@@ -1,0 +1,73 @@
+import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
+import * as GriffelDiagnosticsStories from "./index.stories";
+
+<Meta of={GriffelDiagnosticsStories} />
+
+<Title />
+
+Griffel compiles `makeStyles` into atomic CSS at build time. A small set of CSS
+shorthand properties cannot be expanded deterministically, so Griffel refuses
+them: it logs a console error and **drops the declaration**. The style is written
+in the source, passes review, appears in the diff, and never reaches the browser.
+
+That makes a shorthand diagnostic a defect report rather than lint noise. This
+page investigates the diagnostics the production CAP Button-family style hooks
+emitted, and shows the corrected output.
+
+## The question this page answers
+
+When a CAP Button-family fixture logs an unsupported-shorthand diagnostic, which
+production style emitted it, and what visual or accessibility guarantee did the
+dropped declaration carry?
+
+## What was found
+
+The CAP Button focus indicator declared its boundary colour three times using the
+`borderColor` shorthand:
+
+| Where | Declaration | Guarantee lost |
+| --- | --- | --- |
+| Focus indicator, resting | `borderColor: colorStrokeFocus2` | The focus ring's inner boundary kept the resting stroke colour. |
+| Focus indicator, hover | `borderColor: colorStrokeFocus2` | Hovering a focused button did not hold the focus boundary. |
+| Focus indicator, forced colors | `borderColor: Highlight` | Under `forced-colors: active`, the focused boundary stayed `ButtonBorder` instead of `Highlight`. |
+
+Each was replaced with `shorthands.borderColor(...)`, which expands to the four
+longhand properties Griffel does resolve. The intended focus, boundary, selected,
+and disabled treatments are unchanged; they are simply delivered now.
+
+### Why the type system did not catch it
+
+`GriffelStyle` models the unsupported properties as errors, so the source should
+not have compiled. The call site widened
+`createCustomFocusIndicatorStyle(...)`'s inferred return with
+`as unknown as GriffelStyle`. That cast satisfied the compiler by asserting the
+conclusion, and the object literal was inferred as the reset-style variant, where
+shorthands are permitted. Removing the shorthands also removed the need for the
+casts — the corrected code type-checks without them, which is the more durable
+guard.
+
+## Live evidence
+
+<Stories includePrimary title={null} />
+
+## What working as intended looks like
+
+- Every card reports **Focus boundary colour emitted**, in green.
+- `focusBoundaryRules` is non-zero for each Button-family slot, and the expanded
+  rules show `border-top-color` on a `[data-fui-focus-visible]` selector.
+- `forcedColorsFocusBoundaryRules` is non-zero, showing the boundary is also
+  declared inside `@media (forced-colors: active)`.
+- The browser console contains no `@griffel/react: You are using unsupported
+  shorthand CSS property` message while this page renders.
+
+## Evidence boundary
+
+This page reads the CSSOM: it shows which declarations the browser received, not
+how they are painted. A rule can be present and still be overridden, and forced
+colors substitutes values at paint time. Paint-level relationships are asserted
+separately in the cross-engine Playwright checks.
+
+The automated regression lives in
+`src/diagnostics/capButtonFamilyDiagnostics.test.tsx`. It renders the whole
+Button family in both writing directions while intercepting `console.error`, and
+fails if any unsupported-shorthand diagnostic returns.
