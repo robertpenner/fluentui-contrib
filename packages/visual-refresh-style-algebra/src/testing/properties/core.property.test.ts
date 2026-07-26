@@ -1,12 +1,20 @@
 import * as fc from 'fast-check';
 import { compareContracts } from '../../comparison/compareContracts';
 import { formatCounterexample } from '../../comparison/formatCounterexample';
-import { appearances, interactionStates, type ButtonCase } from '../../domain/ButtonCase';
+import {
+  appearances,
+  interactionStates,
+  type ButtonCase,
+} from '../../domain/ButtonCase';
 import { supportedAppearances } from '../../domain/SupportedDomain';
 import { isValidButtonCase } from '../../domain/validity';
 import { resolveLayeredButton } from '../../layered/resolveLayeredButton';
 import { resolveSemanticButton } from '../../semantic/resolveSemanticButton';
-import { buttonCaseArbitrary, productArbitrary, visualLanguageArbitrary } from '../arbitraries';
+import {
+  buttonCaseArbitrary,
+  productArbitrary,
+  visualLanguageArbitrary,
+} from '../arbitraries';
 import { propertyParameters } from '../propertyConfig';
 
 const assertCompleteValue = (value: unknown, path: string): void => {
@@ -14,7 +22,9 @@ const assertCompleteValue = (value: unknown, path: string): void => {
   if (typeof value === 'number') {
     expect(Number.isFinite(value)).toBe(true);
   } else if (Array.isArray(value)) {
-    value.forEach((entry, index) => assertCompleteValue(entry, `${path}[${index}]`));
+    value.forEach((entry, index) =>
+      assertCompleteValue(entry, `${path}[${index}]`)
+    );
   } else if (typeof value === 'object' && value !== null) {
     for (const [key, entry] of Object.entries(value)) {
       assertCompleteValue(entry, `${path}.${key}`);
@@ -25,7 +35,7 @@ const assertCompleteValue = (value: unknown, path: string): void => {
 const supportedCase = (
   product: ButtonCase['product'],
   visualLanguage: ButtonCase['visualLanguage'],
-  appearance: ButtonCase['appearance'],
+  appearance: ButtonCase['appearance']
 ): ButtonCase => ({
   product,
   visualLanguage,
@@ -43,41 +53,49 @@ const supportedCase = (
 describe('core preservation laws', () => {
   it('Law 1: totality over valid cases', () => {
     fc.assert(
-      fc.property(buttonCaseArbitrary, input => {
+      fc.property(buttonCaseArbitrary, (input) => {
         expect(isValidButtonCase(input)).toBe(true);
         assertCompleteValue(resolveLayeredButton(input), 'layered');
         assertCompleteValue(resolveSemanticButton(input), 'semantic');
       }),
-      propertyParameters,
+      propertyParameters
     );
   });
 
   it('Law 5: state completeness', () => {
     fc.assert(
-      fc.property(buttonCaseArbitrary, input => {
+      fc.property(buttonCaseArbitrary, (input) => {
         for (const interactionState of interactionStates) {
           const stateCase = { ...input, interactionState };
-          for (const contract of [resolveLayeredButton(stateCase), resolveSemanticButton(stateCase)]) {
-            expect(contract.supportedDomain.supportedStates).toEqual(interactionStates);
+          for (const contract of [
+            resolveLayeredButton(stateCase),
+            resolveSemanticButton(stateCase),
+          ]) {
+            expect(contract.supportedDomain.supportedStates).toEqual(
+              interactionStates
+            );
             expect(contract.appearance.foregroundRole).toBeDefined();
             expect(contract.appearance.backgroundRole).toBeDefined();
             expect(contract.appearance.borderRole).toBeDefined();
           }
         }
       }),
-      propertyParameters,
+      propertyParameters
     );
   });
 
   it('Law 11: observational equivalence of semantic contracts', () => {
     fc.assert(
-      fc.property(buttonCaseArbitrary, input => {
-        const differences = compareContracts(resolveLayeredButton(input), resolveSemanticButton(input));
+      fc.property(buttonCaseArbitrary, (input) => {
+        const differences = compareContracts(
+          resolveLayeredButton(input),
+          resolveSemanticButton(input)
+        );
         if (differences.length > 0) {
           throw new Error(formatCounterexample(input, differences));
         }
       }),
-      propertyParameters,
+      propertyParameters
     );
   });
 
@@ -93,15 +111,23 @@ describe('core preservation laws', () => {
 
           expect(isValidButtonCase(input)).toBe(isSupported);
           if (isSupported) {
-            expect(resolveSemanticButton(input).supportedDomain.appearanceSupported).toBe(true);
-            expect(resolveLayeredButton(input).supportedDomain.appearanceSupported).toBe(true);
+            expect(
+              resolveSemanticButton(input).supportedDomain.appearanceSupported
+            ).toBe(true);
+            expect(
+              resolveLayeredButton(input).supportedDomain.appearanceSupported
+            ).toBe(true);
           } else {
-            expect(() => resolveSemanticButton(input)).toThrow('unsupportedAppearance');
-            expect(() => resolveLayeredButton(input)).toThrow('unsupportedAppearance');
+            expect(() => resolveSemanticButton(input)).toThrow(
+              'unsupportedAppearance'
+            );
+            expect(() => resolveLayeredButton(input)).toThrow(
+              'unsupportedAppearance'
+            );
           }
-        },
+        }
       ),
-      propertyParameters,
+      propertyParameters
     );
   });
 });

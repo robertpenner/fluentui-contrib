@@ -20,7 +20,9 @@ describe('resolveSemanticButton', () => {
     const contract = resolveSemanticButton(discriminatingCase);
 
     expect(contract.geometry.blockSize).toBe(32);
-    expect(contract.geometry.paddingInlineStart).toBeLessThan(contract.geometry.paddingInlineEnd);
+    expect(contract.geometry.paddingInlineStart).toBeLessThan(
+      contract.geometry.paddingInlineEnd
+    );
     expect(contract.shape).toEqual({
       radiusStartStart: 8,
       radiusStartEnd: 0,
@@ -32,17 +34,28 @@ describe('resolveSemanticButton', () => {
       backgroundRole: 'ButtonFace',
       borderRole: 'ButtonBorder',
     });
-    expect(contract.focus).toMatchObject({ visible: true, colorRole: 'Highlight' });
+    expect(contract.focus).toMatchObject({
+      visible: true,
+      colorRole: 'Highlight',
+    });
     expect(contract.anatomy.accessibleNameSource).toBe('text');
     expect(contract.validationObligations).toEqual(
-      expect.arrayContaining(['forcedColorsBehavior', 'accessibleNaming', 'compoundGeometry']),
+      expect.arrayContaining([
+        'forcedColorsBehavior',
+        'accessibleNaming',
+        'compoundGeometry',
+      ])
     );
     expect(contract.capabilities.supportsKeyboardActivation).toBe(true);
   });
 
   it('fails explicitly for an unsupported appearance', () => {
-    expect(() => resolveSemanticButton({ ...discriminatingCase, product: 'teams', appearance: 'tint' })).toThrow(
-      'unsupportedAppearance',
-    );
+    expect(() =>
+      resolveSemanticButton({
+        ...discriminatingCase,
+        product: 'teams',
+        appearance: 'tint',
+      })
+    ).toThrow('unsupportedAppearance');
   });
 });

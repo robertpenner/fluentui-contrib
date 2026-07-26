@@ -19,7 +19,11 @@ export const standardOverrideOrder: readonly OverrideStageName[] = [
   'forcedColors',
 ];
 
-const applyOverrideStage = (state: LayeredState, input: ButtonCase, stage: OverrideStageName): void => {
+const applyOverrideStage = (
+  state: LayeredState,
+  input: ButtonCase,
+  stage: OverrideStageName
+): void => {
   switch (stage) {
     case 'visualRefresh':
       applyVisualRefreshOverrides(state, input);
@@ -41,7 +45,7 @@ const applyOverrideStage = (state: LayeredState, input: ButtonCase, stage: Overr
 
 export const resolveLayeredButtonInOrder = (
   input: ButtonCase,
-  stages: readonly OverrideStageName[],
+  stages: readonly OverrideStageName[]
 ): LayeredState => {
   assertValidButtonCase(input);
   const state = applyFluentBase(input);
@@ -53,7 +57,9 @@ export const resolveLayeredButtonInOrder = (
   return state;
 };
 
-export const resolveLayeredButtonWithHistory = (input: ButtonCase): LayeredState => {
+export const resolveLayeredButtonWithHistory = (
+  input: ButtonCase
+): LayeredState => {
   return resolveLayeredButtonInOrder(input, standardOverrideOrder);
 };
 

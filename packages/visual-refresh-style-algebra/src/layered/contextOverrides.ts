@@ -4,23 +4,53 @@ import { resolveGeometry } from '../semantic/resolveGeometry';
 import { resolveShape } from '../semantic/resolveShape';
 import { addDecision, type LayeredState, writeField } from './writeHistory';
 
-export const applyContextOverrides = (state: LayeredState, input: ButtonCase): LayeredState => {
+export const applyContextOverrides = (
+  state: LayeredState,
+  input: ButtonCase
+): LayeredState => {
   const geometry = resolveGeometry(input);
-  for (const field of ['paddingInlineStart', 'paddingInlineEnd', 'gap'] as const) {
-    writeField(state, 'context', `geometry.${field}`, geometry[field], (contract, value) => {
-      contract.geometry[field] = value;
-    });
+  for (const field of [
+    'paddingInlineStart',
+    'paddingInlineEnd',
+    'gap',
+  ] as const) {
+    writeField(
+      state,
+      'context',
+      `geometry.${field}`,
+      geometry[field],
+      (contract, value) => {
+        contract.geometry[field] = value;
+      }
+    );
   }
 
   const shape = resolveShape(input);
-  for (const field of ['radiusStartStart', 'radiusStartEnd', 'radiusEndStart', 'radiusEndEnd'] as const) {
-    writeField(state, 'context', `shape.${field}`, shape[field], (contract, value) => {
-      contract.shape[field] = value;
-    });
+  for (const field of [
+    'radiusStartStart',
+    'radiusStartEnd',
+    'radiusEndStart',
+    'radiusEndEnd',
+  ] as const) {
+    writeField(
+      state,
+      'context',
+      `shape.${field}`,
+      shape[field],
+      (contract, value) => {
+        contract.shape[field] = value;
+      }
+    );
   }
-  writeField(state, 'context', 'validationObligations', deriveValidationObligations(input), (contract, value) => {
-    contract.validationObligations = value;
-  });
+  writeField(
+    state,
+    'context',
+    'validationObligations',
+    deriveValidationObligations(input),
+    (contract, value) => {
+      contract.validationObligations = value;
+    }
+  );
   addDecision(state, {
     rule: 'content-and-composition-override',
     fields: [

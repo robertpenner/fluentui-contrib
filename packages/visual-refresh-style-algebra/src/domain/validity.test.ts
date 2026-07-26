@@ -34,18 +34,31 @@ describe('supported appearance domain', () => {
     for (const visualLanguage of visualLanguages) {
       for (const product of products) {
         expect(supportedAppearances({ product, visualLanguage })).toEqual(
-          appearanceDomains[visualLanguage][product],
+          appearanceDomains[visualLanguage][product]
         );
       }
     }
   });
 
   it('adds and removes appearances explicitly at domain boundaries', () => {
-    expect(supportedAppearances({ product: 'fluent', visualLanguage: 'visualRefresh' })).toContain('tint');
-    expect(supportedAppearances({ product: 'sharepoint', visualLanguage: 'visualRefresh' })).not.toContain(
-      'transparent',
-    );
-    expect(supportedAppearances({ product: 'teams', visualLanguage: 'visualRefresh' })).not.toContain('tint');
+    expect(
+      supportedAppearances({
+        product: 'fluent',
+        visualLanguage: 'visualRefresh',
+      })
+    ).toContain('tint');
+    expect(
+      supportedAppearances({
+        product: 'sharepoint',
+        visualLanguage: 'visualRefresh',
+      })
+    ).not.toContain('transparent');
+    expect(
+      supportedAppearances({
+        product: 'teams',
+        visualLanguage: 'visualRefresh',
+      })
+    ).not.toContain('tint');
   });
 });
 
@@ -55,17 +68,29 @@ describe('ButtonCase validity', () => {
     ['iconOnly', 'only'],
     ['textAndIcon', 'before'],
     ['textAndIcon', 'after'],
-  ] as const)('accepts %s content with %s placement', (contentKind, iconPlacement) => {
-    expect(isValidButtonCase({ ...baseCase, contentKind, iconPlacement })).toBe(true);
-  });
+  ] as const)(
+    'accepts %s content with %s placement',
+    (contentKind, iconPlacement) => {
+      expect(
+        isValidButtonCase({ ...baseCase, contentKind, iconPlacement })
+      ).toBe(true);
+    }
+  );
 
   it('rejects every undeclared content and icon placement relationship', () => {
-    const acceptedPairs = new Set(['text:none', 'iconOnly:only', 'textAndIcon:before', 'textAndIcon:after']);
+    const acceptedPairs = new Set([
+      'text:none',
+      'iconOnly:only',
+      'textAndIcon:before',
+      'textAndIcon:after',
+    ]);
 
     for (const contentKind of contentKinds) {
       for (const iconPlacement of iconPlacements) {
         const input = { ...baseCase, contentKind, iconPlacement };
-        expect(isValidButtonCase(input)).toBe(acceptedPairs.has(`${contentKind}:${iconPlacement}`));
+        expect(isValidButtonCase(input)).toBe(
+          acceptedPairs.has(`${contentKind}:${iconPlacement}`)
+        );
       }
     }
   });
@@ -76,8 +101,12 @@ describe('ButtonCase validity', () => {
       anatomyPolicy: 'visualRefreshReconstructed',
     };
 
-    expect(invalidButtonCaseReasons(input)).toContain('reconstructedAnatomyRequiresVisualRefresh');
-    expect(isValidButtonCase({ ...input, visualLanguage: 'visualRefresh' })).toBe(true);
+    expect(invalidButtonCaseReasons(input)).toContain(
+      'reconstructedAnatomyRequiresVisualRefresh'
+    );
+    expect(
+      isValidButtonCase({ ...input, visualLanguage: 'visualRefresh' })
+    ).toBe(true);
   });
 
   it('classifies every finite combination deterministically', () => {
@@ -109,7 +138,9 @@ describe('ButtonCase validity', () => {
                           };
                           const reasons = invalidButtonCaseReasons(input);
 
-                          expect(isValidButtonCase(input)).toBe(reasons.length === 0);
+                          expect(isValidButtonCase(input)).toBe(
+                            reasons.length === 0
+                          );
                           expect(new Set(reasons).size).toBe(reasons.length);
                           classifiedCases += 1;
                         }

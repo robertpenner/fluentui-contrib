@@ -5,9 +5,13 @@ import { blockSizePolicy, spacingPolicy } from '../domain/policies';
 type Geometry = ButtonStyleContract['geometry'];
 
 const resolvePadding = (
-  input: Pick<ButtonCase, 'contentKind' | 'density' | 'direction' | 'iconPlacement'>,
+  input: Pick<
+    ButtonCase,
+    'contentKind' | 'density' | 'direction' | 'iconPlacement'
+  >
 ): Pick<Geometry, 'paddingInlineStart' | 'paddingInlineEnd'> => {
-  const compactAdjustment = input.density === 'compact' ? spacingPolicy.compactDelta : 0;
+  const compactAdjustment =
+    input.density === 'compact' ? spacingPolicy.compactDelta : 0;
 
   if (input.contentKind === 'iconOnly') {
     const padding = spacingPolicy.iconOnlyPadding - compactAdjustment;
@@ -30,8 +34,12 @@ const resolvePadding = (
 };
 
 export const resolveGeometry = (input: ButtonCase): Geometry => ({
-  blockSize: blockSizePolicy[input.visualLanguage][input.product][input.density],
-  minInlineSize: Math.max(spacingPolicy.minInlineSize, blockSizePolicy[input.visualLanguage][input.product][input.density]),
+  blockSize:
+    blockSizePolicy[input.visualLanguage][input.product][input.density],
+  minInlineSize: Math.max(
+    spacingPolicy.minInlineSize,
+    blockSizePolicy[input.visualLanguage][input.product][input.density]
+  ),
   ...resolvePadding(input),
   gap: input.contentKind === 'textAndIcon' ? spacingPolicy.gap : 0,
 });

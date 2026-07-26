@@ -27,9 +27,10 @@ export const appearanceDomains: AppearanceDomains = {
 };
 
 export const supportedAppearances = (
-  input: Pick<ButtonCase, 'product' | 'visualLanguage'>,
-): readonly Appearance[] => appearanceDomains[input.visualLanguage][input.product];
+  input: Pick<ButtonCase, 'product' | 'visualLanguage'>
+): readonly Appearance[] =>
+  appearanceDomains[input.visualLanguage][input.product];
 
 export const isAppearanceSupported = (
-  input: Pick<ButtonCase, 'product' | 'visualLanguage' | 'appearance'>,
+  input: Pick<ButtonCase, 'product' | 'visualLanguage' | 'appearance'>
 ): boolean => supportedAppearances(input).includes(input.appearance);

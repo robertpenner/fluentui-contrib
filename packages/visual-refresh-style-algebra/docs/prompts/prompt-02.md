@@ -74,16 +74,9 @@ Represent forced colors as an environmental mode, not as another product theme.
 A suitable starting point is:
 
 ```ts
-type ColorMode = "light" | "dark" | "forcedColors";
+type ColorMode = 'light' | 'dark' | 'forcedColors';
 
-type SystemColorRole =
-  | "Canvas"
-  | "CanvasText"
-  | "ButtonFace"
-  | "ButtonText"
-  | "GrayText"
-  | "Highlight"
-  | "HighlightText";
+type SystemColorRole = 'Canvas' | 'CanvasText' | 'ButtonFace' | 'ButtonText' | 'GrayText' | 'Highlight' | 'HighlightText';
 
 interface ForcedColorsContract {
   foregroundRole: SystemColorRole;
@@ -105,10 +98,7 @@ Do not claim that this model exhaustively reproduces browser behavior. The model
 If the current architecture exposes transformations, model forced-colors adaptation explicitly:
 
 ```ts
-function applyForcedColorsPolicy(
-  contract: ButtonStyleContract,
-  input: ButtonCase,
-): ButtonStyleContract;
+function applyForcedColorsPolicy(contract: ButtonStyleContract, input: ButtonCase): ButtonStyleContract;
 ```
 
 If the current semantic resolver is direct rather than transformational, keep the direct resolver and expose the forced-colors decision as a named sub-resolution step:

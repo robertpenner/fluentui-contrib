@@ -1,5 +1,8 @@
 import type { ButtonCase } from '../domain/ButtonCase';
-import type { ButtonStyleContract, StyleDecision } from '../domain/ButtonStyleContract';
+import type {
+  ButtonStyleContract,
+  StyleDecision,
+} from '../domain/ButtonStyleContract';
 import { DESIGN_LANGUAGE_VERSION } from '../domain/policies';
 import { assertValidButtonCase } from '../domain/validity';
 import { deriveValidationObligations } from './deriveValidationObligations';
@@ -23,11 +26,18 @@ const collectDecisions = (input: ButtonCase): readonly StyleDecision[] => [
     rule: 'product-density-policy',
     fields: ['geometry.blockSize', 'geometry.minInlineSize'],
     explanation: `${input.product}/${input.visualLanguage}/${input.density} selects one named size policy`,
-    evidence: input.visualLanguage === 'visualRefresh' && input.density === 'standard' ? 'presentationObservation' : 'modelAssumption',
+    evidence:
+      input.visualLanguage === 'visualRefresh' && input.density === 'standard'
+        ? 'presentationObservation'
+        : 'modelAssumption',
   },
   {
     rule: 'content-direction-padding',
-    fields: ['geometry.paddingInlineStart', 'geometry.paddingInlineEnd', 'geometry.gap'],
+    fields: [
+      'geometry.paddingInlineStart',
+      'geometry.paddingInlineEnd',
+      'geometry.gap',
+    ],
     explanation: `${input.contentKind}/${input.iconPlacement}/${input.direction} selects logical spacing`,
     evidence: 'modelAssumption',
   },
@@ -41,7 +51,10 @@ const collectDecisions = (input: ButtonCase): readonly StyleDecision[] => [
     rule: 'complete-state-color-table',
     fields: ['appearance'],
     explanation: `${input.appearance}/${input.interactionState}/${input.colorMode} selects explicit semantic roles`,
-    evidence: input.colorMode === 'forcedColors' ? 'accessibilityProtection' : 'modelAssumption',
+    evidence:
+      input.colorMode === 'forcedColors'
+        ? 'accessibilityProtection'
+        : 'modelAssumption',
   },
   {
     rule: 'anatomy-and-name-source',
@@ -51,7 +64,9 @@ const collectDecisions = (input: ButtonCase): readonly StyleDecision[] => [
   },
 ];
 
-export const resolveSemanticButton = (input: ButtonCase): ButtonStyleContract => {
+export const resolveSemanticButton = (
+  input: ButtonCase
+): ButtonStyleContract => {
   assertValidButtonCase(input);
 
   return {

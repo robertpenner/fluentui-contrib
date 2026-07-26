@@ -1,8 +1,13 @@
 import type { ButtonStyleContract } from '../domain/ButtonStyleContract';
 
-export type ComparableButtonStyleContract = Omit<ButtonStyleContract, 'provenance'>;
+export type ComparableButtonStyleContract = Omit<
+  ButtonStyleContract,
+  'provenance'
+>;
 
-export const normalizeContract = (contract: ButtonStyleContract): ComparableButtonStyleContract => ({
+export const normalizeContract = (
+  contract: ButtonStyleContract
+): ComparableButtonStyleContract => ({
   modelVersion: contract.modelVersion,
   geometry: contract.geometry,
   shape: contract.shape,

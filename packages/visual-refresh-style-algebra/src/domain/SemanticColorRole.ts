@@ -41,5 +41,7 @@ export type ProductColorRole =
 
 export type SemanticColorRole = ProductColorRole | SystemColorRole;
 
-export const isSystemColorRole = (role: SemanticColorRole): role is SystemColorRole =>
+export const isSystemColorRole = (
+  role: SemanticColorRole
+): role is SystemColorRole =>
   (systemColorRoles as readonly SemanticColorRole[]).includes(role);

@@ -5,7 +5,9 @@ export type Pixels = number;
 
 export const px = (value: number): Pixels => {
   if (!Number.isFinite(value) || value < 0) {
-    throw new Error(`Expected a finite, non-negative pixel value, received ${value}`);
+    throw new Error(
+      `Expected a finite, non-negative pixel value, received ${value}`
+    );
   }
 
   return value;
@@ -20,7 +22,9 @@ type ProductDensityPolicy = Readonly<Record<Product, DensityPolicy>>;
  * Presentation evidence supplies only Visual Refresh standard=36 and Teams
  * standard=32. All compact and Fluent 2 values are replaceable model assumptions.
  */
-export const blockSizePolicy: Readonly<Record<VisualLanguage, ProductDensityPolicy>> = {
+export const blockSizePolicy: Readonly<
+  Record<VisualLanguage, ProductDensityPolicy>
+> = {
   fluent2: {
     fluent: { standard: px(32), compact: px(28) },
     sharepoint: { standard: px(32), compact: px(28) },

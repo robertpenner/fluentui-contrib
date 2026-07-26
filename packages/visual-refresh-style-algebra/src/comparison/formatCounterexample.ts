@@ -3,7 +3,7 @@ import type { ContractDifference } from './compareContracts';
 
 export const formatCounterexample = (
   input: ButtonCase,
-  differences: readonly ContractDifference[] = [],
+  differences: readonly ContractDifference[] = []
 ): string =>
   JSON.stringify(
     {
@@ -11,5 +11,5 @@ export const formatCounterexample = (
       differences,
     },
     undefined,
-    2,
+    2
   );

@@ -143,17 +143,17 @@ Model the following pressures without copying production code:
 Start with these axes. Keep the model small enough to understand, but do not collapse the dimensions that create the motivating interactions.
 
 ```ts
-type Product = "fluent" | "sharepoint" | "teams";
-type VisualLanguage = "fluent2" | "visualRefresh";
-type Density = "standard" | "compact";
-type Appearance = "primary" | "subtle" | "transparent" | "tint";
-type InteractionState = "rest" | "hover" | "pressed" | "focusVisible" | "disabled";
-type ColorMode = "light" | "dark" | "forcedColors";
-type ContentKind = "text" | "iconOnly" | "textAndIcon";
-type IconPlacement = "none" | "before" | "after" | "only";
-type AnatomyPolicy = "fluentDefault" | "visualRefreshReconstructed";
-type CompositionContext = "standalone" | "toolbar" | "splitButtonStart" | "splitButtonEnd";
-type Direction = "ltr" | "rtl";
+type Product = 'fluent' | 'sharepoint' | 'teams';
+type VisualLanguage = 'fluent2' | 'visualRefresh';
+type Density = 'standard' | 'compact';
+type Appearance = 'primary' | 'subtle' | 'transparent' | 'tint';
+type InteractionState = 'rest' | 'hover' | 'pressed' | 'focusVisible' | 'disabled';
+type ColorMode = 'light' | 'dark' | 'forcedColors';
+type ContentKind = 'text' | 'iconOnly' | 'textAndIcon';
+type IconPlacement = 'none' | 'before' | 'after' | 'only';
+type AnatomyPolicy = 'fluentDefault' | 'visualRefreshReconstructed';
+type CompositionContext = 'standalone' | 'toolbar' | 'splitButtonStart' | 'splitButtonEnd';
+type Direction = 'ltr' | 'rtl';
 
 interface ButtonCase {
   product: Product;
@@ -175,9 +175,7 @@ Do not generate impossible cases indiscriminately. Implement an explicit validit
 Add an explicit supported-domain function:
 
 ```ts
-function supportedAppearances(
-  input: Pick<ButtonCase, "product" | "visualLanguage">,
-): readonly Appearance[];
+function supportedAppearances(input: Pick<ButtonCase, 'product' | 'visualLanguage'>): readonly Appearance[];
 ```
 
 The generator must select appearances from this function rather than generate an appearance first and filter most cases afterward. This models the presentation's observation that Visual Refresh can add and delete appearances.
@@ -224,7 +222,7 @@ interface ButtonStyleContract {
   anatomy: {
     orderedSlots: readonly ButtonSlot[];
     iconPlacement: IconPlacement;
-    accessibleNameSource: "text" | "ariaLabel";
+    accessibleNameSource: 'text' | 'ariaLabel';
   };
   supportedDomain: {
     appearanceSupported: boolean;
