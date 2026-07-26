@@ -266,22 +266,23 @@ export const auditFindings: readonly AuditFinding[] = [
  * rather than "where does the code look complicated?".
  *
  * Produced by counting, per family, across `*.styles.ts` in
- * `packages/react-cap-theme/src/components`:
+ * `packages/react-cap-theme/src/components`. Every column is re-derived from
+ * disk by the companion test, so a number that has drifted fails rather than
+ * quietly keeping the shape of a measurement:
  *
  * - `rawShorthands` — declarations of `borderColor` / `borderStyle` /
  *   `borderWidth` / `borderInline*` / `borderBlock*` written directly rather
  *   than through `shorthands.*`. This is the mechanism of the first defect: the
- *   declaration is dropped at build time. The nomination's strongest claim rests
- *   on this column, so the companion test re-derives it from disk rather than
- *   trusting the recorded number.
- * - `focusOverrides` — references to `outline`, `:focus-visible`, or
+ *   declaration is dropped at build time, and the nomination's strongest claim
+ *   is that exactly one family still carries them.
+ * - `focusOverrides` — occurrences of `outline`, `:focus-visible`, or
  *   `createCustomFocusIndicatorStyle`. This is the surface area of the second
  *   defect: a restated reset that lands in a later bucket erases the indicator.
  * - `forcedColorsBlocks` — `@media (forced-colors: active)` blocks. This is the
  *   surface area of the third and fourth defects: accessibility-critical policy
  *   restated at equal specificity, decided by insertion order.
- * - `hardcodedPixels` — `'<n>px'` literals, a weaker signal of hand-resolved
- *   token arithmetic.
+ * - `hardcodedPixels` — quoted `'<n>px'` literals, a weaker signal of
+ *   hand-resolved token arithmetic.
  */
 export interface StyleMarkerCensusRow {
   readonly family: string;

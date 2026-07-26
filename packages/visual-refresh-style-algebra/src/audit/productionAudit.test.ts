@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {
   type AuditFinding,
+  type StyleMarkerCensusRow,
   auditFindings,
   nextInvestigation,
   styleMarkerCensus,
@@ -42,10 +43,38 @@ const styleFilesUnder = (directory: string): readonly string[] =>
 const unsupportedShorthand =
   /^\s*(borderColor|borderStyle|borderWidth|borderBlock|borderBlockEnd|borderBlockStart|borderInline|borderInlineEnd|borderInlineStart)\s*:/;
 
-const countRawShorthands = (family: string): number =>
-  styleFilesUnder(path.join(themeComponents, family))
-    .flatMap((file) => fs.readFileSync(file, 'utf8').split('\n'))
-    .filter((line) => unsupportedShorthand.test(line)).length;
+/**
+ * The remaining three markers, counted as occurrences rather than lines so a
+ * single line declaring two of them is not undercounted.
+ */
+const focusOverride = /outline|:focus-visible|createCustomFocusIndicatorStyle/g;
+const forcedColorsBlock = /forced-colors:\s*active/g;
+const hardcodedPixel = /'\d+px'/g;
+
+const occurrences = (source: string, pattern: RegExp): number =>
+  (source.match(pattern) ?? []).length;
+
+/**
+ * Recounts every census column for one family straight off the theme package.
+ * The census is only worth quoting if it is a measurement rather than a
+ * transcription, so nothing here reads the recorded numbers.
+ */
+const measureFamily = (
+  family: string
+): Omit<StyleMarkerCensusRow, 'family'> => {
+  const source = styleFilesUnder(path.join(themeComponents, family))
+    .map((file) => fs.readFileSync(file, 'utf8'))
+    .join('\n');
+
+  return {
+    rawShorthands: source
+      .split('\n')
+      .filter((line) => unsupportedShorthand.test(line)).length,
+    focusOverrides: occurrences(source, focusOverride),
+    forcedColorsBlocks: occurrences(source, forcedColorsBlock),
+    hardcodedPixels: occurrences(source, hardcodedPixel),
+  };
+};
 
 /**
  * A published audit is only worth reading if its claims are attached to
@@ -76,12 +105,11 @@ describe('CAP production audit', () => {
     (_id, finding) => {
       const regression = finding.regression;
 
-      // Narrowed by the filter above; restated so the test reads on its own.
-      expect(regression).not.toBeNull();
+      if (regression === null) {
+        throw new Error(`${finding.id} lost the regression it was filtered on`);
+      }
 
-      const source = readSource(regression?.file ?? '');
-
-      expect(source).toContain(`'${regression?.suite}'`);
+      expect(readSource(regression.file)).toContain(`'${regression.suite}'`);
     }
   );
 
@@ -100,16 +128,41 @@ describe('CAP production audit', () => {
   });
 
   /**
-   * The nomination's strongest claim is that exactly one family still carries
-   * the shorthands Griffel drops, so that column is re-derived from disk rather
-   * than trusted. The other three columns are weaker signals and stay recorded.
+   * The census is the nomination's whole evidence base, so every column is
+   * recounted from the theme package rather than trusted. A recorded number that
+   * has drifted is worse than no number, because it still reads as measurement.
    */
   it.each(styleMarkerCensus.map((row) => [row.family, row] as const))(
-    'still measures the raw shorthands it recorded for %s',
+    'still measures the markers it recorded for %s',
     (family, row) => {
-      expect(countRawShorthands(family)).toBe(row.rawShorthands);
+      const measured = measureFamily(family);
+
+      expect({ family, ...measured }).toEqual(row);
     }
   );
+
+  /**
+   * The nomination states its numbers in prose as well as in the table. Binding
+   * them together stops the narrative outliving the measurement that produced it.
+   */
+  it('quotes the census it was derived from', () => {
+    const nominated = styleMarkerCensus.find(
+      (row) => row.family === nextInvestigation.family
+    );
+    const audited = styleMarkerCensus.find(
+      (row) => row.family === 'react-button'
+    );
+    const justification = nextInvestigation.measuredJustification;
+
+    expect(justification).toContain(`(${nominated?.rawShorthands})`);
+    expect(justification).toContain(
+      `${nominated?.focusOverrides} against the audited Button family`
+    );
+    expect(justification).toContain(`${audited?.focusOverrides}`);
+    expect(justification).toContain(
+      `${nominated?.forcedColorsBlocks} forced-colors blocks`
+    );
+  });
 
   it('nominates the family the census actually points at', () => {
     const nominated = styleMarkerCensus.find(
