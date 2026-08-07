@@ -26,6 +26,14 @@ export type {
   Product,
   VisualLanguage,
 } from './domain/ButtonCase';
+export {
+  buttonCaseAxes,
+  buttonCaseCensus,
+  contentConstructionCensus,
+  enumerateButtonCases,
+  productPolicyCensus,
+} from './domain/census';
+export type { ButtonCaseAxis } from './domain/census';
 export type { ButtonAnatomy, ButtonSlot } from './domain/ButtonAnatomy';
 export type {
   ButtonStyleContract,

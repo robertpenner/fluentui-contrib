@@ -1,17 +1,5 @@
-import {
-  anatomyPolicies,
-  appearances,
-  colorModes,
-  compositionContexts,
-  contentKinds,
-  densities,
-  directions,
-  iconPlacements,
-  interactionStates,
-  products,
-  visualLanguages,
-  type ButtonCase,
-} from '../domain/ButtonCase';
+import { type ButtonCase } from '../domain/ButtonCase';
+import { buttonCaseCensus, enumerateButtonCases } from '../domain/census';
 import { isValidButtonCase } from '../domain/validity';
 import { createForcedColorsEmissionExperiment } from '../emission/createForcedColorsEmissionExperiment';
 import type { ForcedColorsEmissionTarget } from '../emission/ForcedColorsEmission';
@@ -22,46 +10,6 @@ import {
 import { resolveLayeredButtonWithHistory } from '../layered/resolveLayeredButton';
 import { fieldsWithOverlappingOwnership } from '../layered/writeHistory';
 import { resolveForcedColorsContract } from '../semantic/resolveForcedColorsContract';
-
-const enumerateCases = (): ButtonCase[] => {
-  const cases: ButtonCase[] = [];
-  for (const product of products) {
-    for (const visualLanguage of visualLanguages) {
-      for (const density of densities) {
-        for (const appearance of appearances) {
-          for (const interactionState of interactionStates) {
-            for (const colorMode of colorModes) {
-              for (const contentKind of contentKinds) {
-                for (const iconPlacement of iconPlacements) {
-                  for (const anatomyPolicy of anatomyPolicies) {
-                    for (const compositionContext of compositionContexts) {
-                      for (const direction of directions) {
-                        cases.push({
-                          product,
-                          visualLanguage,
-                          density,
-                          appearance,
-                          interactionState,
-                          colorMode,
-                          contentKind,
-                          iconPlacement,
-                          anatomyPolicy,
-                          compositionContext,
-                          direction,
-                        });
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  return cases;
-};
 
 const forcedColorsMetricCase: ButtonCase = {
   product: 'fluent',
@@ -105,15 +53,17 @@ const forcedColorsMetricTargets: readonly {
 
 describe('research metrics', () => {
   it('keeps the documented finite-domain census reproducible', () => {
-    const allCases = enumerateCases();
+    const allCases = enumerateButtonCases();
     const validCases = allCases.filter(isValidButtonCase);
 
-    expect(allCases).toHaveLength(138_240);
-    expect(validCases).toHaveLength(27_840);
+    expect(allCases).toHaveLength(buttonCaseCensus.rawTotal);
+    expect(validCases).toHaveLength(buttonCaseCensus.validTotal);
+    expect(buttonCaseCensus.rawTotal).toBe(138_240);
+    expect(buttonCaseCensus.validTotal).toBe(27_840);
   });
 
   it('measures layered write volume and ownership overlap exhaustively', () => {
-    const validCases = enumerateCases().filter(isValidButtonCase);
+    const validCases = enumerateButtonCases().filter(isValidButtonCase);
     const writeCounts = validCases.map(
       (input) => resolveLayeredButtonWithHistory(input).writeHistory.length
     );
