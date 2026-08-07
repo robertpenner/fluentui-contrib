@@ -34,6 +34,28 @@ export {
   productPolicyCensus,
 } from './domain/census';
 export type { ButtonCaseAxis } from './domain/census';
+export {
+  buttonContentEvidenceBaseline,
+  buttonContentEvidenceRows,
+  buttonContentGroundingCensus,
+  buttonContentScenarios,
+  compareButtonContentObservations,
+  mapButtonContentObservation,
+  reactChildEdgeCases,
+} from './grounding/contentAnatomyGrounding';
+export type {
+  ButtonContentEvidenceRow,
+  ButtonContentObservationField,
+  ButtonContentObservationMapping,
+  ButtonContentProductionObservation,
+  ButtonContentScenario,
+  CapStyleEffect,
+  GroundedContentConfiguration,
+  ProductionEvidenceBaseline,
+  ProductionEvidenceBoundary,
+  ProductionEvidenceSource,
+  ReactChildEdgeCase,
+} from './grounding/contentAnatomyGrounding';
 export type { ButtonAnatomy, ButtonSlot } from './domain/ButtonAnatomy';
 export type {
   ButtonStyleContract,

@@ -2,9 +2,10 @@
 
 ## Status
 
-Proposed. This document captures the implementation plan for grounding the clean-room button model in observable
-Fluent and Visual Refresh CAP behavior. It does not change production packages or claim that current CAP behavior is
-the desired product contract.
+In progress. The content/icon slice now has pinned source metadata, twelve executable production observations, an
+observation-to-model mapper, parity and mutation tests, six React-child edge cases, a Storybook evidence table, and an
+attributed census explanation. The remaining axes and any resulting type evolution are not yet complete. This work
+does not change production packages or claim that current CAP behavior is the desired product contract.
 
 ## Motivation
 
@@ -114,23 +115,23 @@ type CapButtonObservation = {
 
 type ObservationMapping =
   | {
-      status: 'represented';
+      status: "represented";
       buttonCase: ButtonCase;
       evidence: readonly EvidenceReference[];
     }
   | {
-      status: 'canonicalized';
+      status: "canonicalized";
       buttonCase: ButtonCase;
       discardedDistinctions: readonly string[];
       evidence: readonly EvidenceReference[];
     }
   | {
-      status: 'excluded';
+      status: "excluded";
       reason: string;
       evidence: readonly EvidenceReference[];
     }
   | {
-      status: 'unrepresented';
+      status: "unrepresented";
       reason: string;
       evidence: readonly EvidenceReference[];
     };
@@ -201,8 +202,8 @@ type ProductionGrounding = {
   normalizable: boolean;
   rendered: boolean;
   capClassified: boolean;
-  support: 'documented' | 'unknown' | 'unsupported';
-  modelMapping: 'represented' | 'canonicalized' | 'excluded' | 'unrepresented';
+  support: "documented" | "unknown" | "unsupported";
+  modelMapping: "represented" | "canonicalized" | "excluded" | "unrepresented";
 };
 ```
 
@@ -324,7 +325,10 @@ Do not strengthen `ButtonCase` into a discriminated union before Phase 2 establi
 content/icon cases are grounded, consider splitting the types:
 
 ```ts
-type ButtonContent = { kind: 'text' } | { kind: 'iconOnly' } | { kind: 'textAndIcon'; iconPosition: 'before' | 'after' };
+type ButtonContent =
+  | { kind: "text" }
+  | { kind: "iconOnly" }
+  | { kind: "textAndIcon"; iconPosition: "before" | "after" };
 
 type GroundedButtonCase = CommonButtonCase & {
   content: ButtonContent;

@@ -4,6 +4,22 @@
 
 The raw Cartesian input space contains 138,240 tuples. The explicit validity predicate admits 27,840 cases, or about 20.1%. `researchMetrics.test.ts` reproduces this census exhaustively.
 
+The first production-grounding slice exercises twelve public icon, children, and `iconPosition` scenarios against
+Fluent 9.70.0 and VR CAP 0.5.1. All twelve normalize and render a button root. Nine produce slot anatomy represented
+by the clean-room content domain and canonicalize to four semantic configurations. Three empty-button scenarios are
+observed but unrepresented. The CAP hook produces four distinct class-effect groups: base, icon-only, text-and-icon
+before, and text-and-icon after. Product support is unknown for all twelve scenarios.
+
+The matching number four has two different derivations. The clean-room census declares four of twelve abstract
+content/icon pairs valid. Production grounding observes twelve public-input scenarios and canonicalizes nine
+represented outcomes to four configurations. The latter supplies evidence for the model vocabulary, but it does not
+prove the former rejection policy or the 27,840 total as a production inventory.
+
+Six React-child edge cases expose a further limit. `null`, `false`, `0`, and an empty string select icon-only state;
+whitespace selects text-and-icon state. An empty fragment selects text-and-icon normalization and CAP classes but
+renders no content. This is a production-observed disagreement between JavaScript truthiness, style classification,
+and rendered anatomy, so the research mapper leaves it visible rather than treating `children` as a static text flag.
+
 Across all valid cases, the layered architecture records 38 to 51 field writes per resolution. Eighteen fields have multiple owners somewhere in the domain: anatomy, capabilities, supported appearance, validation obligations, focus visibility/color, four geometry fields, four logical corners, and three appearance color roles. These values are executable regression metrics, not performance benchmarks.
 
 The program contains 16 named property laws and seven controlled mutations. The deep validation profile runs each property for 1,000 generated cases with a deterministic seed. Browser assertions cover eight scenarios in each of three engines.
@@ -161,7 +177,9 @@ cost; it cannot supply the alignment.
 
 Policy values include clean-room assumptions. The renderer does not model the complete CSS cascade, font metrics, layout measurement, animation, full Fluent behavior, browser paint-time forced-color substitution, native accessibility APIs, or assistive-technology output. Random property checks are not exhaustive proofs, and the curated browser matrix is intentionally sparse. Passing semantic properties does not prove browser rendering correctness, and successful model normalization does not prove Griffel can apply the same optimization.
 
-Next experiments should replace assumptions with cited public evidence, add contrast and high-zoom measurements, compare against production components only through public APIs, test bidirectional mixed content, and measure whether ownership overlap predicts real maintenance defects.
+Next experiments should apply the same grounding method to appearance and size/density. Contrast, high-zoom
+measurements, bidirectional mixed content, and ownership-overlap prediction remain open. Production comparisons should
+continue to use public APIs.
 
 ## Production audit
 

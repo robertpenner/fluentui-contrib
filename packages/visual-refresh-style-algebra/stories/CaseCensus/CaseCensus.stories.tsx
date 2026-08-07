@@ -7,6 +7,7 @@ import {
 import {
   anatomyPolicies,
   appearances,
+  buttonContentGroundingCensus,
   buttonCaseAxes,
   buttonCaseCensus,
   contentConstructionCensus,
@@ -269,7 +270,7 @@ const formatNumber = (value: number): string => value.toLocaleString('en-US');
 
 export const CaseCensus = (): React.ReactElement => {
   const styles = useStyles();
-  const validPercent =
+  const admittedPercent =
     (buttonCaseCensus.validTotal / buttonCaseCensus.rawTotal) * 100;
 
   return (
@@ -280,8 +281,8 @@ export const CaseCensus = (): React.ReactElement => {
         </h2>
         <p className={styles.lede}>
           Imagine a form with eleven independent choices. Taking every value
-          from every menu creates the raw space. Applying three documented
-          compatibility rules leaves the cases the model promises to handle.
+          from every menu creates the raw space. Applying three explicit model
+          rules leaves the cases the clean-room resolvers promise to handle.
         </p>
         <div className={styles.summary}>
           <div className={styles.summaryItem}>
@@ -297,7 +298,7 @@ export const CaseCensus = (): React.ReactElement => {
               {formatNumber(buttonCaseCensus.validTotal)}
             </span>
             <span className={styles.summaryLabel}>
-              valid cases ({validPercent.toFixed(1)}%)
+              model-admitted cases ({admittedPercent.toFixed(1)}%)
             </span>
           </div>
         </div>
@@ -330,16 +331,18 @@ export const CaseCensus = (): React.ReactElement => {
 
       <section className={styles.section} aria-labelledby="content-rule">
         <h2 id="content-rule" className={styles.sectionHeading}>
-          2. Content and icon placement must agree
+          2. The model begins with an anatomy hypothesis
         </h2>
         <p className={styles.lede}>
           The raw space pairs every content kind with every icon placement: 3 ×
-          4 = 12 pairs. Only four describe a coherent button anatomy.
+          4 = 12 abstract pairs. The original clean-room rule admits four. This
+          is a resolver precondition, not evidence that production CAP rejects
+          the other eight.
         </p>
         <div className={styles.tableWrap}>
           <table className={styles.table}>
             <caption className={styles.lede}>
-              Four accepted content and icon-placement pairs out of twelve
+              Four model-admitted content and icon-placement pairs out of twelve
             </caption>
             <thead>
               <tr>
@@ -384,7 +387,7 @@ export const CaseCensus = (): React.ReactElement => {
                           ) : (
                             <DismissCircle20Regular aria-hidden="true" />
                           )}
-                          {valid ? 'Valid' : 'Invalid'}
+                          {valid ? 'Admitted' : 'Excluded'}
                         </span>
                       </td>
                     );
@@ -394,16 +397,32 @@ export const CaseCensus = (): React.ReactElement => {
             </tbody>
           </table>
         </div>
+        <p className={styles.lede}>
+          The production-shaped observation also exercises{' '}
+          {buttonContentGroundingCensus.productionScenarios} scenarios, but it
+          reaches four differently:{' '}
+          {buttonContentGroundingCensus.representedScenarios} scenarios have
+          represented anatomy and canonicalize to{' '}
+          {buttonContentGroundingCensus.canonicalConfigurations} semantic
+          configurations. The{' '}
+          {buttonContentGroundingCensus.unrepresentedScenarios} empty-button
+          scenarios are observed gaps, not rejected inputs. See{' '}
+          <a href="?path=/docs/packages-visual-refresh-style-algebra-content-anatomy-grounding--docs">
+            Content anatomy grounding
+          </a>{' '}
+          for the executable table.
+        </p>
       </section>
 
       <section className={styles.section} aria-labelledby="policy-rule">
         <h2 id="policy-rule" className={styles.sectionHeading}>
-          3. Product policy contributes 29 combinations
+          3. Assumed product policy contributes 29 combinations
         </h2>
         <p className={styles.lede}>
-          Appearance support depends on both product and visual language.
-          Reconstructed anatomy is available only under Visual Refresh. Reading
-          each cell separately avoids double-counting those overlapping rules.
+          In the clean-room policy, appearance support depends on product and
+          visual language, while reconstructed anatomy is available only under
+          Visual Refresh. These are replaceable research assumptions. Reading
+          each cell separately avoids double-counting their overlapping rules.
         </p>
         <div className={styles.policyGroups}>
           {visualLanguages.map((visualLanguage) => (
@@ -497,8 +516,8 @@ export const CaseCensus = (): React.ReactElement => {
         <p className={styles.lede}>
           Density, state, color mode, composition, and direction are not
           restricted by the predicate. Their 240 contexts combine freely with
-          each of the four valid content constructions and 29 product-policy
-          combinations.
+          each of the four model-admitted content constructions and 29 assumed
+          product-policy combinations.
         </p>
         <div className={styles.equation}>
           <div className={mergeClasses(styles.factor, styles.factorValid)}>
@@ -514,7 +533,7 @@ export const CaseCensus = (): React.ReactElement => {
               {buttonCaseCensus.contentConstruction.validCount}
             </span>
             <span className={styles.factorDetail}>
-              4 accepted pairs out of 12
+              4 model-admitted pairs out of 12
             </span>
           </div>
           <div className={mergeClasses(styles.factor, styles.factorValid)}>
@@ -527,7 +546,9 @@ export const CaseCensus = (): React.ReactElement => {
             </span>
           </div>
         </div>
-        <p className={styles.resultEquation}>240 × 4 × 29 = 27,840</p>
+        <p className={styles.resultEquation}>
+          240 × 4 × 29 = 27,840 model-admitted cases
+        </p>
       </section>
     </div>
   );

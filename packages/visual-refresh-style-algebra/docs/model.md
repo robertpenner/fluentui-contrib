@@ -35,6 +35,19 @@ The validity predicate excludes only documented combinations:
 No case is excluded by density, state, color mode, composition context, or direction. If a real example contradicts
 these constraints, it should be recorded as a counterexample before changing the domain.
 
+The content/icon rule is now accompanied by a separate production-grounding table. The public Fluent input shape
+admits twelve basic icon, children, and position scenarios. Nine render anatomy represented by this model and
+canonicalize to the same four content configurations; three empty-button scenarios are observed but unrepresented.
+This does not retroactively turn the validity predicate into a production support rule. Production reaches four by
+normalization and modeled semantic equivalence, while the clean-room predicate reaches four by excluding eight
+abstract pairs. Product support remains unknown for every observed row.
+
+React children also prevent `contentKind` from acting as a complete runtime anatomy discriminator. With an icon,
+`null`, `false`, `0`, and an empty string normalize as icon-only. Whitespace normalizes as text-and-icon. An empty
+fragment is truthy, so Fluent and CAP classify it as text-and-icon even though it renders no content node. The model
+keeps its simpler semantic vocabulary, but the production observation boundary records this counterexample instead of
+calling the public input invalid.
+
 The supported-appearance table is a **model assumption**. Visual Refresh Fluent adds `tint`; Visual Refresh
 SharePoint removes `transparent`; Visual Refresh Teams does not add `tint`. These choices test domain evolution and
 are not claims about a private specification.
