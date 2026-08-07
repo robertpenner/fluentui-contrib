@@ -18,6 +18,8 @@ This package is an experiment, not a production dependency or a statement of pri
   override elasticity.
 - [Research charter](docs/research-charter.md): question, hypotheses, method, and evidence rules.
 - [Clean-room model](docs/model.md): domain, validity, contract, policies, and omissions.
+- [Production grounding plan](docs/production-grounding-plan.md): staged observation, mapping, differential testing,
+  and census revision against public Fluent and VR CAP behavior.
 - [Resolver architectures](docs/architectures.md): layered overrides versus semantic composition.
 - [Executable laws](docs/laws.md): sixteen deterministic fast-check properties.
 - [Mutation experiments](docs/mutations.md): seven teaching faults and minimized regressions.
