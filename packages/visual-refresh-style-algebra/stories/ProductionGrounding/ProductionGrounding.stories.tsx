@@ -179,8 +179,15 @@ const mappingDetail = (mapping: ButtonContentObservationMapping): string => {
     return mapping.reason;
   }
 
-  return 'No production distinction is discarded.';
+  return 'The model keeps this production distinction.';
 };
+
+const mappingStatusLabels = {
+  represented: 'direct match',
+  canonicalized: 'grouped with another input',
+  excluded: 'excluded from model',
+  unrepresented: 'outside the model',
+} as const;
 
 const MappingTag = ({
   mapping,
@@ -195,7 +202,11 @@ const MappingTag = ({
     unrepresented: styles.unrepresented,
   }[mapping.status];
 
-  return <span className={`${styles.tag} ${tone}`}>{mapping.status}</span>;
+  return (
+    <span className={`${styles.tag} ${tone}`}>
+      {mappingStatusLabels[mapping.status]}
+    </span>
+  );
 };
 
 export const ProductionGrounding = (): React.ReactElement => {
@@ -205,13 +216,14 @@ export const ProductionGrounding = (): React.ReactElement => {
     <div className={styles.root}>
       <section className={styles.section} aria-labelledby="grounding-summary">
         <h2 id="grounding-summary" className={styles.heading}>
-          One public input space, three different counts
+          One production slice, four useful counts
         </h2>
         <p className={styles.lede}>
-          Fluent accepts twelve simple icon, children, and position scenarios.
-          Nine produce anatomy represented by the clean-room model. Those nine
-          collapse to four semantic configurations because several input
-          distinctions have no rendered effect.
+          The audit runs all twelve combinations in this slice. Nine contain a
+          content pattern the research model can describe. Grouping inputs that
+          produce the same modeled result leaves four recurring patterns. The
+          other three are empty buttons that pass through the production path
+          but sit outside the model.
         </p>
         <div className={styles.summary}>
           <div className={styles.summaryItem}>
@@ -219,7 +231,7 @@ export const ProductionGrounding = (): React.ReactElement => {
               {buttonContentGroundingCensus.productionScenarios}
             </span>
             <span className={styles.summaryLabel}>
-              constructible production scenarios
+              input combinations tested
             </span>
           </div>
           <div className={styles.summaryItem}>
@@ -227,7 +239,7 @@ export const ProductionGrounding = (): React.ReactElement => {
               {buttonContentGroundingCensus.representedScenarios}
             </span>
             <span className={styles.summaryLabel}>
-              scenarios represented by the model
+              inputs with a model counterpart
             </span>
           </div>
           <div className={`${styles.summaryItem} ${styles.summaryCanonical}`}>
@@ -235,7 +247,7 @@ export const ProductionGrounding = (): React.ReactElement => {
               {buttonContentGroundingCensus.canonicalConfigurations}
             </span>
             <span className={styles.summaryLabel}>
-              canonical research configurations
+              recurring content patterns
             </span>
           </div>
           <div className={`${styles.summaryItem} ${styles.summaryGap}`}>
@@ -254,13 +266,13 @@ export const ProductionGrounding = (): React.ReactElement => {
 
       <section className={styles.section} aria-labelledby="grounding-table">
         <h2 id="grounding-table" className={styles.heading}>
-          Observation before interpretation
+          What the real path did
         </h2>
         <p className={styles.lede}>
-          The middle columns record what Fluent normalized and rendered, plus
-          the distinct class effect selected by the real CAP hook. The final
-          column says how the clean-room vocabulary interprets that evidence.
-          Product support remains unknown for every row.
+          The middle columns show what Fluent normalized and rendered and which
+          style branch the CAP hook selected. Only the final column asks how the
+          later research model handles that result. Product support remains
+          unknown for every row.
         </p>
         <div className={styles.tableWrap}>
           <CapFixtureProvider>
@@ -274,7 +286,7 @@ export const ProductionGrounding = (): React.ReactElement => {
                   <th className={styles.cell}>Fluent state</th>
                   <th className={styles.cell}>Rendered slots</th>
                   <th className={styles.cell}>CAP class effect</th>
-                  <th className={styles.cell}>Clean-room mapping</th>
+                  <th className={styles.cell}>How the model handles it</th>
                 </tr>
               </thead>
               <tbody>

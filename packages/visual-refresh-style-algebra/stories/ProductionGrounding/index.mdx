@@ -3,31 +3,35 @@ import * as ProductionGroundingStories from "./index.stories";
 
 <Meta of={ProductionGroundingStories} />
 
-<Title />
+<Title>What the real Button path does with content and icons</Title>
 
-The [Case census](?path=/docs/packages-visual-refresh-style-algebra-case-census--docs) begins with twelve clean-room content and icon-placement pairs and keeps four. This page asks a different question: what does the public Fluent Button actually accept, normalize, and render when VR CAP styles it?
+The [CAP Button audit](?path=/docs/packages-visual-refresh-style-algebra-cap-button-audit--docs) identified content and icon placement as a small place to begin. This page opens that first slice: twelve combinations of icon presence, child content, and icon position, all run through public Fluent Button behavior and the Visual Refresh CAP style hook.
 
-## What is grounded
+## What the audit runs
 
-The table exercises the installed production pipeline rather than reconstructing its conditionals:
+For each row, the check uses the installed component code rather than recreating its conditions:
 
-1. public `ButtonProps` construct each icon, children, and `iconPosition` scenario;
-2. `useButton_unstable` supplies the normalized state;
-3. `renderButton_unstable` supplies the rendered slot order;
-4. CAP's `useButtonStyles_unstable` hook supplies the class effect.
+1. public `ButtonProps` supply the icon, children, and `iconPosition` input;
+2. Fluent's `useButton_unstable` normalizes that input;
+3. Fluent's `renderButton_unstable` determines which slots render and in what order;
+4. CAP's `useButtonStyles_unstable` selects the Visual Refresh style branch.
 
-The semantic table is verified by a component-level integration test running in the package's unit-test harness. Across all twelve scenarios, the test runs Fluent's public normalization and rendering functions, renders the public Button with and without CAP's style hook, and records slot presence, rendered order, and relative class changes. Generated class names are used only within the comparison; this page publishes their four stable semantic effects.
+This is a component-level integration test running in the package's unit-test harness. It renders each Button with and without CAP styling, then records slot presence, rendered order, and relative class changes. Generated class names stay inside the comparison because their spelling is unstable; the page reports the four recurring effects they produce.
 
-Because the test runs in a simulated DOM rather than a browser engine, it establishes normalized structure and style selection, not layout or pixel equivalence.
+The test runs in a simulated DOM, so it establishes structure and style selection, not browser layout or pixel equivalence.
 
-## What is interpreted
+## How to read the final column
 
-The clean-room mapping is deliberately separate. A **represented** row preserves the production distinction. A **canonicalized** row maps to a clean-room case while naming the production distinction it discards. An **unrepresented** row was observed successfully but has no clean-room content case.
+The first five columns report the production path. The final column asks whether the later research model can describe the result:
 
-None of those terms means product-supported. No product contract was found for these twelve scenarios, so support remains explicitly unknown.
+- **Direct match** means the model keeps the observed distinction.
+- **Grouped with another input** means two production inputs reach the same modeled case; the row names what was set aside.
+- **Outside the model** means the production path handled the input, but the model has no content case for it.
 
-The final table challenges the word “content” with real React child values. It records the point where input truthiness, CAP classification, and rendered DOM no longer agree, rather than forcing the empty-fragment case into one of the four clean-room configurations.
+These labels do not mean product-supported or product-unsupported. No product contract was found for these twelve scenarios, so support remains unknown.
+
+The second table tries real React child values. It shows where JavaScript truthiness, CAP's chosen style branch, and rendered content disagree, especially for an empty fragment.
 
 <Stories includePrimary title={null} />
 
-The important result is not merely that the number four appears again. Production reaches four canonical configurations by normalization and semantic equivalence, while the original census reached four by declaring eight abstract pairs invalid. Continue with that distinction in mind when reading the model census.
+The important result is not merely that the number four appears again. The production path reaches four recurring content patterns by normalizing inputs and producing equivalent output. The research model reaches four by admitting four abstract pairs and excluding eight. Continue to the [Case census](?path=/docs/packages-visual-refresh-style-algebra-case-census--docs) to see how that model decision contributes to 27,840 model-admitted cases.

@@ -5,7 +5,7 @@
 - **Button Matrix** samples product, visual language, density, state, color mode, anatomy, composition, and direction without pretending to render all 27,840 valid cases.
 - **Button Comparison** places layered and semantic results side by side and surfaces normalized differences.
 - **Counterexamples** preserves cases that exposed focus, forced-color, density, accessibility, RTL padding, and split-corner faults.
-- **Content anatomy grounding** exercises twelve public icon, children, and position scenarios, separates Fluent
+- **Content anatomy audit** exercises twelve public icon, children, and position scenarios, separates Fluent
   normalization and rendered order from clean-room interpretation, and records four distinct VR CAP class effects.
 - **Forced-colors emission** shows five compact reference cases spanning Fluent 2, Visual Refresh, Fluent,
   SharePoint, Teams, standard/compact density, all supported appearance families, focus/disabled states,

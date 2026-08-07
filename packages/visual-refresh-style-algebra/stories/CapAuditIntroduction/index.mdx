@@ -1,0 +1,12 @@
+import { Canvas, Meta, Title } from "@storybook/addon-docs/blocks";
+import * as CapAuditIntroductionStories from "./index.stories";
+
+<Meta of={CapAuditIntroductionStories} />
+
+<Title>CAP Button audit</Title>
+
+A few Button props become a large system when appearance, state, content, direction, and product context interact. This audit makes that complexity concrete: eleven dimensions produce 138,240 possible combinations to understand under CAP.
+
+<Canvas of={CapAuditIntroductionStories.CapAuditIntroduction} />
+
+Open the [Content anatomy audit](?path=/docs/packages-visual-refresh-style-algebra-content-anatomy-audit--docs) to inspect all twelve results.

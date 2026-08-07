@@ -407,8 +407,8 @@ export const CaseCensus = (): React.ReactElement => {
           configurations. The{' '}
           {buttonContentGroundingCensus.unrepresentedScenarios} empty-button
           scenarios are observed gaps, not rejected inputs. See{' '}
-          <a href="?path=/docs/packages-visual-refresh-style-algebra-content-anatomy-grounding--docs">
-            Content anatomy grounding
+          <a href="?path=/docs/packages-visual-refresh-style-algebra-content-anatomy-audit--docs">
+            Content anatomy audit
           </a>{' '}
           for the executable table.
         </p>

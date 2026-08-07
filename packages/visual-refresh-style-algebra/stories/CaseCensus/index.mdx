@@ -5,20 +5,20 @@ import * as CaseCensusStories from "./index.stories";
 
 <Title />
 
-This page continues the introductory path from [Start here](?path=/docs/packages-visual-refresh-style-algebra-start-here--docs). It explains where the model's two census numbers come from before later pages begin sampling individual buttons.
+This page follows the production-first [CAP Button audit](?path=/docs/packages-visual-refresh-style-algebra-cap-button-audit--docs) and [content anatomy audit](?path=/docs/packages-visual-refresh-style-algebra-content-anatomy-audit--docs). The audit found four recurring content patterns, three constructible empty-button inputs outside the research model, and no product-support contract for the twelve inputs. With those limits visible, this page asks a narrower question: how does the research model turn the 138,240-case review problem into 27,840 cases that its resolvers promise to handle?
 
 ## The simple idea
 
-A button case is a tuple of eleven choices: product, visual language, density, appearance, interaction state, color mode, content kind, icon placement, anatomy policy, composition, and direction.
+A button case records eleven choices: product, visual language, density, appearance, interaction state, color mode, content kind, icon placement, anatomy policy, composition, and direction.
 
-If every value is paired with every other value, the result is the **raw Cartesian space**. The **model-admitted space** keeps only tuples accepted by the clean-room predicate.
+Pairing every value with every other value gives **138,240 review candidates**. The research model then applies three stated assumptions and keeps **27,840 model-admitted cases** for generation and comparison.
 
-The distinction is about this clean-room model's contract. An excluded tuple is outside the modeled domain; it is not a claim that Fluent or CAP rejects it, or that no product could support it. The resulting 27,840 is a model-derived count, not a production CAP inventory.
+This narrowing makes generated tests spend their time on cases the resolvers promise to handle. It does not classify support on CAP's behalf. A case omitted by the model may still pass through production code, and a constructible case is not automatically promised by a product. The resulting 27,840 is a model-derived count, not a production CAP inventory.
 
 ## Follow the four steps
 
 1. Multiply the cardinalities of all eleven axes to get 138,240 raw tuples.
-2. See the clean-room anatomy hypothesis that admits four of twelve abstract content and icon-placement pairs.
+2. Represent the audit's four recurring content patterns as four model cases, while documenting the eight pairings the model does not generate.
 3. Count the assumed appearance and anatomy domains within each product and visual language, producing 29 rather than 48.
 4. Recombine the independent groups: `240 × 4 × 29 = 27,840` model-admitted cases.
 
@@ -30,4 +30,4 @@ Only about 20.1% of the raw tuples satisfy the model predicate. A generator that
 
 The visualization and the exhaustive metric use the same exported domain declarations. `researchMetrics.test.ts` still enumerates every one of the 138,240 tuples and checks that exactly 27,840 satisfy the model predicate.
 
-Continue to [Content anatomy grounding](?path=/docs/packages-visual-refresh-style-algebra-content-anatomy-grounding--docs) to see the twelve production-shaped scenarios exercised through real Fluent normalization, rendering, and VR CAP styling. Then use [Button comparison](?path=/docs/packages-visual-refresh-style-algebra-button-comparison--docs) to see how a few carefully held conditions make product and visual-language differences reviewable.
+Return to the [Content anatomy audit](?path=/docs/packages-visual-refresh-style-algebra-content-anatomy-audit--docs) to compare this model assumption with the twelve production-shaped observations. Then use [Button comparison](?path=/docs/packages-visual-refresh-style-algebra-button-comparison--docs) to see how a few carefully held conditions make product and visual-language differences reviewable.
