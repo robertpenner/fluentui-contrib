@@ -57,7 +57,7 @@ const useStyles = makeStyles({
   },
   axisGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(9rem, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))',
     gap: tokens.spacingHorizontalS,
     '@media (max-width: 480px)': {
       gridTemplateColumns: 'minmax(0, 1fr)',
@@ -65,21 +65,36 @@ const useStyles = makeStyles({
   },
   axis: {
     display: 'grid',
-    gridTemplateColumns: 'auto 1fr',
-    alignItems: 'baseline',
-    gap: tokens.spacingHorizontalS,
+    alignContent: 'start',
+    gap: tokens.spacingVerticalS,
     padding: tokens.spacingHorizontalM,
     backgroundColor: tokens.colorNeutralBackground2,
+  },
+  axisHeader: {
+    display: 'flex',
+    alignItems: 'baseline',
+    gap: tokens.spacingHorizontalXS,
   },
   axisCount: {
     fontFamily: tokens.fontFamilyMonospace,
     color: tokens.colorBrandForeground1,
-    fontSize: tokens.fontSizeBase500,
+    fontSize: tokens.fontSizeBase400,
     fontWeight: tokens.fontWeightSemibold,
+    lineHeight: tokens.lineHeightBase400,
   },
   axisName: {
-    fontSize: tokens.fontSizeBase200,
+    fontSize: tokens.fontSizeBase400,
     fontWeight: tokens.fontWeightSemibold,
+    lineHeight: tokens.lineHeightBase400,
+  },
+  axisOptions: {
+    display: 'grid',
+    gap: tokens.spacingVerticalXS,
+    margin: 0,
+    paddingInlineStart: tokens.spacingHorizontalL,
+    color: tokens.colorNeutralForeground2,
+    fontSize: tokens.fontSizeBase300,
+    lineHeight: tokens.lineHeightBase400,
   },
   equation: {
     display: 'grid',
@@ -102,13 +117,25 @@ const useStyles = makeStyles({
   },
   equationDetail: {
     color: tokens.colorNeutralForeground3,
-    fontSize: tokens.fontSizeBase200,
+    fontSize: tokens.fontSizeBase300,
+    lineHeight: tokens.lineHeightBase400,
   },
   equationResult: {
     fontFamily: tokens.fontFamilyMonospace,
     fontSize: tokens.fontSizeHero700,
     fontWeight: tokens.fontWeightSemibold,
     lineHeight: tokens.lineHeightHero700,
+  },
+  validityQuestion: {
+    display: 'grid',
+    gap: tokens.spacingVerticalS,
+    paddingBlock: tokens.spacingVerticalL,
+    borderTop: `${tokens.strokeWidthThick} solid ${tokens.colorBrandStroke1}`,
+  },
+  questionHeading: {
+    margin: 0,
+    fontSize: tokens.fontSizeBase500,
+    fontWeight: tokens.fontWeightSemibold,
   },
   resultStrip: {
     display: 'grid',
@@ -140,19 +167,58 @@ const useStyles = makeStyles({
 
 const formatNumber = (value: number): string => value.toLocaleString('en-US');
 
+const optionLabels: Readonly<Record<string, string>> = {
+  fluent: 'Fluent',
+  sharepoint: 'SharePoint',
+  teams: 'Teams',
+  fluent2: 'Fluent 2',
+  visualRefresh: 'Visual Refresh',
+  standard: 'Standard',
+  compact: 'Compact',
+  primary: 'Primary',
+  subtle: 'Subtle',
+  transparent: 'Transparent',
+  tint: 'Tint',
+  rest: 'Rest',
+  hover: 'Hover',
+  pressed: 'Pressed',
+  focusVisible: 'Focus visible',
+  disabled: 'Disabled',
+  light: 'Light',
+  dark: 'Dark',
+  forcedColors: 'Forced colors',
+  text: 'Text',
+  iconOnly: 'Icon only',
+  textAndIcon: 'Text and icon',
+  none: 'No icon',
+  before: 'Before',
+  after: 'After',
+  only: 'Icon only',
+  fluentDefault: 'Fluent default',
+  visualRefreshReconstructed: 'Visual Refresh reconstructed',
+  standalone: 'Standalone',
+  toolbar: 'Toolbar',
+  splitButtonStart: 'Split button start',
+  splitButtonEnd: 'Split button end',
+  ltr: 'Left to right',
+  rtl: 'Right to left',
+};
+
+const optionLabel = (value: string): string => optionLabels[value] ?? value;
+
 const auditSteps = [
   {
-    name: 'Set the inputs',
-    detail: 'Choose the public Button props for one combination.',
+    name: 'Check the input',
+    detail: 'Can public Button props express this combination?',
   },
   {
-    name: 'Run Fluent with CAP',
-    detail: 'Use Fluent normalization and rendering with the CAP style hook.',
-  },
-  {
-    name: 'Record the result',
+    name: 'Observe the result',
     detail:
-      'Capture the rendered slots, their order, and the CAP style selected.',
+      'Run Fluent with CAP and record the rendered content and style selected.',
+  },
+  {
+    name: 'Confirm product intent',
+    detail: 'Use a product contract or decision to establish intended support.',
   },
 ] as const;
 
@@ -161,38 +227,29 @@ export const CapAuditIntroduction = (): React.ReactElement => {
 
   return (
     <div className={styles.root}>
-      <section className={styles.section} aria-labelledby="audit-path-heading">
-        <h2 id="audit-path-heading" className={styles.heading}>
-          How the audit runs
-        </h2>
-        <p className={styles.lede}>
-          Each case uses public Fluent Button props and the Visual Refresh CAP
-          style hook.
-        </p>
-        <div className={styles.auditPath}>
-          {auditSteps.map((step, index) => (
-            <article className={styles.auditStep} key={step.name}>
-              <span className={styles.stepNumber}>0{index + 1}</span>
-              <span className={styles.stepName}>{step.name}</span>
-              <p className={styles.stepDetail}>{step.detail}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <section className={styles.section} aria-labelledby="combination-heading">
         <h2 id="combination-heading" className={styles.heading}>
-          138,240 combinations
+          138,240 possible combinations
         </h2>
         <p className={styles.lede}>
-          Eleven choices can affect the button's structure, style, interaction,
-          accessibility, or composition.
+          Eleven dimensions can affect the button's structure, style,
+          interaction, accessibility, or composition.
         </p>
         <div className={styles.axisGrid}>
           {buttonCaseAxes.map((axis) => (
             <div className={styles.axis} key={axis.key}>
-              <span className={styles.axisCount}>{axis.values.length}</span>
-              <span className={styles.axisName}>{axis.label}</span>
+              <div className={styles.axisHeader}>
+                <span className={styles.axisName}>{axis.label}</span>
+                <span className={styles.axisCount}>×{axis.values.length}</span>
+              </div>
+              <ul
+                className={styles.axisOptions}
+                aria-label={`${axis.label} options`}
+              >
+                {axis.values.map((value) => (
+                  <li key={value}>{optionLabel(value)}</li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
@@ -207,15 +264,25 @@ export const CapAuditIntroduction = (): React.ReactElement => {
             {formatNumber(buttonCaseCensus.rawTotal)}
           </span>
         </div>
+        <div className={styles.validityQuestion}>
+          <h3 className={styles.questionHeading}>How many are valid?</h3>
+          <p className={styles.lede}>
+            Possible does not mean valid. Some inputs may produce the same
+            result, render nothing, or have no documented product support.
+            Counting valid combinations requires evidence from both component
+            behavior and product intent.
+          </p>
+        </div>
       </section>
 
       <section className={styles.section} aria-labelledby="first-slice-heading">
         <h2 id="first-slice-heading" className={styles.heading}>
-          Content and icons
+          A first check: content and icons
         </h2>
         <p className={styles.lede}>
           The first audit covers all twelve combinations of icon, content, and
-          icon position.
+          icon position. Running them shows that nine render content, four CAP
+          style effects recur, and three render empty.
         </p>
         <div className={styles.resultStrip}>
           <div className={styles.result}>
@@ -248,6 +315,26 @@ export const CapAuditIntroduction = (): React.ReactElement => {
               buttons that render empty
             </span>
           </div>
+        </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="audit-path-heading">
+        <h2 id="audit-path-heading" className={styles.heading}>
+          How do we determine which are valid?
+        </h2>
+        <p className={styles.lede}>
+          First, define what valid means. Public props show what can be
+          expressed, the running component shows what happens, and product
+          intent shows what is deliberately supported.
+        </p>
+        <div className={styles.auditPath}>
+          {auditSteps.map((step, index) => (
+            <article className={styles.auditStep} key={step.name}>
+              <span className={styles.stepNumber}>0{index + 1}</span>
+              <span className={styles.stepName}>{step.name}</span>
+              <p className={styles.stepDetail}>{step.detail}</p>
+            </article>
+          ))}
         </div>
       </section>
     </div>
