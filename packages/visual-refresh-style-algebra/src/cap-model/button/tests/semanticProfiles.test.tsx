@@ -2,7 +2,10 @@ import type { CapButtonObservation } from '../CapButtonObservation';
 import { capButtonScenarios } from '../enumerateCapButtonScenarios';
 import {
   capButtonSemanticProfileCensus,
+  capButtonSemanticObservationKey,
+  capButtonSemanticProfileKey,
   capButtonSemanticProfileProjection,
+  compareCapButtonSemanticProfileCensuses,
   compareCapButtonSemanticProfiles,
   createCapButtonSemanticProfileCensus,
   projectCapButtonSemanticProfile,
@@ -101,6 +104,44 @@ describe('CAP Button semantic profiles', () => {
         path: 'rootAppearance.background',
         left: observation.rootAppearance.background,
         right: 'semantic-mutation',
+      },
+    ]);
+  });
+
+  it('identifies changed observations and profile keys when cardinality changes', () => {
+    const production = observeProductionCensus();
+    const [observation, ...remaining] = production;
+    const mutation: CapButtonObservation = {
+      ...observation,
+      rootAppearance: {
+        ...observation.rootAppearance,
+        background: 'semantic-cardinality-mutation',
+      },
+    };
+    const actual = [mutation, ...remaining];
+    const difference = compareCapButtonSemanticProfileCensuses(
+      production,
+      actual
+    );
+
+    expect(difference.baselineProfileCount).toBe(396);
+    expect(difference.actualProfileCount).toBe(397);
+    expect(difference.addedProfileKeys).toEqual([
+      capButtonSemanticProfileKey(mutation),
+    ]);
+    expect(difference.removedProfileKeys).toEqual([]);
+    expect(difference.addedObservationKeys).toEqual([]);
+    expect(difference.removedObservationKeys).toEqual([]);
+    expect(difference.changedObservations).toEqual([
+      {
+        key: capButtonSemanticObservationKey(observation),
+        differences: [
+          {
+            path: 'rootAppearance.background',
+            left: observation.rootAppearance.background,
+            right: 'semantic-cardinality-mutation',
+          },
+        ],
       },
     ]);
   });

@@ -23,6 +23,21 @@ export interface CapButtonSemanticProfileDifference {
   readonly right: unknown;
 }
 
+export interface CapButtonChangedSemanticObservation {
+  readonly key: string;
+  readonly differences: readonly CapButtonSemanticProfileDifference[];
+}
+
+export interface CapButtonSemanticProfileCensusDifference {
+  readonly baselineProfileCount: number;
+  readonly actualProfileCount: number;
+  readonly addedProfileKeys: readonly string[];
+  readonly removedProfileKeys: readonly string[];
+  readonly addedObservationKeys: readonly string[];
+  readonly removedObservationKeys: readonly string[];
+  readonly changedObservations: readonly CapButtonChangedSemanticObservation[];
+}
+
 export interface CapButtonObservedEquivalenceEvidence {
   readonly kind: 'observed-semantic-equivalence';
   readonly projection: typeof capButtonSemanticProfileProjection;
@@ -149,6 +164,15 @@ export const capButtonSemanticProfileKey = (
   observation: CapButtonSemanticObservation
 ): string => JSON.stringify(projectCapButtonSemanticProfile(observation));
 
+export const capButtonSemanticObservationKey = (
+  observation: CapButtonObservation
+): string =>
+  JSON.stringify({
+    scenario: observation.scenario,
+    conditions: observation.conditions,
+    productionBaseline: observation.productionBaseline,
+  });
+
 const isRecord = (value: unknown): value is Readonly<Record<string, unknown>> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
@@ -193,6 +217,63 @@ export const compareCapButtonSemanticProfiles = (
   );
 
   return differences;
+};
+
+const difference = (
+  left: ReadonlySet<string>,
+  right: ReadonlySet<string>
+): readonly string[] => [...left].filter((key) => !right.has(key)).sort();
+
+export const compareCapButtonSemanticProfileCensuses = (
+  baseline: readonly CapButtonObservation[],
+  actual: readonly CapButtonObservation[]
+): CapButtonSemanticProfileCensusDifference => {
+  const baselineProfiles = new Set(baseline.map(capButtonSemanticProfileKey));
+  const actualProfiles = new Set(actual.map(capButtonSemanticProfileKey));
+  const baselineObservations = new Map(
+    baseline.map((observation) => [
+      capButtonSemanticObservationKey(observation),
+      observation,
+    ])
+  );
+  const actualObservations = new Map(
+    actual.map((observation) => [
+      capButtonSemanticObservationKey(observation),
+      observation,
+    ])
+  );
+  const changedObservations: CapButtonChangedSemanticObservation[] = [];
+
+  for (const [key, baselineObservation] of baselineObservations) {
+    const actualObservation = actualObservations.get(key);
+
+    if (actualObservation) {
+      const differences = compareCapButtonSemanticProfiles(
+        baselineObservation,
+        actualObservation
+      );
+
+      if (differences.length > 0) {
+        changedObservations.push({ key, differences });
+      }
+    }
+  }
+
+  return {
+    baselineProfileCount: baselineProfiles.size,
+    actualProfileCount: actualProfiles.size,
+    addedProfileKeys: difference(actualProfiles, baselineProfiles),
+    removedProfileKeys: difference(baselineProfiles, actualProfiles),
+    addedObservationKeys: difference(
+      new Set(actualObservations.keys()),
+      new Set(baselineObservations.keys())
+    ),
+    removedObservationKeys: difference(
+      new Set(baselineObservations.keys()),
+      new Set(actualObservations.keys())
+    ),
+    changedObservations,
+  };
 };
 
 export const createCapButtonSemanticProfileCensus = (

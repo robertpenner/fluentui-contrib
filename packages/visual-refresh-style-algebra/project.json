@@ -60,6 +60,34 @@
         "output": "{workspaceRoot}/dist/.playwright/packages/visual-refresh-style-algebra",
         "config": "packages/visual-refresh-style-algebra/playwright.config.ts"
       }
+    },
+    "test-cap-button": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/visual-refresh-style-algebra/jest.config.cts",
+        "passWithNoTests": false,
+        "runInBand": true,
+        "testPathPatterns": ["src/cap-model/button/tests/.*\\.test\\.(ts|tsx)$"]
+      }
+    },
+    "component-test-cap-button": {
+      "executor": "@fluentui-contrib/nx-plugin:playwright",
+      "options": {
+        "testingType": "component",
+        "output": "{workspaceRoot}/dist/.playwright/packages/visual-refresh-style-algebra/cap-button",
+        "config": "packages/visual-refresh-style-algebra/playwright.config.ts",
+        "project": ["chromium"],
+        "testFiles": [
+          "packages/visual-refresh-style-algebra/src/cap-model/button/tests/CapButtonInteraction.component-browser-spec.tsx",
+          "packages/visual-refresh-style-algebra/src/cap-model/button/tests/CapButtonForcedColors.component-browser-spec.tsx",
+          "packages/visual-refresh-style-algebra/src/cap-model/button/tests/CapButtonMotion.component-browser-spec.tsx"
+        ]
+      }
+    },
+    "verify-cap-button": {
+      "executor": "nx:noop",
+      "dependsOn": ["test-cap-button", "component-test-cap-button"]
     }
   }
 }

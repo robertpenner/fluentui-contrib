@@ -1,3 +1,5 @@
+import { capButtonBaselineManifest } from './versionedVerification';
+
 export interface CapButtonProductionSource {
   readonly packageName: string;
   readonly version: string;
@@ -19,16 +21,17 @@ export interface CapModelEvidence {
 }
 
 export const capButtonProductionBaseline: CapButtonProductionBaseline = {
-  id: 'fluent-button-9.70.0__cap-theme-0.5.1',
+  id: capButtonBaselineManifest.id,
   sources: [
     {
       packageName: '@fluentui/react-components',
-      version: '9.70.0',
+      version: capButtonBaselineManifest.packages['@fluentui/react-components'],
       symbols: ['ButtonProps', 'useButton_unstable'],
     },
     {
       packageName: '@fluentui-contrib/react-cap-theme',
-      version: '0.5.1',
+      version:
+        capButtonBaselineManifest.packages['@fluentui-contrib/react-cap-theme'],
       symbols: ['CAP_STYLE_HOOKS.useButtonStyles_unstable'],
     },
   ],

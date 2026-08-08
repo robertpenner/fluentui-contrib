@@ -182,19 +182,41 @@ export { capButtonMotionMatrix } from './cap-model/button/enumerateCapButtonMoti
 export type { CapButtonMotionMatrixEntry } from './cap-model/button/enumerateCapButtonMotionMatrix';
 export {
   capButtonSemanticProfileCensus,
+  capButtonSemanticObservationKey,
   capButtonSemanticProfileKey,
   capButtonSemanticProfileProjection,
+  compareCapButtonSemanticProfileCensuses,
   compareCapButtonSemanticProfiles,
   createCapButtonSemanticProfileCensus,
   projectCapButtonSemanticProfile,
 } from './cap-model/button/semanticProfiles';
 export type {
+  CapButtonChangedSemanticObservation,
   CapButtonObservedEquivalenceEvidence,
   CapButtonSemanticProfile,
   CapButtonSemanticProfileCensus,
+  CapButtonSemanticProfileCensusDifference,
   CapButtonSemanticProfileDifference,
   CapButtonSemanticProfileGroup,
 } from './cap-model/button/semanticProfiles';
+export {
+  capButtonBaselineManifest,
+  capButtonContractGroups,
+  classifyCapButtonVerification,
+  verifyCapButtonBaselineManifest,
+} from './cap-model/button/versionedVerification';
+export type {
+  CapButtonBaselineDifference,
+  CapButtonBaselineManifest,
+  CapButtonCleanRoomRegression,
+  CapButtonContractGroup,
+  CapButtonProductionBaselineDrift,
+  CapButtonProductionPackage,
+  CapButtonProductionSymbol,
+  CapButtonVerificationOrigin,
+  CapButtonVerificationPassed,
+  CapButtonVerificationResult,
+} from './cap-model/button/versionedVerification';
 export {
   capButtonAppearanceAvailabilityEvidence,
   capButtonDirectionEvidence,
