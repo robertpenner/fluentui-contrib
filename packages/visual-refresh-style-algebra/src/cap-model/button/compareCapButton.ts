@@ -210,6 +210,55 @@ export const compareCapButton = (
     production.geometry.icon?.marginRight,
     cleanRoom.geometry.icon?.marginRight
   );
+  compare(
+    'rootAppearance.foreground',
+    production.rootAppearance.foreground,
+    cleanRoom.rootAppearance.foreground
+  );
+  compare(
+    'rootAppearance.background',
+    production.rootAppearance.background,
+    cleanRoom.rootAppearance.background
+  );
+  for (const side of ['top', 'right', 'bottom', 'left'] as const) {
+    compare(
+      `rootAppearance.border.${side}`,
+      production.rootAppearance.border[side],
+      cleanRoom.rootAppearance.border[side]
+    );
+  }
+  compare(
+    'rootAppearance.focusTreatment.selection',
+    production.rootAppearance.focusTreatment.selection,
+    cleanRoom.rootAppearance.focusTreatment.selection
+  );
+  for (const side of ['top', 'right', 'bottom', 'left'] as const) {
+    compare(
+      `rootAppearance.focusTreatment.border.${side}`,
+      production.rootAppearance.focusTreatment.border[side],
+      cleanRoom.rootAppearance.focusTreatment.border[side]
+    );
+  }
+  compare(
+    'rootAppearance.focusTreatment.outline.color',
+    production.rootAppearance.focusTreatment.outline.color,
+    cleanRoom.rootAppearance.focusTreatment.outline.color
+  );
+  compare(
+    'rootAppearance.focusTreatment.outline.style',
+    production.rootAppearance.focusTreatment.outline.style,
+    cleanRoom.rootAppearance.focusTreatment.outline.style
+  );
+  compare(
+    'rootAppearance.focusTreatment.outline.width',
+    production.rootAppearance.focusTreatment.outline.width,
+    cleanRoom.rootAppearance.focusTreatment.outline.width
+  );
+  compare(
+    'rootAppearance.focusTreatment.innerShadow',
+    production.rootAppearance.focusTreatment.innerShadow,
+    cleanRoom.rootAppearance.focusTreatment.innerShadow
+  );
 
   return differences;
 };

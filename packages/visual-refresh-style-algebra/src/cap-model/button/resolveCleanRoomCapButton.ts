@@ -1,8 +1,10 @@
 import type { CapButtonContract } from './CapButtonContract';
 import type {
   CapButtonAnatomySlot,
+  CapButtonBorderColors,
   CapButtonGeometry,
   CapButtonNormalizedState,
+  CapButtonRootAppearance,
   CapButtonStyleSelections,
 } from './CapButtonObservation';
 import type {
@@ -31,6 +33,117 @@ interface SizeGeometry {
   readonly iconSpacing: string;
   readonly roundedRadius: string;
 }
+
+interface RestAppearance {
+  readonly foreground: string;
+  readonly background: string;
+  readonly border: string;
+}
+
+const enabledAppearance: Readonly<
+  Record<CapButtonScenario['appearance'], RestAppearance>
+> = {
+  primary: {
+    foreground: '#ffffff',
+    background: '#0f6cbd',
+    border: 'transparent',
+  },
+  tint: {
+    foreground: '#0f6cbd',
+    background: '#ebf3fc',
+    border: '#b4d6fa',
+  },
+  outline: {
+    foreground: '#616161',
+    background: 'transparent',
+    border: '#ebebeb',
+  },
+  secondary: {
+    foreground: '#616161',
+    background: '#f5f5f5',
+    border: '#ebebeb',
+  },
+  subtle: {
+    foreground: '#616161',
+    background: 'transparent',
+    border: 'transparent',
+  },
+  transparent: {
+    foreground: '#616161',
+    background: 'transparent',
+    border: 'transparent',
+  },
+};
+
+const disabledAppearance: Readonly<
+  Record<CapButtonScenario['appearance'], RestAppearance>
+> = {
+  primary: {
+    foreground: '#bdbdbd',
+    background: '#f0f0f0',
+    border: 'transparent',
+  },
+  tint: {
+    foreground: '#bdbdbd',
+    background: '#f0f0f0',
+    border: '#e0e0e0',
+  },
+  outline: {
+    foreground: '#bdbdbd',
+    background: 'transparent',
+    border: '#e0e0e0',
+  },
+  secondary: {
+    foreground: '#bdbdbd',
+    background: '#f0f0f0',
+    border: '#e0e0e0',
+  },
+  subtle: {
+    foreground: '#bdbdbd',
+    background: 'transparent',
+    border: 'transparent',
+  },
+  transparent: {
+    foreground: '#bdbdbd',
+    background: 'transparent',
+    border: 'transparent',
+  },
+};
+
+const uniformBorder = (color: string): CapButtonBorderColors => ({
+  top: color,
+  right: color,
+  bottom: color,
+  left: color,
+});
+
+const resolveRootAppearance = (
+  normalized: CapButtonNormalizedState
+): CapButtonRootAppearance => {
+  const unavailable = normalized.disabled || normalized.disabledFocusable;
+  const rest = (unavailable ? disabledAppearance : enabledAppearance)[
+    normalized.appearance
+  ];
+  const isPrimary =
+    normalized.appearance === 'primary' || normalized.appearance === 'tint';
+
+  return {
+    foreground: rest.foreground,
+    background: rest.background,
+    border: uniformBorder(rest.border),
+    focusTreatment: {
+      selection:
+        !normalized.disabledFocusable && isPrimary ? 'primary' : 'base',
+      border: uniformBorder('#000000'),
+      outline: {
+        color: '#000000',
+        style: 'solid',
+        width: '2px',
+      },
+      innerShadow: '0 0 0 1px #ffffff inset',
+    },
+  };
+};
 
 const geometryBySize: Readonly<Record<CapButtonSize, SizeGeometry>> = {
   small: {
@@ -244,6 +357,7 @@ export const resolveCleanRoomCapButton = (
     anatomy: resolveAnatomy(normalized, childSemantics.rendersContent),
     styleSelections: resolveStyleSelections(scenario, normalized),
     geometry: resolveGeometry(normalized),
+    rootAppearance: resolveRootAppearance(normalized),
     provenance: tracedCapButtonEvidence,
   };
 };

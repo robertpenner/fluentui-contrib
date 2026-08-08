@@ -68,11 +68,39 @@ export interface CapButtonGeometry {
   readonly icon?: CapButtonIconGeometry;
 }
 
+export interface CapButtonBorderColors {
+  readonly top: string;
+  readonly right: string;
+  readonly bottom: string;
+  readonly left: string;
+}
+
+export interface CapButtonFocusOutline {
+  readonly color: string;
+  readonly style: string;
+  readonly width: string;
+}
+
+export interface CapButtonStaticFocusTreatment {
+  readonly selection: 'base' | 'primary';
+  readonly border: CapButtonBorderColors;
+  readonly outline: CapButtonFocusOutline;
+  readonly innerShadow: string;
+}
+
+export interface CapButtonRootAppearance {
+  readonly foreground: string;
+  readonly background: string;
+  readonly border: CapButtonBorderColors;
+  readonly focusTreatment: CapButtonStaticFocusTreatment;
+}
+
 export interface CapButtonSemanticObservation {
   readonly normalized: CapButtonNormalizedState;
   readonly anatomy: readonly CapButtonAnatomySlot[];
   readonly styleSelections: CapButtonStyleSelections;
   readonly geometry: CapButtonGeometry;
+  readonly rootAppearance: CapButtonRootAppearance;
 }
 
 export interface CapButtonObservation extends CapButtonSemanticObservation {

@@ -327,6 +327,7 @@ const outlineStyleKeywords = new Set([
 ]);
 
 const outlineWidthPattern = /^(thin|medium|thick|[\d.]+[a-z%]*)$/;
+const outlineWidthVariablePattern = /^var\(\s*--[^,)]*width/i;
 
 const splitTopLevel = (value: string): readonly string[] => {
   const parts: string[] = [];
@@ -385,7 +386,10 @@ export const expandOutlineShorthand = (
   for (const part of splitTopLevel(outline)) {
     if (outlineStyleKeywords.has(part)) {
       expanded['outline-style'] = part;
-    } else if (outlineWidthPattern.test(part)) {
+    } else if (
+      outlineWidthPattern.test(part) ||
+      outlineWidthVariablePattern.test(part)
+    ) {
       expanded['outline-width'] = part;
     } else {
       expanded['outline-color'] = part;

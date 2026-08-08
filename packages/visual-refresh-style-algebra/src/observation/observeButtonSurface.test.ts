@@ -285,6 +285,18 @@ describe('expandOutlineShorthand', () => {
     });
   });
 
+  it('recognizes a tokenized outline width', () => {
+    expect(
+      expandOutlineShorthand({
+        outline: 'var(--strokeWidthThick) solid var(--colorStrokeFocus2)',
+      })
+    ).toEqual({
+      'outline-width': 'var(--strokeWidthThick)',
+      'outline-style': 'solid',
+      'outline-color': 'var(--colorStrokeFocus2)',
+    });
+  });
+
   it('resets the longhands the shorthand leaves unnamed', () => {
     expect(expandOutlineShorthand({ outline: 'none' })).toEqual({
       'outline-width': 'medium',

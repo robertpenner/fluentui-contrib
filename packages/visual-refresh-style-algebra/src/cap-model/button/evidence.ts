@@ -97,6 +97,42 @@ export const capButtonGeometryEvidence: readonly CapModelEvidence[] = [
   },
 ];
 
+export const capButtonAppearanceAvailabilityEvidence: readonly CapModelEvidence[] =
+  [
+    {
+      productionBaseline: capButtonProductionBaseline.id,
+      productionSymbol: 'useRootBaseStyles, useRootStyles[appearance]',
+      scenarioProjection: 'appearance',
+      observation:
+        'Effective ordinary rest foreground, background, and four border colors are resolved from CAP and Fluent theme values.',
+      interpretation:
+        'Appearance selects the root color surface without relying on generated class identity.',
+      support: 'unknown',
+    },
+    {
+      productionBaseline: capButtonProductionBaseline.id,
+      productionSymbol:
+        'useRootDisabledStyles.base, useRootDisabledStyles[appearance]',
+      scenarioProjection: 'appearance, disabled, disabledFocusable',
+      observation:
+        'Either authored availability flag selects disabled rest colors while both flags remain distinct normalized inputs.',
+      interpretation:
+        'Equivalent disabled and disabled-focusable rest surfaces may canonicalize only after authored state is retained.',
+      support: 'unknown',
+    },
+    {
+      productionBaseline: capButtonProductionBaseline.id,
+      productionSymbol:
+        'useRootBaseFocusIndicatorStyles, useRootFocusStyles.primary',
+      scenarioProjection: 'appearance, disabledFocusable',
+      observation:
+        'Effective focus-visible border, outline, and inset shadow declarations are stable; primary and tint select the primary focus policy unless disabledFocusable is authored.',
+      interpretation:
+        'Static focus treatment records both normalized resolved declarations and the production-selected focus policy.',
+      support: 'unknown',
+    },
+  ];
+
 export const tracedCapButtonEvidence: readonly CapModelEvidence[] = [
   {
     productionBaseline: capButtonProductionBaseline.id,
@@ -119,5 +155,6 @@ export const tracedCapButtonEvidence: readonly CapModelEvidence[] = [
       'The clean-room contract records semantic branch selections rather than generated class names.',
     support: 'unknown',
   },
+  ...capButtonAppearanceAvailabilityEvidence,
   ...capButtonGeometryEvidence,
 ];

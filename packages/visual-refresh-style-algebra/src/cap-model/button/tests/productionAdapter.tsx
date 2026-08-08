@@ -8,15 +8,21 @@ import {
 import { CAP_STYLE_HOOKS } from '@fluentui-contrib/react-cap-theme';
 import { capTheme } from '../../../fixtures/capButtonFamily';
 import {
+  capColors,
   capGeometry,
   observeCapSurface,
 } from '../../../observation/capSurface';
-import { resolveThemeValues } from '../../../observation/observeButtonSurface';
+import {
+  resolveThemeValues,
+  type ButtonSurfaceObservation,
+} from '../../../observation/observeButtonSurface';
 import type {
   CapButtonAnatomySlot,
+  CapButtonBorderColors,
   CapButtonGeometry,
   CapButtonNormalizedState,
   CapButtonObservation,
+  CapButtonRootAppearance,
   CapButtonStyleSelections,
 } from '../CapButtonObservation';
 import type {
@@ -209,9 +215,10 @@ const observeAnatomy = (
 };
 
 const normalizedGeometryDeclarations = (
-  element: HTMLElement
+  element: HTMLElement,
+  observation: ButtonSurfaceObservation = observeCapSurface(element)
 ): Readonly<Record<string, string>> => {
-  const effective = observeCapSurface(element).effective.ordinary.rest;
+  const effective = observation.effective.ordinary.rest;
   const themeResolved = resolveThemeValues(effective, capThemeValues);
   const customProperties = Object.fromEntries(
     Object.entries(themeResolved)
@@ -259,8 +266,63 @@ const radiusDeclaration = (
 ): string =>
   declarations[property] ?? requiredDeclaration(declarations, 'border-radius');
 
-const observeGeometry = (button: HTMLElement): CapButtonGeometry => {
-  const root = normalizedGeometryDeclarations(button);
+const borderColors = (
+  declarations: Readonly<Record<string, string>>
+): CapButtonBorderColors => {
+  const borderColor = declarations['border']?.split(/\s+/).at(-1);
+  const shorthand =
+    declarations['border-color']?.split(/\s+/) ??
+    (borderColor === undefined ? undefined : [borderColor]);
+  const [top, right = top, bottom = top, left = right] = shorthand ?? [];
+
+  return {
+    top:
+      declarations['border-top-color'] ?? requiredDeclaration({ top }, 'top'),
+    right:
+      declarations['border-right-color'] ??
+      requiredDeclaration({ right }, 'right'),
+    bottom:
+      declarations['border-bottom-color'] ??
+      requiredDeclaration({ bottom }, 'bottom'),
+    left:
+      declarations['border-left-color'] ??
+      requiredDeclaration({ left }, 'left'),
+  };
+};
+
+const observeRootAppearance = (
+  observation: ButtonSurfaceObservation,
+  focusSelection: CapButtonStyleSelections['root']['focus']
+): CapButtonRootAppearance => {
+  const restSurface = observation.effective.ordinary.rest;
+  const rest = capColors(restSurface);
+  const resolvedRest = resolveThemeValues(restSurface, capThemeValues);
+  const focusVisible = observation.effective.ordinary.focusVisible;
+  const focusColors = capColors(focusVisible);
+  const resolvedFocus = resolveThemeValues(focusVisible, capThemeValues);
+
+  return {
+    foreground: requiredDeclaration(rest, 'color'),
+    background: requiredDeclaration(rest, 'background-color'),
+    border: borderColors({ ...resolvedRest, ...rest }),
+    focusTreatment: {
+      selection: focusSelection,
+      border: borderColors({ ...resolvedFocus, ...focusColors }),
+      outline: {
+        color: requiredDeclaration(focusColors, 'outline-color'),
+        style: requiredDeclaration(resolvedFocus, 'outline-style'),
+        width: requiredDeclaration(resolvedFocus, 'outline-width'),
+      },
+      innerShadow: requiredDeclaration(resolvedFocus, 'box-shadow'),
+    },
+  };
+};
+
+const observeGeometry = (
+  button: HTMLElement,
+  rootObservation: ButtonSurfaceObservation
+): CapButtonGeometry => {
+  const root = normalizedGeometryDeclarations(button, rootObservation);
   const iconElement = button.querySelector<HTMLElement>(
     `[${slotAttribute}="icon"]`
   )?.parentElement;
@@ -330,6 +392,11 @@ export const observeCapButtonProductionScenarios = (
 
   const observations = buttons.map((button): CapButtonObservation => {
     const index = Number(button.getAttribute(observationIndexAttribute));
+    const styleSelections = parseAttribute<CapButtonStyleSelections>(
+      button,
+      styleSelectionsAttribute
+    );
+    const rootObservation = observeCapSurface(button);
 
     return {
       productionBaseline: capButtonProductionBaseline.id,
@@ -340,11 +407,12 @@ export const observeCapButtonProductionScenarios = (
         normalizedAttribute
       ),
       anatomy: observeAnatomy(button),
-      styleSelections: parseAttribute<CapButtonStyleSelections>(
-        button,
-        styleSelectionsAttribute
+      styleSelections,
+      geometry: observeGeometry(button, rootObservation),
+      rootAppearance: observeRootAppearance(
+        rootObservation,
+        styleSelections.root.focus
       ),
-      geometry: observeGeometry(button),
     };
   });
 
