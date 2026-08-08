@@ -165,6 +165,19 @@ export const capButtonInteractionRuntimeEvidence: CapModelEvidence = {
   support: 'unknown',
 };
 
+export const capButtonForcedColorsRuntimeEvidence: CapModelEvidence = {
+  productionBaseline: capButtonProductionBaseline.id,
+  productionSymbol:
+    'Button forced-colors CSSOM; Chromium computed styles and substitution canary',
+  scenarioProjection:
+    'forcedColors, focusVisible, appearance, availability; ltr, rest pointer state, full motion',
+  observation:
+    'Playwright 1.56.1 Chromium 141.0.7390.37 on Linux matches the forced-colors media query, substitutes the pinned system palette, and preserves CAP focus-visible treatment.',
+  interpretation:
+    'Authored CSSOM system-color keywords and forced-color-adjust declarations remain separate from computed RGB paint and engine substitution behavior; product support is unknown.',
+  support: 'unknown',
+};
+
 export const tracedCapButtonEvidence: readonly CapModelEvidence[] = [
   {
     productionBaseline: capButtonProductionBaseline.id,

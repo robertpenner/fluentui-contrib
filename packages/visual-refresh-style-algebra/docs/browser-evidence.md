@@ -21,6 +21,49 @@ Playwright component tests run the shared native-button renderer in Chromium, Fi
 
 The browser suite is deliberately small and scenario-based. Property tests cover combinatorial semantics cheaply; browser tests verify that the renderer preserves selected semantics in actual engines.
 
+### CAP Button forced-colors baseline
+
+The production-faithful CAP Button model has a separate 48-case forced-colors
+projection. It is not a third theme fixture and does not alter the six ordinary
+interaction conditions:
+
+- 18 inactive rest cases: six appearances by enabled, disabled, and
+  disabled-focusable availability;
+- 18 active rest cases over the same appearance and availability product;
+- 12 active focus-visible cases: six appearances by enabled and
+  disabled-focusable availability. Native disabled Buttons cannot receive this
+  keyboard focus condition.
+
+The test-only production probe renders the real Fluent Button through the CAP
+theme and style hooks. For the 30 active cases it reads matching forced-colors
+declarations from the live Griffel CSSOM, then separately reads computed paint.
+The clean-room resolver has no Fluent or CAP runtime imports and reproduces both
+observations with literal values.
+
+The authored contract records only CSSOM-proven system-color keywords and an
+explicit `forced-color-adjust: none`; null means that CAP authored no matching
+forced-colors declaration. The effective contract records computed RGB values,
+the computed `auto | none` policy, media-query match, a substitution canary,
+four border colors, and focus outline/shadow paint. It does not infer a system
+keyword from an RGB value. Chromium maps the observed focus-border keywords to
+the pinned palette after transitions settle, and may suppress a box shadow that
+remains present in CSSOM.
+
+The pinned baseline is Playwright 1.56.1 with Chromium 141.0.7390.37, Linux
+headless. Its observed system-color paints are `ButtonBorder #000000`,
+`ButtonFace #ffffff`, `GrayText #600000`, `Highlight #050049`, and
+`HighlightText #ffffff`. These values are version-, engine-, platform-, and
+palette-sensitive. Firefox and WebKit are intentionally unavailable for this
+contract, and Playwright media emulation is not a real Windows high-contrast
+session. Other operating-system palettes and platform substitution outcomes
+remain unknown. Product support also remains unknown.
+
+Hover and active under forced colors are not included: the issue requires
+appearance, availability, substitution, and producible focus-visible coverage,
+not a multiplication of the ordinary pointer-state matrix. Direction belongs
+to the separate direction scope, and transition/reduced-motion behavior belongs
+to the separate motion scope.
+
 The content-anatomy table is verified primarily by a twelve-scenario component integration test running in the unit-test
 harness, not by a browser-paint assertion. The test invokes public Fluent normalization and rendering APIs, renders public Button components with and without the
 real CAP style hooks, and compares class-effect relationships without publishing generated class identities. The

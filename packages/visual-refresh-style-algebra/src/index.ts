@@ -102,6 +102,18 @@ export type {
   CapButtonInteractionSemanticContract,
   CapButtonInteractionSurface,
 } from './cap-model/button/CapButtonInteraction';
+export type {
+  CapButtonForcedColorsActiveSemanticContract,
+  CapButtonForcedColorsAuthoredContract,
+  CapButtonForcedColorsAuthoredFocus,
+  CapButtonForcedColorsCondition,
+  CapButtonForcedColorsContract,
+  CapButtonForcedColorsEffectiveContract,
+  CapButtonForcedColorsEffectiveFocus,
+  CapButtonForcedColorsInactiveSemanticContract,
+  CapButtonForcedColorsSemanticContract,
+  CapButtonSystemColorKeyword,
+} from './cap-model/button/CapButtonForcedColors';
 export { resolveCleanRoomCapButton } from './cap-model/button/resolveCleanRoomCapButton';
 export {
   capButtonDisabledFocusableInteractionSurfaces,
@@ -110,10 +122,16 @@ export {
   capButtonInteractionSurfaces,
   resolveCapButtonInteraction,
 } from './cap-model/button/resolveCapButtonInteraction';
+export {
+  capButtonChromiumSystemColorPaint,
+  resolveCapButtonForcedColors,
+} from './cap-model/button/resolveCapButtonForcedColors';
 export { compareCapButton } from './cap-model/button/compareCapButton';
 export type { CapButtonDifference } from './cap-model/button/compareCapButton';
 export { compareCapButtonInteraction } from './cap-model/button/compareCapButtonInteraction';
 export type { CapButtonInteractionDifference } from './cap-model/button/compareCapButtonInteraction';
+export { compareCapButtonForcedColors } from './cap-model/button/compareCapButtonForcedColors';
+export type { CapButtonForcedColorsDifference } from './cap-model/button/compareCapButtonForcedColors';
 export {
   capButtonInteractionConditionExclusions,
   capButtonInteractionConditionLedger,
@@ -123,6 +141,11 @@ export type {
   CapButtonInteractionConditionExclusion,
   CapButtonInteractionConditionLedgerEntry,
 } from './cap-model/button/enumerateCapButtonInteractionConditions';
+export {
+  capButtonForcedColorsMatrix,
+  capButtonForcedColorsProjection,
+} from './cap-model/button/enumerateCapButtonForcedColorsMatrix';
+export type { CapButtonForcedColorsMatrixEntry } from './cap-model/button/enumerateCapButtonForcedColorsMatrix';
 export {
   capButtonSemanticProfileCensus,
   capButtonSemanticProfileKey,
@@ -140,6 +163,7 @@ export type {
 } from './cap-model/button/semanticProfiles';
 export {
   capButtonAppearanceAvailabilityEvidence,
+  capButtonForcedColorsRuntimeEvidence,
   capButtonGeometryEvidence,
   capButtonInteractionBrowserBaseline,
   capButtonInteractionConditionEvidence,

@@ -114,7 +114,7 @@ export const capButtonInteractionConditionExclusions: readonly CapButtonInteract
     ),
     exclusion(
       'forced-colors',
-      'Forced-colors interaction surfaces belong to issue #14.'
+      'Forced-colors is modeled by the independent capButtonForcedColorsMatrix projection; it is not a seventh ordinary interaction condition.'
     ),
     exclusion(
       'reduced-motion',
