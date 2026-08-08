@@ -52,4 +52,6 @@ Start the inspection UI with:
 yarn nx run visual-refresh-style-algebra:storybook
 ```
 
+Storybook runs at <http://localhost:4400>. The command remains active while the development server is running.
+
 The default property profile uses seed `0x5eed` and 100 runs. The program now contains 29 named laws, including 13 focused forced-colors semantic/emission laws. Mutation experiments are opt-in transformations exercised by their own test files; normal resolvers and emitters never activate them.
