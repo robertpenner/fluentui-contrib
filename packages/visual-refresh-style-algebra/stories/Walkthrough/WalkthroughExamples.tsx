@@ -8,18 +8,18 @@ import {
   webLightTheme,
 } from '@fluentui/react-components';
 import {
-  CleanRoomButton,
-  compareContracts,
-  createForcedColorsEmissionExperiment,
-  measureForcedColorsEmission,
-  normalizeForcedColorsEmission,
+  SyntheticButtonResearchRenderer as CleanRoomButton,
+  compareSyntheticButtonResearchContracts as compareContracts,
+  createSyntheticForcedColorsEmissionExperiment as createForcedColorsEmissionExperiment,
+  measureSyntheticForcedColorsEmission as measureForcedColorsEmission,
+  normalizeSyntheticForcedColorsEmission as normalizeForcedColorsEmission,
   resolveSyntheticForcedColorsContract as resolveForcedColorsContract,
   resolveSyntheticLayeredButtonWithHistory as resolveLayeredButtonWithHistory,
   resolveSyntheticSemanticButton as resolveSemanticButton,
   type SyntheticButtonResearchCase as ButtonCase,
-  type EmittedStyleRule,
+  type SyntheticEmittedStyleRule as EmittedStyleRule,
+  resolveSyntheticButtonWithMutation as resolveButtonWithMutation,
 } from '../../src';
-import { resolveButtonWithMutation } from '../../src/testing/mutations';
 
 const exampleCase: ButtonCase = {
   product: 'fluent',

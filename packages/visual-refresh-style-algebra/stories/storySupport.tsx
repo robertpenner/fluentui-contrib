@@ -7,8 +7,8 @@ import {
   webLightTheme,
 } from '@fluentui/react-components';
 import {
-  CleanRoomButton,
-  compareContracts,
+  SyntheticButtonResearchRenderer as CleanRoomButton,
+  compareSyntheticButtonResearchContracts as compareContracts,
   explainSyntheticButtonResearchExclusion as invalidButtonCaseReasons,
   resolveSyntheticLayeredButtonWithHistory as resolveLayeredButtonWithHistory,
   resolveSyntheticSemanticButton as resolveSemanticButton,

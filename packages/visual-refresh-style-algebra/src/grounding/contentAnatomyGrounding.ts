@@ -1,8 +1,8 @@
-import type { ContentKind, IconPlacement } from '../domain/ButtonCase';
-
 export type ButtonContentPresence = 'absent' | 'present';
 export type ProductionIconPosition = 'omitted' | 'before' | 'after';
 export type ButtonContentSlot = 'icon' | 'content';
+export type GroundedContentKind = 'text' | 'iconOnly' | 'textAndIcon';
+export type GroundedIconPlacement = 'none' | 'before' | 'after' | 'only';
 export type CapStyleEffect =
   | 'base'
   | 'iconOnly'
@@ -80,8 +80,8 @@ export interface ButtonContentProductionObservation {
 }
 
 export type GroundedContentConfiguration = {
-  readonly contentKind: ContentKind;
-  readonly iconPlacement: IconPlacement;
+  readonly contentKind: GroundedContentKind;
+  readonly iconPlacement: GroundedIconPlacement;
 };
 
 export type ButtonContentObservationMapping =
@@ -210,8 +210,8 @@ const scenarioById = (id: string): ButtonContentScenario => {
 };
 
 const represented = (
-  contentKind: ContentKind,
-  iconPlacement: IconPlacement
+  contentKind: GroundedContentKind,
+  iconPlacement: GroundedIconPlacement
 ): ButtonContentObservationMapping => ({
   status: 'represented',
   content: { contentKind, iconPlacement },
@@ -219,8 +219,8 @@ const represented = (
 });
 
 const canonicalized = (
-  contentKind: ContentKind,
-  iconPlacement: IconPlacement,
+  contentKind: GroundedContentKind,
+  iconPlacement: GroundedIconPlacement,
   discardedDistinctions: readonly string[]
 ): ButtonContentObservationMapping => ({
   status: 'canonicalized',

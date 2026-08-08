@@ -7,15 +7,15 @@ import {
   webLightTheme,
 } from '@fluentui/react-components';
 import {
-  CleanRoomButton,
-  createForcedColorsEmissionExperiment,
-  measureForcedColorsEmission,
-  normalizeForcedColorsEmission,
+  SyntheticButtonResearchRenderer as CleanRoomButton,
+  createSyntheticForcedColorsEmissionExperiment as createForcedColorsEmissionExperiment,
+  measureSyntheticForcedColorsEmission as measureForcedColorsEmission,
+  normalizeSyntheticForcedColorsEmission as normalizeForcedColorsEmission,
   resolveSyntheticForcedColorsContract as resolveForcedColorsContract,
   resolveSyntheticLayeredButtonWithHistory as resolveLayeredButtonWithHistory,
   resolveSyntheticSemanticButton as resolveSemanticButton,
   type SyntheticButtonResearchCase as ButtonCase,
-  type ForcedColorsEmissionTarget,
+  type SyntheticForcedColorsEmissionTarget as ForcedColorsEmissionTarget,
 } from '../../src';
 
 interface ForcedColorsStoryCase {

@@ -24,9 +24,9 @@ The clean-room model declares eleven arrays, then multiplies their lengths:
 3 x 2 x 2 x 4 x 5 x 3 x 3 x 4 x 2 x 4 x 2 = 138,240
 ```
 
-[ButtonCase.ts](../src/domain/ButtonCase.ts) owns the arrays.
-[census.ts](../src/domain/census.ts) constructs the axes and computes
-`rawTotal`. [researchMetrics.test.ts](../src/testing/researchMetrics.test.ts)
+[ButtonCase.ts](../src/research/domain/ButtonCase.ts) owns the arrays.
+[census.ts](../src/research/domain/census.ts) constructs the axes and computes
+`rawTotal`. [researchMetrics.test.ts](../src/research/testing/researchMetrics.test.ts)
 proves that enumeration agrees with that arithmetic.
 
 Those facts establish reproducibility, not provenance. Production source
@@ -98,7 +98,7 @@ code directly defines this exact Cartesian product:
 
 1. The research source itself labels the product and appearance policy a
    "Clean-room model assumption" in
-   [SupportedDomain.ts](../src/domain/SupportedDomain.ts).
+   [SupportedDomain.ts](../src/research/domain/SupportedDomain.ts).
 2. Production CAP has six Button appearances, while the census multiplies four.
 3. Production Fluent and CAP use three Button sizes, while the census multiplies
    two research densities.
@@ -205,7 +205,7 @@ Its result is not twelve distinct supported content configurations:
 This is direct evidence that an equal raw factor count does not prove that the
 research axes mirror independent production inputs. `contentKind x
 iconPlacement` also has twelve pairs, but it is a different coordinate system
-with a research validity predicate in [validity.ts](../src/domain/validity.ts).
+with a research validity predicate in [validity.ts](../src/research/domain/validity.ts).
 
 ## What is proven now
 

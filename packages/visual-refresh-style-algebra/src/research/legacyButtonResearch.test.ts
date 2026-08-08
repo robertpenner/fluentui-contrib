@@ -9,6 +9,15 @@ import {
 const packageRoot = resolve(__dirname, '../..');
 const sourceRoots = ['src', 'stories'] as const;
 const sourceExtensions = new Set(['.ts', '.tsx']);
+const removedLegacyRoots = [
+  'src/domain',
+  'src/comparison',
+  'src/emission',
+  'src/layered',
+  'src/render',
+  'src/semantic',
+  'src/testing',
+] as const;
 const legacyImportPattern =
   /(?:from|import\()\s*['"][^'"]*(?:domain\/|layered\/|semantic\/)/;
 
@@ -58,13 +67,13 @@ describe('legacy Button research boundary', () => {
     expect(
       legacyButtonConsumerInventory.map(({ classification }) => classification)
     ).toEqual(
-      expect.arrayContaining([
-        'production-conformance',
-        'synthetic-research',
-        'migration',
-        'removal',
-      ])
+      expect.arrayContaining(['production-conformance', 'synthetic-research'])
     );
+    expect(
+      legacyButtonConsumerInventory.filter(({ classification }) =>
+        ['migration', 'removal'].includes(classification)
+      )
+    ).toEqual([]);
   });
 
   it('keeps every explicitly inventoried story and document path current', () => {
@@ -75,6 +84,21 @@ describe('legacy Button research boundary', () => {
     for (const path of exactPaths) {
       expect(existsSync(resolve(packageRoot, path))).toBe(true);
     }
+  });
+
+  it('removes the legacy implementation roots and raw package exports', () => {
+    for (const path of removedLegacyRoots) {
+      expect(existsSync(resolve(packageRoot, path))).toBe(false);
+    }
+
+    const packageIndex = readFileSync(
+      resolve(packageRoot, 'src/index.ts'),
+      'utf8'
+    );
+
+    expect(packageIndex).not.toMatch(
+      /from ['"]\.\/(?:domain|comparison|emission|layered|render|semantic|testing)\//
+    );
   });
 
   it('classifies the replacement runtime as production conformance with a legacy import ban', () => {

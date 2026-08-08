@@ -137,15 +137,15 @@ Represent only finite authored distinctions in scope:
 
 ```ts
 type CapButtonScenario = {
-  appearance: 'primary' | 'tint' | 'outline' | 'secondary' | 'subtle' | 'transparent';
-  size: 'small' | 'medium' | 'large';
-  shape: 'rounded' | 'circular' | 'square';
+  appearance: "primary" | "tint" | "outline" | "secondary" | "subtle" | "transparent";
+  size: "small" | "medium" | "large";
+  shape: "rounded" | "circular" | "square";
   disabled: boolean;
   disabledFocusable: boolean;
   content: {
-    icon: 'absent' | 'present';
-    children: 'absent' | 'present';
-    iconPosition: 'omitted' | 'before' | 'after';
+    icon: "absent" | "present";
+    children: "absent" | "present";
+    iconPosition: "omitted" | "before" | "after";
   };
 };
 ```
@@ -165,7 +165,7 @@ type CapButtonObservationConditions = {
   focusVisible: boolean;
   forcedColors: boolean;
   prefersReducedMotion: boolean;
-  direction: 'ltr' | 'rtl';
+  direction: "ltr" | "rtl";
 };
 ```
 
@@ -184,12 +184,12 @@ Return semantic observations rather than generated class identities:
 ```ts
 type CapButtonContract = {
   normalized: {
-    iconPosition: 'before' | 'after';
+    iconPosition: "before" | "after";
     iconOnly: boolean;
     hasIcon: boolean;
     hasChildren: boolean;
   };
-  anatomy: readonly ('icon' | 'content')[];
+  anatomy: readonly ("icon" | "content")[];
   root: CapButtonRootStyleContract;
   icon?: CapButtonIconStyleContract;
   provenance: readonly CapModelEvidence[];
@@ -212,7 +212,7 @@ type CapModelEvidence = {
   scenarioProjection: string;
   observation: string;
   interpretation: string;
-  support: 'documented' | 'unknown' | 'unsupported';
+  support: "documented" | "unknown" | "unsupported";
 };
 ```
 
@@ -229,7 +229,10 @@ and CAP style hooks:
 
 ```ts
 interface CapButtonProductionAdapter {
-  observe(scenario: CapButtonScenario, conditions: CapButtonObservationConditions): Promise<CapButtonObservation>;
+  observe(
+    scenario: CapButtonScenario,
+    conditions: CapButtonObservationConditions,
+  ): Promise<CapButtonObservation>;
 }
 ```
 
@@ -255,7 +258,10 @@ type CapButtonDifference = {
   evidence: readonly CapModelEvidence[];
 };
 
-function compareCapButton(production: CapButtonObservation, cleanRoom: CapButtonContract): readonly CapButtonDifference[];
+function compareCapButton(
+  production: CapButtonObservation,
+  cleanRoom: CapButtonContract,
+): readonly CapButtonDifference[];
 ```
 
 The comparator is the correspondence seam. Tests must not scatter one-off

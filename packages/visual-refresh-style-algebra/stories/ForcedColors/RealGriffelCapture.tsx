@@ -13,24 +13,18 @@ import {
   CAP_STYLE_HOOKS,
   CAP_THEME_TOKENS,
 } from '@fluentui-contrib/react-cap-theme';
-import { adaptGriffelForcedColorsCapture } from '../../src/emission/adaptGriffelForcedColorsCapture';
 import {
-  captureGriffelForcedColorsFixture,
-  captureGriffelForcedColorsRules,
-} from '../../src/emission/captureGriffelForcedColorsRules';
-import {
-  diffGriffelForcedColorsCaptures,
-  type GriffelForcedColorsCapture,
-  type GriffelForcedColorsCaptureDifference,
-} from '../../src/emission/diffGriffelForcedColorsCaptures';
-import type {
-  EmissionResult,
-  ForcedColorsEmissionTarget,
-} from '../../src/emission/ForcedColorsEmission';
-import {
-  measureForcedColorsEmission,
-  normalizeForcedColorsEmission,
-} from '../../src/emission/normalizeForcedColorsEmission';
+  adaptSyntheticGriffelForcedColorsCapture as adaptGriffelForcedColorsCapture,
+  captureSyntheticGriffelForcedColorsFixture as captureGriffelForcedColorsFixture,
+  captureSyntheticGriffelForcedColorsRules as captureGriffelForcedColorsRules,
+  diffSyntheticGriffelForcedColorsCaptures as diffGriffelForcedColorsCaptures,
+  measureSyntheticForcedColorsEmission as measureForcedColorsEmission,
+  normalizeSyntheticForcedColorsEmission as normalizeForcedColorsEmission,
+  type SyntheticEmissionResult as EmissionResult,
+  type SyntheticForcedColorsEmissionTarget as ForcedColorsEmissionTarget,
+  type SyntheticGriffelForcedColorsCapture as GriffelForcedColorsCapture,
+  type SyntheticGriffelForcedColorsCaptureDifference as GriffelForcedColorsCaptureDifference,
+} from '../../src';
 
 interface CapturedTarget {
   title: string;

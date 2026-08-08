@@ -19,7 +19,7 @@ The package uses these labels to keep observations separate from assumptions:
 
 `ButtonCase` keeps product, visual language, density, appearance, interaction state, color mode, content anatomy,
 anatomy policy, composition context, and direction independent. The finite values are exported from
-`src/domain/ButtonCase.ts` so exhaustive tests and property generators use the same declarations.
+`src/research/domain/ButtonCase.ts` so exhaustive tests and property generators use the same declarations.
 
 The interaction state is a resolved snapshot, not a behavioral state machine. A `disabled` snapshot represents a
 native disabled button. Other snapshots represent an enabled button in the named state.

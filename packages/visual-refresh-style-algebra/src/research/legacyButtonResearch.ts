@@ -6,24 +6,44 @@ import {
   products,
   visualLanguages,
   type ButtonCase,
-} from '../domain/ButtonCase';
+} from './domain/ButtonCase';
 import {
   buttonCaseAxes,
   buttonCaseCensus,
   contentConstructionCensus,
   enumerateButtonCases,
   productPolicyCensus,
-} from '../domain/census';
-import {
-  invalidButtonCaseReasons,
-  isValidButtonCase,
-} from '../domain/validity';
+} from './domain/census';
+import { invalidButtonCaseReasons, isValidButtonCase } from './domain/validity';
 import {
   resolveLayeredButton,
   resolveLayeredButtonWithHistory,
-} from '../layered/resolveLayeredButton';
-import { resolveForcedColorsContract } from '../semantic/resolveForcedColorsContract';
-import { resolveSemanticButton } from '../semantic/resolveSemanticButton';
+} from './layered/resolveLayeredButton';
+import { compareContracts } from './comparison/compareContracts';
+import { adaptGriffelForcedColorsCapture } from './emission/adaptGriffelForcedColorsCapture';
+import {
+  captureGriffelForcedColorsFixture,
+  captureGriffelForcedColorsRules,
+} from './emission/captureGriffelForcedColorsRules';
+import { createForcedColorsEmissionExperiment } from './emission/createForcedColorsEmissionExperiment';
+import {
+  diffGriffelForcedColorsCaptures,
+  type GriffelForcedColorsCapture,
+  type GriffelForcedColorsCaptureDifference,
+} from './emission/diffGriffelForcedColorsCaptures';
+import type {
+  EmittedStyleRule,
+  EmissionResult,
+  ForcedColorsEmissionTarget,
+} from './emission/ForcedColorsEmission';
+import {
+  measureForcedColorsEmission,
+  normalizeForcedColorsEmission,
+} from './emission/normalizeForcedColorsEmission';
+import { CleanRoomButton } from './render/CleanRoomButton';
+import { resolveForcedColorsContract } from './semantic/resolveForcedColorsContract';
+import { resolveSemanticButton } from './semantic/resolveSemanticButton';
+import { resolveButtonWithMutation } from './testing/mutations';
 
 export type LegacyButtonConsumerClassification =
   | 'production-conformance'
@@ -63,52 +83,11 @@ export const legacyButtonConsumerInventory: readonly LegacyButtonConsumerInvento
       purpose: 'Production-first CAP Button audit reading path.',
     },
     {
-      match: { kind: 'prefix', value: 'src/domain/' },
-      classification: 'synthetic-research',
-      policy: 'retain-with-synthetic-label',
-      purpose: 'Historical eleven-axis research ontology and policy inputs.',
-    },
-    {
       match: { kind: 'prefix', value: 'src/research/' },
       classification: 'synthetic-research',
       policy: 'retain-with-synthetic-label',
-      purpose: 'Explicit public boundary for retained synthetic research.',
-    },
-    {
-      match: { kind: 'prefix', value: 'src/layered/' },
-      classification: 'synthetic-research',
-      policy: 'retain-with-synthetic-label',
-      purpose: 'Ordered-override architecture experiment.',
-    },
-    {
-      match: { kind: 'prefix', value: 'src/semantic/' },
-      classification: 'synthetic-research',
-      policy: 'retain-with-synthetic-label',
-      purpose: 'Semantic-composition architecture experiment.',
-    },
-    {
-      match: { kind: 'prefix', value: 'src/testing/' },
-      classification: 'synthetic-research',
-      policy: 'retain-with-synthetic-label',
-      purpose: 'Property and mutation experiments over the synthetic domain.',
-    },
-    {
-      match: { kind: 'prefix', value: 'src/render/' },
-      classification: 'synthetic-research',
-      policy: 'retain-with-synthetic-label',
-      purpose: 'Synthetic contract rendering and browser demonstrations.',
-    },
-    {
-      match: { kind: 'prefix', value: 'src/comparison/' },
-      classification: 'synthetic-research',
-      policy: 'retain-with-synthetic-label',
-      purpose: 'Comparison instruments for the two research architectures.',
-    },
-    {
-      match: { kind: 'prefix', value: 'src/emission/' },
-      classification: 'synthetic-research',
-      policy: 'retain-with-synthetic-label',
-      purpose: 'Synthetic forced-colors emission and normalization experiments.',
+      purpose:
+        'Historical ontology, architecture, emission, rendering, and test experiments.',
     },
     {
       match: { kind: 'prefix', value: 'stories/ButtonComparison/' },
@@ -138,7 +117,8 @@ export const legacyButtonConsumerInventory: readonly LegacyButtonConsumerInvento
       match: { kind: 'prefix', value: 'stories/ForcedColors/' },
       classification: 'synthetic-research',
       policy: 'retain-with-synthetic-label',
-      purpose: 'Synthetic emission cards beside separately labeled CAP capture.',
+      purpose:
+        'Synthetic emission cards beside separately labeled CAP capture.',
     },
     {
       match: { kind: 'prefix', value: 'stories/Walkthrough/' },
@@ -157,21 +137,6 @@ export const legacyButtonConsumerInventory: readonly LegacyButtonConsumerInvento
       classification: 'synthetic-research',
       policy: 'retain-with-synthetic-label',
       purpose: 'Synthetic story comparison and rejection helpers.',
-    },
-    {
-      match: {
-        kind: 'path',
-        value: 'src/grounding/contentAnatomyGrounding.ts',
-      },
-      classification: 'migration',
-      policy: 'replace-legacy-dependency',
-      purpose: 'Production grounding still borrows two synthetic type labels.',
-    },
-    {
-      match: { kind: 'path', value: 'src/index.ts' },
-      classification: 'removal',
-      policy: 'remove-in-issue-21',
-      purpose: 'Raw legacy root exports retained only through migration.',
     },
     {
       match: { kind: 'path', value: 'docs/model.md' },
@@ -234,11 +199,32 @@ export const syntheticButtonResearchProducts = products;
 export const syntheticButtonResearchVisualLanguages = visualLanguages;
 export const enumerateSyntheticButtonResearchCases = enumerateButtonCases;
 export const isSyntheticButtonResearchCaseAdmitted = isValidButtonCase;
-export const explainSyntheticButtonResearchExclusion =
-  invalidButtonCaseReasons;
+export const explainSyntheticButtonResearchExclusion = invalidButtonCaseReasons;
 export const resolveSyntheticLayeredButton = resolveLayeredButton;
 export const resolveSyntheticLayeredButtonWithHistory =
   resolveLayeredButtonWithHistory;
 export const resolveSyntheticSemanticButton = resolveSemanticButton;
-export const resolveSyntheticForcedColorsContract =
-  resolveForcedColorsContract;
+export const resolveSyntheticForcedColorsContract = resolveForcedColorsContract;
+export const compareSyntheticButtonResearchContracts = compareContracts;
+export const SyntheticButtonResearchRenderer = CleanRoomButton;
+export const createSyntheticForcedColorsEmissionExperiment =
+  createForcedColorsEmissionExperiment;
+export const measureSyntheticForcedColorsEmission = measureForcedColorsEmission;
+export const normalizeSyntheticForcedColorsEmission =
+  normalizeForcedColorsEmission;
+export const adaptSyntheticGriffelForcedColorsCapture =
+  adaptGriffelForcedColorsCapture;
+export const captureSyntheticGriffelForcedColorsRules =
+  captureGriffelForcedColorsRules;
+export const captureSyntheticGriffelForcedColorsFixture =
+  captureGriffelForcedColorsFixture;
+export const diffSyntheticGriffelForcedColorsCaptures =
+  diffGriffelForcedColorsCaptures;
+export const resolveSyntheticButtonWithMutation = resolveButtonWithMutation;
+
+export type SyntheticEmittedStyleRule = EmittedStyleRule;
+export type SyntheticEmissionResult = EmissionResult;
+export type SyntheticForcedColorsEmissionTarget = ForcedColorsEmissionTarget;
+export type SyntheticGriffelForcedColorsCapture = GriffelForcedColorsCapture;
+export type SyntheticGriffelForcedColorsCaptureDifference =
+  GriffelForcedColorsCaptureDifference;

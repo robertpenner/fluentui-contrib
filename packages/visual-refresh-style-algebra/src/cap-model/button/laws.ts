@@ -110,10 +110,7 @@ export const diagnoseCapButtonLaws = (
   observations: readonly CapButtonSemanticObservation[]
 ): readonly CapButtonLawDiagnostic[] => {
   const diagnostics: CapButtonLawDiagnostic[] = [];
-  const classificationsByLaw = new Map<
-    string,
-    CapButtonLawClassification[]
-  >();
+  const classificationsByLaw = new Map<string, CapButtonLawClassification[]>();
   const reachableProfileKeys = new Set(
     observations.map(capButtonSemanticProfileKey)
   );

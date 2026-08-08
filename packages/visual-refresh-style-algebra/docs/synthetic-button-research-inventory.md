@@ -7,12 +7,12 @@ The package contains two deliberately separate Button boundaries:
 
 The executable `legacyButtonConsumerInventory` assigns each consumer to one of four dispositions. Its test scans source and story imports so a new legacy consumer cannot remain unclassified.
 
-| Classification | Retained surface | Purpose and limit |
-| --- | --- | --- |
-| Production conformance | `src/cap-model/`, CAP audit stories | Compare typed semantic observations against a pinned production baseline. Legacy imports are prohibited. |
-| Synthetic research | `src/domain/`, `src/layered/`, `src/semantic/`, research tests, renderers, and stories | Compare ordered overrides with semantic composition, exercise mutation sensitivity, and study conservative forced-colors emission. Results apply only to the declared synthetic domain. |
-| Migration | The content-anatomy grounding type dependency | Replace borrowed synthetic labels with production-owned terms before legacy removal. |
-| Removal | Raw legacy exports from `src/index.ts` | Remove in the final migration after retained callers use the explicit research facade. |
+| Classification         | Retained surface                                        | Purpose and limit                                                                                                                                                                       |
+| ---------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Production conformance | `src/cap-model/`, CAP audit stories                     | Compare typed semantic observations against a pinned production baseline. Legacy imports are prohibited.                                                                                |
+| Synthetic research     | `src/research/` and explicitly labeled research stories | Compare ordered overrides with semantic composition, exercise mutation sensitivity, and study conservative forced-colors emission. Results apply only to the declared synthetic domain. |
+| Migration              | The content-anatomy grounding type dependency           | Replace borrowed synthetic labels with production-owned terms before legacy removal.                                                                                                    |
+| Removal                | Raw legacy exports from `src/index.ts`                  | Remove in the final migration after retained callers use the explicit research facade.                                                                                                  |
 
 ## Retained experiments
 

@@ -63,10 +63,7 @@ describe('CAP Button production-backed laws', () => {
     };
 
     expect(
-      diagnoseCapButtonLaws(
-        [productionLaw, contradiction],
-        observeProduction()
-      )
+      diagnoseCapButtonLaws([productionLaw, contradiction], observeProduction())
     ).toEqual([
       {
         kind: 'contradictory-classification',

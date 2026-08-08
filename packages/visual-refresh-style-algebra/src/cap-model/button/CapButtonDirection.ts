@@ -81,8 +81,7 @@ const logicalIcon = (
   direction: CapButtonDirection
 ): CapButtonLogicalIconGeometry => ({
   fontSize: icon.fontSize,
-  marginInlineStart:
-    direction === 'rtl' ? icon.marginRight : icon.marginLeft,
+  marginInlineStart: direction === 'rtl' ? icon.marginRight : icon.marginLeft,
   marginInlineEnd: direction === 'rtl' ? icon.marginLeft : icon.marginRight,
 });
 

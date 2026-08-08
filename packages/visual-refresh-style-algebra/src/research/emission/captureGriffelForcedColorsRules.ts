@@ -1,18 +1,10 @@
 import type { CapturedGriffelStyleRule } from './adaptGriffelForcedColorsCapture';
 import type { GriffelForcedColorsCapture } from './diffGriffelForcedColorsCaptures';
+import { selectorContainsClass } from '../../diagnostics/selectorContainsClass';
 
 const FORCED_COLORS_ACTIVE = '(forced-colors: active)';
 
-const escapeRegularExpression = (value: string): string =>
-  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-export const selectorContainsClass = (
-  selector: string,
-  className: string
-): boolean =>
-  new RegExp(`\\.${escapeRegularExpression(className)}(?![-_a-zA-Z0-9])`).test(
-    selector
-  );
+export { selectorContainsClass } from '../../diagnostics/selectorContainsClass';
 
 export const isForcedColorsActiveCondition = (condition: string): boolean =>
   condition.trim().toLowerCase() === FORCED_COLORS_ACTIVE;

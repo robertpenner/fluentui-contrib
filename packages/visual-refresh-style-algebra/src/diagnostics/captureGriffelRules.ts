@@ -1,4 +1,4 @@
-import { selectorContainsClass } from '../emission/captureGriffelForcedColorsRules';
+import { selectorContainsClass } from './selectorContainsClass';
 
 /**
  * Griffel's style buckets, in the order it inserts them into the document.
