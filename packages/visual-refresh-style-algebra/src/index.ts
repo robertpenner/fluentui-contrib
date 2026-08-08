@@ -220,6 +220,21 @@ export type {
   CapButtonVerificationResult,
 } from './cap-model/button/versionedVerification';
 export {
+  capButtonConformanceLaws,
+  capButtonLawClassifications,
+  capButtonResearchAssumptions,
+  diagnoseCapButtonLaws,
+  evaluateCapButtonProductionLaws,
+} from './cap-model/button/laws';
+export type {
+  CapButtonConformanceLaw,
+  CapButtonLaw,
+  CapButtonLawClassification,
+  CapButtonLawDiagnostic,
+  CapButtonProductionLawFailure,
+  CapButtonResearchAssumption,
+} from './cap-model/button/laws';
+export {
   capButtonAppearanceAvailabilityEvidence,
   capButtonDirectionEvidence,
   capButtonForcedColorsRuntimeEvidence,
