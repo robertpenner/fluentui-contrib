@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { makeStyles, mergeClasses, tokens } from '@fluentui/react-components';
 import {
-  buttonCaseAxes,
-  buttonCaseCensus,
   buttonContentGroundingCensus,
+  capButtonAppearances,
+  productionButtonShapes,
+  productionButtonSizes,
+  productionButtonStyleCensus,
 } from '../../src';
 
 const useStyles = makeStyles({
@@ -167,41 +169,54 @@ const useStyles = makeStyles({
 
 const formatNumber = (value: number): string => value.toLocaleString('en-US');
 
+const productionAxes = [
+  {
+    label: 'Appearance',
+    values: capButtonAppearances.map(
+      (appearance) => appearance[0].toUpperCase() + appearance.slice(1)
+    ),
+  },
+  {
+    label: 'Size',
+    values: productionButtonSizes.map(
+      (size) => size[0].toUpperCase() + size.slice(1)
+    ),
+  },
+  {
+    label: 'Shape',
+    values: productionButtonShapes.map(
+      (shape) => shape[0].toUpperCase() + shape.slice(1)
+    ),
+  },
+  { label: 'Disabled', values: ['False', 'True'] },
+  { label: 'Disabled focusable', values: ['False', 'True'] },
+  { label: 'Icon', values: ['Absent', 'Present'] },
+  { label: 'Children', values: ['Absent', 'Present'] },
+  { label: 'Authored icon position', values: ['Omitted', 'Before', 'After'] },
+] as const;
+
+const profileStages = [
+  {
+    value: productionButtonStyleCensus.authoredScenariosPerVariant,
+    label: 'basic authored scenarios',
+  },
+  {
+    value: productionButtonStyleCensus.normalizedStateTuplesPerVariant,
+    label: 'normalized state tuples',
+  },
+  {
+    value: productionButtonStyleCensus.styleProfilesPerVariant,
+    label: 'distinct CAP style profiles',
+  },
+] as const;
+
 const optionLabels: Readonly<Record<string, string>> = {
-  fluent: 'Fluent',
-  sharepoint: 'SharePoint',
-  teams: 'Teams',
-  fluent2: 'Fluent 2',
-  visualRefresh: 'Visual Refresh',
-  standard: 'Standard',
-  compact: 'Compact',
   primary: 'Primary',
+  tint: 'Tint',
+  outline: 'Outline',
+  secondary: 'Secondary',
   subtle: 'Subtle',
   transparent: 'Transparent',
-  tint: 'Tint',
-  rest: 'Rest',
-  hover: 'Hover',
-  pressed: 'Pressed',
-  focusVisible: 'Focus visible',
-  disabled: 'Disabled',
-  light: 'Light',
-  dark: 'Dark',
-  forcedColors: 'Forced colors',
-  text: 'Text',
-  iconOnly: 'Icon only',
-  textAndIcon: 'Text and icon',
-  none: 'No icon',
-  before: 'Before',
-  after: 'After',
-  only: 'Icon only',
-  fluentDefault: 'Fluent default',
-  visualRefreshReconstructed: 'Visual Refresh reconstructed',
-  standalone: 'Standalone',
-  toolbar: 'Toolbar',
-  splitButtonStart: 'Split button start',
-  splitButtonEnd: 'Split button end',
-  ltr: 'Left to right',
-  rtl: 'Right to left',
 };
 
 const optionLabel = (value: string): string => optionLabels[value] ?? value;
@@ -229,15 +244,16 @@ export const CapAuditIntroduction = (): React.ReactElement => {
     <div className={styles.root}>
       <section className={styles.section} aria-labelledby="combination-heading">
         <h2 id="combination-heading" className={styles.heading}>
-          138,240 possible combinations
+          2,592 basic authored scenarios
         </h2>
         <p className={styles.lede}>
-          Eleven dimensions can affect the button's structure, style,
-          interaction, accessibility, or composition.
+          This finite census starts with the inputs that Fluent normalization
+          and the production CAP Button style hook actually read. It varies
+          basic icon and child presence, not arbitrary React content.
         </p>
         <div className={styles.axisGrid}>
-          {buttonCaseAxes.map((axis) => (
-            <div className={styles.axis} key={axis.key}>
+          {productionAxes.map((axis) => (
+            <div className={styles.axis} key={axis.label}>
               <div className={styles.axisHeader}>
                 <span className={styles.axisName}>{axis.label}</span>
                 <span className={styles.axisCount}>×{axis.values.length}</span>
@@ -255,24 +271,59 @@ export const CapAuditIntroduction = (): React.ReactElement => {
         </div>
         <div className={styles.equation}>
           <div className={styles.equationText}>
-            <span className={styles.equationLabel}>All choices multiplied</span>
+            <span className={styles.equationLabel}>
+              Production inputs multiplied
+            </span>
             <span className={styles.equationDetail}>
-              3 × 2 × 2 × 4 × 5 × 3 × 3 × 4 × 2 × 4 × 2
+              6 × 3 × 3 × 2 × 2 × 2 × 2 × 3
             </span>
           </div>
           <span className={styles.equationResult}>
-            {formatNumber(buttonCaseCensus.rawTotal)}
+            {formatNumber(
+              productionButtonStyleCensus.authoredScenariosPerVariant
+            )}
           </span>
         </div>
         <div className={styles.validityQuestion}>
-          <h3 className={styles.questionHeading}>How many are valid?</h3>
+          <h3 className={styles.questionHeading}>This is a scoped census</h3>
           <p className={styles.lede}>
-            Possible does not mean valid. Some inputs may produce the same
-            result, render nothing, or have no documented product support.
-            Counting valid combinations requires evidence from both component
-            behavior and product intent.
+            It is not a count of every possible Button prop. Arbitrary React
+            children, slot objects, user classes, event handlers, ARIA props,
+            and theme values do not form useful finite axes for this audit.
           </p>
         </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="profile-heading">
+        <h2 id="profile-heading" className={styles.heading}>
+          What production does with them
+        </h2>
+        <p className={styles.lede}>
+          Fluent supplies defaults and derives state before CAP selects style
+          classes. Inputs that reach the same branch collapse into one profile.
+        </p>
+        <div className={styles.resultStrip}>
+          {profileStages.map((stage, index) => (
+            <div
+              className={mergeClasses(
+                styles.result,
+                index === profileStages.length - 1 && styles.resultGap
+              )}
+              key={stage.label}
+            >
+              <span className={styles.resultNumber}>
+                {formatNumber(stage.value)}
+              </span>
+              <span className={styles.resultLabel}>{stage.label}</span>
+            </div>
+          ))}
+        </div>
+        <p className={styles.lede}>
+          The production hook collapses the 24 appearance and availability
+          combinations to 14 class branches. Across three sizes, three shapes,
+          and four recurring content effects, that produces 504 observed style
+          profiles. This is not a product-support count.
+        </p>
       </section>
 
       <section className={styles.section} aria-labelledby="first-slice-heading">
