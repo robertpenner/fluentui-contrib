@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Matrix } from '../storySupport';
-import type { ButtonCase } from '../../src';
+import type { SyntheticButtonResearchCase as ButtonCase } from '../../src';
 
 const cases: readonly { title: string; input: ButtonCase }[] = [
   {

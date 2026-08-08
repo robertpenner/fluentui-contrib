@@ -13,10 +13,10 @@ import {
   createForcedColorsEmissionExperiment,
   measureForcedColorsEmission,
   normalizeForcedColorsEmission,
-  resolveForcedColorsContract,
-  resolveLayeredButtonWithHistory,
-  resolveSemanticButton,
-  type ButtonCase,
+  resolveSyntheticForcedColorsContract as resolveForcedColorsContract,
+  resolveSyntheticLayeredButtonWithHistory as resolveLayeredButtonWithHistory,
+  resolveSyntheticSemanticButton as resolveSemanticButton,
+  type SyntheticButtonResearchCase as ButtonCase,
   type EmittedStyleRule,
 } from '../../src';
 import { resolveButtonWithMutation } from '../../src/testing/mutations';

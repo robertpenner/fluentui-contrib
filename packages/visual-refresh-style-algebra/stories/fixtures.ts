@@ -1,4 +1,4 @@
-import type { ButtonCase } from '../src';
+import type { SyntheticButtonResearchCase as ButtonCase } from '../src';
 
 export const rtlSplitRegression: ButtonCase = {
   product: 'teams',

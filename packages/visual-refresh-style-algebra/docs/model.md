@@ -1,4 +1,6 @@
-# Clean-room button model
+# Synthetic research Button model
+
+This document describes the historical eleven-axis research ontology, not the production CAP Button contract. Its validity rules and counts are assumptions used to compare two architecture experiments. Production conformance lives in `src/cap-model/button/`, and the retained experiment inventory is in `docs/synthetic-button-research-inventory.md`.
 
 ## Evidence labels
 

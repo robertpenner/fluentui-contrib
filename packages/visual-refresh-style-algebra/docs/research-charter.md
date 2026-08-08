@@ -1,5 +1,7 @@
 # Research charter
 
+This charter governs the historical synthetic Button architecture experiment. Its supported domain and must-always rules are research assumptions, not production CAP contracts. Production conformance is isolated under `src/cap-model/button/`.
+
 ## Practical objective
 
 Find the smallest shared component foundation that preserves universal behavioral and accessibility guarantees while
@@ -32,7 +34,7 @@ combinations and must-always rules, rather than depending on an informal sequenc
 
 ## Method
 
-The package defines a finite `ButtonCase` input domain and a pure `ButtonStyleContract` output. Two independent resolver architectures consume the same cases. Deterministic fast-check properties compare them and enforce preservation laws. A shared native-button renderer, curated Storybook stories, and Playwright checks add browser evidence. Disabled-by-default mutations test whether the laws can detect plausible regressions.
+The experiment defines a finite synthetic Button input domain and a pure research style contract. Two independent resolver architectures consume the same cases. Deterministic fast-check properties compare them and enforce assumed preservation laws. A shared native-button renderer, curated Storybook stories, and Playwright checks add evidence about the experiment. Disabled-by-default mutations test whether its laws can detect plausible regressions.
 
 ## Evidence discipline
 

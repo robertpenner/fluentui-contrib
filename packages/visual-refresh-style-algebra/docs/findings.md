@@ -1,8 +1,10 @@
 # Research findings
 
+The eleven-axis census, layered-versus-semantic comparisons, and property metrics in this document are synthetic research results. They are not production CAP counts or product-support claims. Production observations are called out separately with their pinned baselines.
+
 ## Measurements
 
-The raw Cartesian input space contains 138,240 tuples. The explicit validity predicate admits 27,840 cases, or about 20.1%. `researchMetrics.test.ts` reproduces this census exhaustively.
+The synthetic Cartesian input space contains 138,240 tuples. Its explicit research predicate admits 27,840 cases, or about 20.1%. `researchMetrics.test.ts` reproduces this historical census exhaustively.
 
 The first production-grounding slice exercises twelve public icon, children, and `iconPosition` scenarios against
 Fluent 9.70.0 and VR CAP 0.5.1. All twelve normalize and render a button root. Nine produce slot anatomy represented

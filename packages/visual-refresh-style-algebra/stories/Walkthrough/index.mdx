@@ -14,7 +14,7 @@ A button change that begins as a new height or radius can spread through Fluent 
 
 [Why this research exists](?path=/docs/packages-visual-refresh-style-algebra-why-this-research-exists--docs) explains that practical problem and the tradeoff between retaining Fluent styling and reimplementing product styling.
 
-This walkthrough introduces one response: describe **what must remain true** before deciding how to express it in CSS. That gives us a way to compare implementations, protect accessibility requirements, and investigate duplicated output without treating every generated rule as equally meaningful. You do not need algebra or property-testing experience to follow the approach.
+This walkthrough introduces a synthetic research experiment: describe **what must remain true** before deciding how to express it in CSS. That gives us a way to compare implementations, protect accessibility requirements, and investigate duplicated output without treating every generated rule as equally meaningful. You do not need algebra or property-testing experience to follow the approach. Production CAP Button conformance is a separate path that starts with observed component output.
 
 ## 1. Start with a situation, not a stylesheet
 
@@ -26,7 +26,7 @@ The model gathers those conditions into a **button case**. A resolver turns the 
 
 The word _semantic_ matters here. `ButtonFace` means “use the system's button surface in forced colors.” It does not prescribe a hex value, a class name, or where a media query must appear.
 
-Before building that model, the [**CAP Button audit**](?path=/docs/packages-visual-refresh-style-algebra-cap-button-audit--docs) starts with the production Fluent and Visual Refresh CAP path. It introduces the eleven dimensions, the 138,240 raw combinations they create, and why production observation, product support, and model admission must be counted separately.
+The [**CAP Button audit**](?path=/docs/packages-visual-refresh-style-algebra-cap-button-audit--docs) starts instead with the production Fluent and CAP path. It derives authored, normalized, and semantic counts from typed observations. The eleven dimensions and 138,240 raw tuples below belong only to the later synthetic research model.
 
 ## 2. Separate meaning from the route used to compute it
 
@@ -77,11 +77,11 @@ Once this page feels comfortable, use the other stories for specific questions:
 
 - [**CAP Button audit**](?path=/docs/packages-visual-refresh-style-algebra-cap-button-audit--docs): What does the production component path show, how large is the combination space, and what can “valid” mean?
 - [**Content anatomy audit**](?path=/docs/packages-visual-refresh-style-algebra-content-anatomy-audit--docs): What happens when twelve icon, content, and position inputs run through Fluent and the CAP style hook?
-- [**Case census**](?path=/docs/packages-visual-refresh-style-algebra-case-census--docs): How does the later research model narrow the raw space under explicit assumptions?
-- [**Button comparison**](?path=/docs/packages-visual-refresh-style-algebra-button-comparison--docs): Is a visible difference intentional, or did the implementation change the result by accident?
-- [**Curated matrix**](?path=/docs/packages-visual-refresh-style-algebra-curated-matrix--docs): Does an agreed change survive states, products, directions, accessibility, and compound controls?
+- [**Synthetic case census**](?path=/docs/packages-visual-refresh-style-algebra-synthetic-research-case-census--docs): How does the historical research model narrow the raw space under explicit assumptions?
+- [**Synthetic Button comparison**](?path=/docs/packages-visual-refresh-style-algebra-synthetic-research-button-comparison--docs): Do the layered and semantic research architectures preserve the same modeled result?
+- [**Synthetic curated matrix**](?path=/docs/packages-visual-refresh-style-algebra-synthetic-research-curated-matrix--docs): Do the research architectures agree across selected synthetic states and policies?
 - [**Counterexamples**](?path=/docs/packages-visual-refresh-style-algebra-counterexamples--docs): Which input exposed a fault, which result differed, and which layered rule wrote it?
-- [**Forced-colors emission**](?path=/docs/packages-visual-refresh-style-algebra-forced-colors-emission--docs): Is repeated high-contrast output redundant, necessary context, or evidence of a missing shared requirement?
+- [**Synthetic forced-colors emission**](?path=/docs/packages-visual-refresh-style-algebra-synthetic-research-forced-colors-emission--docs): Is repeated research output redundant, necessary context, or evidence of a missing shared requirement?
 
 ## What this work can and cannot claim
 

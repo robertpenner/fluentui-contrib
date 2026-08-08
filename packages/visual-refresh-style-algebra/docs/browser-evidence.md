@@ -2,12 +2,12 @@
 
 ## Curated stories
 
-- **Button Matrix** samples product, visual language, density, state, color mode, anatomy, composition, and direction without pretending to render all 27,840 valid cases.
-- **Button Comparison** places layered and semantic results side by side and surfaces normalized differences.
-- **Counterexamples** preserves cases that exposed focus, forced-color, density, accessibility, RTL padding, and split-corner faults.
+- **Synthetic Button Matrix** samples research axes without pretending to render all 27,840 model-admitted cases.
+- **Synthetic Button Comparison** places the layered and semantic research results side by side and surfaces normalized differences.
+- **Synthetic Counterexamples** preserves cases that exposed faults in the research architectures and laws.
 - **Content anatomy audit** exercises twelve public icon, children, and position scenarios, separates Fluent
   normalization and rendered order from clean-room interpretation, and records four distinct VR CAP class effects.
-- **Forced-colors emission** shows five compact reference cases spanning Fluent 2, Visual Refresh, Fluent,
+- **Synthetic forced-colors emission** shows five compact reference cases spanning modeled Fluent 2, Visual Refresh, Fluent,
   SharePoint, Teams, standard/compact density, all supported appearance families, focus/disabled states,
   Button/ToggleButton/split targets, and LTR/RTL. Each case exposes the semantic contract, synthetic unnormalized
   emission, normalized emission, diagnostics, rendered output, and layered provenance/write history.
@@ -20,6 +20,8 @@
 Playwright component tests run the shared native-button renderer in Chromium, Firefox, and WebKit. They assert native disabled semantics, focus-visible styling, forced-color system-role mapping, icon-only accessible labels, reconstructed anatomy, conditional padding, split-button corners, and RTL behavior. Runtime capture laws run in all three engines; Chromium additionally locks the dependency-sensitive corpus and differential counts. Forced-colors emulation in all three engines verifies that selected primary paint matches enabled primary paint and disabled paint remains distinct. Chromium and Firefox also map unselected ToggleButton and secondary Button to the same profile; WebKit computes those profiles differently.
 
 The browser suite is deliberately small and scenario-based. Property tests cover combinatorial semantics cheaply; browser tests verify that the renderer preserves selected semantics in actual engines.
+
+The synthetic stories and browser renderer checks do not establish CAP Button support. Production-conformance browser baselines are maintained separately under `src/cap-model/button/tests/`.
 
 ### CAP Button forced-colors baseline
 

@@ -1,4 +1,6 @@
-# Resolver architectures
+# Synthetic research resolver architectures
+
+The layered and semantic resolvers are retained architecture experiments over the historical Button ontology. They do not reproduce or certify production CAP Button behavior. See `docs/synthetic-button-research-inventory.md` for their disposition and limits.
 
 ## The production tradeoff behind the experiment
 

@@ -2,7 +2,8 @@ import type { Meta } from '@storybook/react';
 import { ForcedColorsEmission } from './ForcedColors.stories';
 
 const meta = {
-  title: 'Packages/visual-refresh-style-algebra/Forced-colors emission',
+  title:
+    'Packages/visual-refresh-style-algebra/Synthetic research/Forced-colors emission',
   component: ForcedColorsEmission,
 } satisfies Meta<typeof ForcedColorsEmission>;
 

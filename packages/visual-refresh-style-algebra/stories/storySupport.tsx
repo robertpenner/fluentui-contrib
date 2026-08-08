@@ -9,10 +9,10 @@ import {
 import {
   CleanRoomButton,
   compareContracts,
-  invalidButtonCaseReasons,
-  resolveLayeredButtonWithHistory,
-  resolveSemanticButton,
-  type ButtonCase,
+  explainSyntheticButtonResearchExclusion as invalidButtonCaseReasons,
+  resolveSyntheticLayeredButtonWithHistory as resolveLayeredButtonWithHistory,
+  resolveSyntheticSemanticButton as resolveSemanticButton,
+  type SyntheticButtonResearchCase as ButtonCase,
 } from '../src';
 
 const useStyles = makeStyles({

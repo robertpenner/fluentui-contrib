@@ -252,6 +252,35 @@ export type {
   CapModelEvidence,
 } from './cap-model/button/evidence';
 export {
+  classifyLegacyButtonConsumer,
+  enumerateSyntheticButtonResearchCases,
+  explainSyntheticButtonResearchExclusion,
+  isSyntheticButtonResearchCaseAdmitted,
+  legacyButtonConsumerInventory,
+  resolveSyntheticForcedColorsContract,
+  resolveSyntheticLayeredButton,
+  resolveSyntheticLayeredButtonWithHistory,
+  resolveSyntheticSemanticButton,
+  syntheticButtonResearchAnatomyPolicies,
+  syntheticButtonResearchAppearances,
+  syntheticButtonResearchAxes,
+  syntheticButtonResearchCensus,
+  syntheticButtonResearchContentConstructionCensus,
+  syntheticButtonResearchContentKinds,
+  syntheticButtonResearchIconPlacements,
+  syntheticButtonResearchMetadata,
+  syntheticButtonResearchProductPolicyCensus,
+  syntheticButtonResearchProducts,
+  syntheticButtonResearchVisualLanguages,
+} from './research/legacyButtonResearch';
+export type {
+  LegacyButtonConsumerClassification,
+  LegacyButtonConsumerInventoryEntry,
+  LegacyButtonConsumerMatch,
+  LegacyButtonConsumerPolicy,
+  SyntheticButtonResearchCase,
+} from './research/legacyButtonResearch';
+export {
   productionBooleanValues,
   productionButtonAvailabilityInputs,
   productionButtonGeneratedClassCensus,

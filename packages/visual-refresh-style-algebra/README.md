@@ -5,10 +5,12 @@ Visual Refresh changes, derived components, product requirements, interaction st
 controls can all influence the result. This private, clean-room package investigates how to preserve the useful shared
 foundation while making legitimate product differences cheaper to express and easier to debug.
 
-The experiment models a finite button domain, resolves it through two implementations, compares their user-facing
+The historical synthetic experiment models a finite button domain, resolves it through two implementations, compares their user-facing
 contracts, renders both through one native-button adapter, and challenges the model with properties, controlled
 mutations, stories, and browser assertions. A focused refinement separates forced-colors accessibility requirements
 from CSS/Griffel-like emission and tests conservative media-query normalization.
+
+A separate production-conformance path under `src/cap-model/button/` starts from pinned Fluent and CAP observations. It does not import the synthetic ontology, and it keeps product support unknown. See the [synthetic research inventory](docs/synthetic-button-research-inventory.md) for the boundary and disposition of each retained experiment.
 
 This package is an experiment, not a production dependency or a statement of private Fluent specifications. Policy assumptions are named and replaceable. It must remain private and isolated from published package behavior.
 
@@ -17,18 +19,19 @@ This package is an experiment, not a production dependency or a statement of pri
 - [Why this research exists](docs/motivation.md): UXE motivation, implementation tradeoffs, product alignment, and
   override elasticity.
 - [Research charter](docs/research-charter.md): question, hypotheses, method, and evidence rules.
-- [Clean-room model](docs/model.md): domain, validity, contract, policies, and omissions.
+- [Synthetic research model](docs/model.md): historical domain, validity assumptions, contract, policies, and omissions.
 - [Production grounding plan](docs/production-grounding-plan.md): staged observation, mapping, differential testing,
   and census revision against public Fluent and VR CAP behavior.
-- [Resolver architectures](docs/architectures.md): layered overrides versus semantic composition.
-- [Executable laws](docs/laws.md): sixteen deterministic fast-check properties.
-- [Mutation experiments](docs/mutations.md): seven teaching faults and minimized regressions.
+- [Synthetic research inventory](docs/synthetic-button-research-inventory.md): production boundary, retained experiments, migrations, and removal targets.
+- [Synthetic resolver architectures](docs/architectures.md): layered overrides versus semantic composition.
+- [Synthetic executable laws](docs/laws.md): sixteen deterministic fast-check properties.
+- [Synthetic mutation experiments](docs/mutations.md): seven teaching faults and minimized regressions.
 - [Browser evidence](docs/browser-evidence.md): curated stories and cross-engine assertions.
 - [Findings](docs/findings.md): metrics, interpretation, limitations, and next experiments.
 
 ## Structure
 
-`ButtonCase` separates product, visual language, density, appearance, interaction state, color mode, content, icon placement, anatomy, composition, and direction. `ButtonStyleContract` is the semantic boundary. The layered resolver applies named stages with field-level write history; the semantic resolver derives independent concerns. Provenance is excluded from equality, and both contracts feed `CleanRoomButton`.
+In the synthetic research facade, `SyntheticButtonResearchCase` separates product, visual language, density, appearance, interaction state, color mode, content, icon placement, anatomy, composition, and direction. Its counts and admission rules are not CAP facts. The layered resolver applies named stages with field-level write history; the semantic resolver derives independent concerns. Provenance is excluded from equality, and both research contracts feed the same renderer.
 
 `ForcedColorsContract` separately captures system roles, focus, visible boundaries, and disabled distinguishability. `EmittedStyleRule` then represents media, selector, component/slot scope, declarations, precedence, order, specificity, and provenance. A synthetic emission experiment demonstrates safe exact deduplication. A second instrument captures real runtime Griffel output from public CAP Button-family style hooks, feeds it into the same normalizer, and compares enabled, disabled, selected, and alternate-appearance fixtures without conflating emission with browser paint.
 

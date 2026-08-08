@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { ButtonCase } from '../../src';
+import type { SyntheticButtonResearchCase as ButtonCase } from '../../src';
 import { unsupportedTeamsTint } from '../fixtures';
 import { Matrix, SplitPair, UnsupportedCase } from '../storySupport';
 

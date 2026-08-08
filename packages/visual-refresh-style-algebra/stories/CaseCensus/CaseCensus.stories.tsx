@@ -5,17 +5,17 @@ import {
   DismissCircle20Regular,
 } from '@fluentui/react-icons';
 import {
-  anatomyPolicies,
-  appearances,
   buttonContentGroundingCensus,
-  buttonCaseAxes,
-  buttonCaseCensus,
-  contentConstructionCensus,
-  contentKinds,
-  iconPlacements,
-  productPolicyCensus,
-  products,
-  visualLanguages,
+  syntheticButtonResearchAnatomyPolicies as anatomyPolicies,
+  syntheticButtonResearchAppearances as appearances,
+  syntheticButtonResearchAxes as buttonCaseAxes,
+  syntheticButtonResearchCensus as buttonCaseCensus,
+  syntheticButtonResearchContentConstructionCensus as contentConstructionCensus,
+  syntheticButtonResearchContentKinds as contentKinds,
+  syntheticButtonResearchIconPlacements as iconPlacements,
+  syntheticButtonResearchProductPolicyCensus as productPolicyCensus,
+  syntheticButtonResearchProducts as products,
+  syntheticButtonResearchVisualLanguages as visualLanguages,
 } from '../../src';
 
 const useStyles = makeStyles({

@@ -1,4 +1,6 @@
-# Executable laws
+# Synthetic research executable laws
+
+These properties exercise the historical Button research domain and its two architecture experiments. They are separate from the production-backed laws in `src/cap-model/button/laws.ts`; passing here does not establish CAP conformance or product support.
 
 Property tests use fast-check with seed `0x5eed`, 100 runs by default, and `VISUAL_REFRESH_PBT_RUNS` for deeper runs. Generators preserve validity by selecting appearance only after product and visual language.
 

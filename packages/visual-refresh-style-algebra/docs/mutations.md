@@ -1,4 +1,6 @@
-# Mutation experiments
+# Synthetic research mutation experiments
+
+These controlled faults test the sensitivity of laws over the historical Button research domain. They do not mutate production CAP code or establish production support.
 
 Mutations are teaching faults, disabled during normal resolution and activated only by `mutations.test.ts`. Each property uses `fc.check`, requires a failure, requires at least one shrink, and retains a serialized regression fixture.
 

@@ -2,7 +2,8 @@ import type { Meta } from '@storybook/react';
 import { ButtonComparison } from './ButtonComparison.stories';
 
 const meta = {
-  title: 'Packages/visual-refresh-style-algebra/Button comparison',
+  title:
+    'Packages/visual-refresh-style-algebra/Synthetic research/Button comparison',
   component: ButtonComparison,
 } satisfies Meta<typeof ButtonComparison>;
 

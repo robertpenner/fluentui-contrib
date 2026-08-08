@@ -8,6 +8,26 @@ module.exports = [
     rules: {},
   },
   {
+    files: ['src/cap-model/**/*.ts', 'src/cap-model/**/*.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            '**/domain/**',
+            '**/research/**',
+            '**/layered/**',
+            '**/semantic/**',
+            '**/testing/**',
+            '**/render/**',
+            '**/comparison/**',
+            '**/emission/**',
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['**/*.js', '**/*.jsx'],
     // Override or add rules here
     rules: {},
