@@ -19,6 +19,14 @@ export const capButtonThemeInputKeys = [
   'strokeWidthThin',
 ] as const;
 
+export const capButtonThemeFixtureNames = [
+  'web-light-with-cap',
+  'web-dark-with-cap',
+] as const;
+
+export type CapButtonThemeFixtureName =
+  (typeof capButtonThemeFixtureNames)[number];
+
 export type CapButtonThemeInputKey = (typeof capButtonThemeInputKeys)[number];
 
 export type CapButtonThemeInput = Readonly<

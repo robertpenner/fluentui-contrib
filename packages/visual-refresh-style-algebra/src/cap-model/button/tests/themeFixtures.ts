@@ -5,13 +5,11 @@ import {
 } from '@fluentui/react-components';
 import { CAP_THEME_TOKENS } from '@fluentui-contrib/react-cap-theme';
 import {
+  type CapButtonThemeFixtureName,
   type CapButtonThemeInput,
   projectCapButtonThemeInput,
 } from '../CapButtonTheme';
-
-export type CapButtonThemeFixtureName =
-  | 'web-light-with-cap'
-  | 'web-dark-with-cap';
+export type { CapButtonThemeFixtureName } from '../CapButtonTheme';
 
 export interface CapButtonThemeFixture {
   readonly name: CapButtonThemeFixtureName;

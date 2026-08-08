@@ -8,20 +8,32 @@ import {
 } from '@fluentui/react-components';
 import { CheckmarkCircleRegular } from '@fluentui/react-icons';
 import {
-  buttonContentGroundingCensus,
+  capButtonAppearanceAvailabilityEvidence,
+  capButtonDirectionObservedEquivalence,
+  capButtonAuthoredIconPositions,
+  capButtonBooleanValues,
+  capButtonForcedColorsMatrix,
+  capButtonForcedColorsRuntimeEvidence,
+  capButtonGeometryEvidence,
   capButtonInteractionBrowserBaseline,
+  capButtonInteractionConditionEvidence,
+  capButtonInteractionConditionLedger,
   capButtonMotionMatrix,
+  capButtonMotionRuntimeEvidence,
+  capButtonScopedChildren,
   capButtonSemanticProfileCensus,
-  capButtonAppearances,
+  capButtonThemeFixtureNames,
   type CapButtonGeometry,
   type CapButtonScenario,
+  type CapModelEvidence,
   CapFixtureProvider,
   projectCapButtonThemeInput,
-  productionButtonGeneratedClassCensus,
-  productionButtonShapes,
-  productionButtonSizes,
+  productionCapButtonAppearances,
+  productionCapButtonShapes,
+  productionCapButtonSizes,
   resolveCleanRoomCapButton,
   resolveCapButtonMotion,
+  tracedCapButtonEvidence,
 } from '../../src';
 import { capTheme } from '../../src/fixtures/capButtonFamily';
 
@@ -212,10 +224,32 @@ const useStyles = makeStyles({
     fontWeight: tokens.fontWeightSemibold,
   },
   geometryMetrics: {
+    minWidth: 0,
     color: tokens.colorNeutralForeground3,
     fontFamily: tokens.fontFamilyMonospace,
     fontSize: tokens.fontSizeBase200,
     lineHeight: tokens.lineHeightBase300,
+    overflowWrap: 'anywhere',
+  },
+  evidence: {
+    display: 'grid',
+    gap: tokens.spacingVerticalXS,
+    minWidth: 0,
+    paddingInlineStart: tokens.spacingHorizontalM,
+    borderLeft: `${tokens.strokeWidthThick} solid ${tokens.colorNeutralStroke2}`,
+  },
+  evidenceTitle: {
+    color: tokens.colorNeutralForeground2,
+    fontSize: tokens.fontSizeBase200,
+    fontWeight: tokens.fontWeightSemibold,
+    overflowWrap: 'anywhere',
+  },
+  evidenceDetail: {
+    margin: 0,
+    color: tokens.colorNeutralForeground3,
+    fontSize: tokens.fontSizeBase200,
+    lineHeight: tokens.lineHeightBase300,
+    overflowWrap: 'anywhere',
   },
 });
 
@@ -224,28 +258,70 @@ const formatNumber = (value: number): string => value.toLocaleString('en-US');
 const productionAxes = [
   {
     label: 'Appearance',
-    values: capButtonAppearances.map(
+    values: productionCapButtonAppearances.map(
       (appearance) => appearance[0].toUpperCase() + appearance.slice(1)
     ),
   },
   {
     label: 'Size',
-    values: productionButtonSizes.map(
+    values: productionCapButtonSizes.map(
       (size) => size[0].toUpperCase() + size.slice(1)
     ),
   },
   {
     label: 'Shape',
-    values: productionButtonShapes.map(
+    values: productionCapButtonShapes.map(
       (shape) => shape[0].toUpperCase() + shape.slice(1)
     ),
   },
-  { label: 'Disabled', values: ['False', 'True'] },
-  { label: 'Disabled focusable', values: ['False', 'True'] },
-  { label: 'Icon', values: ['Absent', 'Present'] },
-  { label: 'Children', values: ['Absent', 'Present'] },
-  { label: 'Authored icon position', values: ['Omitted', 'Before', 'After'] },
+  {
+    label: 'Disabled',
+    values: capButtonBooleanValues.map((value) => String(value)),
+  },
+  {
+    label: 'Disabled focusable',
+    values: capButtonBooleanValues.map((value) => String(value)),
+  },
+  { label: 'Icon', values: capButtonScopedChildren },
+  { label: 'Children', values: capButtonScopedChildren },
+  { label: 'Authored icon position', values: capButtonAuthoredIconPositions },
 ] as const;
+
+const authoredScenarioEquation = productionAxes
+  .map((axis) => axis.values.length)
+  .join(' × ');
+
+const environmentProjections: ReadonlyArray<{
+  readonly value: number;
+  readonly label: string;
+  readonly detail: string;
+  readonly evidence: CapModelEvidence;
+}> = [
+  {
+    value: capButtonInteractionConditionLedger.length,
+    label: 'interaction conditions',
+    detail: 'Browser-producible ordinary-color conditions.',
+    evidence: capButtonInteractionConditionEvidence,
+  },
+  {
+    value: capButtonForcedColorsMatrix.length,
+    label: 'forced-colors observations',
+    detail: 'Appearance, availability, and focus projection.',
+    evidence: capButtonForcedColorsRuntimeEvidence,
+  },
+  {
+    value: capButtonMotionMatrix.length,
+    label: 'motion observations',
+    detail: 'Appearance, availability, and preference projection.',
+    evidence: capButtonMotionRuntimeEvidence,
+  },
+  {
+    value: capButtonDirectionObservedEquivalence.scenarioCount,
+    label: 'direction scenario pairs',
+    detail: 'Each scenario is observed in LTR and RTL.',
+    evidence: capButtonDirectionObservedEquivalence.evidence,
+  },
+];
 
 const profileStages = [
   {
@@ -264,13 +340,13 @@ const profileStages = [
     diagnostic: false,
   },
   {
-    value: productionButtonGeneratedClassCensus.generatedClassSelectionProfiles,
+    value: capButtonSemanticProfileCensus.generatedClassProfiles.count,
     label: 'generated class profiles (diagnostic)',
     diagnostic: true,
   },
   {
-    value: 'Unknown',
-    label: 'product-support status',
+    value: `${capButtonSemanticProfileCensus.productSupport.knownProfiles} known / ${capButtonSemanticProfileCensus.productSupport.unknownProfiles} unknown`,
+    label: 'product-support profiles',
     diagnostic: true,
   },
 ] as const;
@@ -301,6 +377,23 @@ const auditSteps = [
     detail: 'Use a product contract or decision to establish intended support.',
   },
 ] as const;
+
+const Evidence = ({
+  evidence,
+}: {
+  readonly evidence: CapModelEvidence;
+}): React.ReactElement => {
+  const styles = useStyles();
+
+  return (
+    <aside className={styles.evidence} aria-label="Production evidence">
+      <span className={styles.evidenceTitle}>
+        Evidence · {evidence.productionBaseline} · {evidence.productionSymbol}
+      </span>
+      <p className={styles.evidenceDetail}>{evidence.observation}</p>
+    </aside>
+  );
+};
 
 const geometryConditions = {
   hover: false,
@@ -435,7 +528,8 @@ export const CapAuditIntroduction = (): React.ReactElement => {
     <div className={styles.root}>
       <section className={styles.section} aria-labelledby="combination-heading">
         <h2 id="combination-heading" className={styles.heading}>
-          2,592 basic authored scenarios
+          {formatNumber(capButtonSemanticProfileCensus.authoredScenarios)} basic
+          authored scenarios
         </h2>
         <p className={styles.lede}>
           This finite census starts with the inputs that Fluent normalization
@@ -466,7 +560,7 @@ export const CapAuditIntroduction = (): React.ReactElement => {
               Production inputs multiplied
             </span>
             <span className={styles.equationDetail}>
-              6 × 3 × 3 × 2 × 2 × 2 × 2 × 3
+              {authoredScenarioEquation}
             </span>
           </div>
           <span className={styles.equationResult}>
@@ -481,6 +575,7 @@ export const CapAuditIntroduction = (): React.ReactElement => {
             and theme values do not form useful finite axes for this audit.
           </p>
         </div>
+        <Evidence evidence={tracedCapButtonEvidence[0]} />
       </section>
 
       <section className={styles.section} aria-labelledby="profile-heading">
@@ -511,56 +606,70 @@ export const CapAuditIntroduction = (): React.ReactElement => {
           ))}
         </div>
         <p className={styles.lede}>
-          Production observations collapse the 24 appearance and availability
-          inputs to 11 effective root appearances. Across three sizes, three
-          shapes, and four recurring geometry/content outputs, that produces 396
-          semantic profiles. The pinned implementation also emits 504
-          root-and-icon class signatures, a version-sensitive diagnostic rather
-          than semantic identity. Neither count establishes product support.
+          Production observations collapse the authored appearance and
+          availability inputs to{' '}
+          {
+            capButtonSemanticProfileCensus.semanticFactors
+              .rootAppearanceAvailabilityOutputs
+          }{' '}
+          effective root appearances. Across{' '}
+          {capButtonSemanticProfileCensus.semanticFactors.sizes} sizes,{' '}
+          {capButtonSemanticProfileCensus.semanticFactors.shapes} shapes, and{' '}
+          {
+            capButtonSemanticProfileCensus.semanticFactors
+              .geometryContentOutputs
+          }{' '}
+          recurring geometry/content outputs, that produces{' '}
+          {formatNumber(capButtonSemanticProfileCensus.semanticProfiles)}{' '}
+          semantic profiles. The pinned implementation also emits{' '}
+          {formatNumber(
+            capButtonSemanticProfileCensus.generatedClassProfiles.count
+          )}{' '}
+          root-and-icon class signatures. That is a version-sensitive
+          diagnostic, not semantic identity. Product support is unknown for all{' '}
+          {formatNumber(
+            capButtonSemanticProfileCensus.productSupport.unknownProfiles
+          )}{' '}
+          profiles;{' '}
+          {capButtonSemanticProfileCensus.productSupport.knownProfiles} are
+          known supported.
         </p>
+        <Evidence evidence={capButtonAppearanceAvailabilityEvidence[0]} />
       </section>
 
-      <section className={styles.section} aria-labelledby="first-slice-heading">
-        <h2 id="first-slice-heading" className={styles.heading}>
-          A first check: content and icons
+      <section className={styles.section} aria-labelledby="environment-heading">
+        <h2 id="environment-heading" className={styles.heading}>
+          Environment conditions are separate projections
         </h2>
         <p className={styles.lede}>
-          The first audit covers all twelve combinations of icon, content, and
-          icon position. Running them shows that nine render content, four CAP
-          style effects recur, and three render empty.
+          These observations test runtime context around the authored Button.
+          They are not Button axes and are not summed or multiplied into one
+          ontology count.
         </p>
         <div className={styles.resultStrip}>
-          <div className={styles.result}>
-            <span className={styles.resultNumber}>
-              {buttonContentGroundingCensus.productionScenarios}
-            </span>
-            <span className={styles.resultLabel}>combinations tested</span>
-          </div>
-          <div className={styles.result}>
-            <span className={styles.resultNumber}>
-              {buttonContentGroundingCensus.representedScenarios}
-            </span>
-            <span className={styles.resultLabel}>
-              buttons that render content
-            </span>
-          </div>
-          <div className={styles.result}>
-            <span className={styles.resultNumber}>
-              {buttonContentGroundingCensus.canonicalConfigurations}
-            </span>
-            <span className={styles.resultLabel}>
-              recurring CAP style effects
-            </span>
-          </div>
+          {environmentProjections.map(({ value, label, detail, evidence }) => (
+            <div className={styles.result} key={label}>
+              <span className={styles.resultNumber}>{formatNumber(value)}</span>
+              <span className={styles.resultLabel}>{label}</span>
+              <span className={styles.geometryMetrics}>{detail}</span>
+              <Evidence evidence={evidence} />
+            </div>
+          ))}
           <div className={mergeClasses(styles.result, styles.resultGap)}>
             <span className={styles.resultNumber}>
-              {buttonContentGroundingCensus.unrepresentedScenarios}
+              {capButtonThemeFixtureNames.length}
             </span>
-            <span className={styles.resultLabel}>
-              buttons that render empty
+            <span className={styles.resultLabel}>theme fixtures</span>
+            <span className={styles.geometryMetrics}>
+              {capButtonThemeFixtureNames.join(' | ')}
             </span>
           </div>
         </div>
+        <p className={styles.lede}>
+          Theme remains an open input rather than a finite Button axis. The
+          fixtures pin light and dark correspondence checks; they are not an
+          exhaustive theme census.
+        </p>
       </section>
 
       <section className={styles.section} aria-labelledby="geometry-heading">
@@ -636,6 +745,7 @@ export const CapAuditIntroduction = (): React.ReactElement => {
             })}
           </div>
         </CapFixtureProvider>
+        <Evidence evidence={capButtonGeometryEvidence[0]} />
       </section>
 
       <section className={styles.section} aria-labelledby="motion-heading">
@@ -664,15 +774,27 @@ export const CapAuditIntroduction = (): React.ReactElement => {
           ))}
         </div>
         <p className={styles.lede}>
-          {capButtonMotionMatrix.length} observations cover six appearances,
-          three availability states, and both preferences. The pinned evidence
-          is {capButtonInteractionBrowserBaseline.engine}{' '}
+          {capButtonMotionMatrix.length} observations cover the exported
+          appearance, availability, and preference projection. These factors are
+          not added to the authored scenario census. The pinned evidence is{' '}
+          {capButtonInteractionBrowserBaseline.engine}{' '}
           {capButtonInteractionBrowserBaseline.version} through Playwright{' '}
           {capButtonInteractionBrowserBaseline.playwright} on{' '}
           {capButtonInteractionBrowserBaseline.platform}. Playwright media
           emulation confirms query matching and computed declarations, not a
           real operating-system preference, other browser engines, perceived
           animation, or product support. Product support remains unknown.
+        </p>
+        <Evidence evidence={capButtonMotionRuntimeEvidence} />
+      </section>
+
+      <section className={styles.section} aria-labelledby="history-heading">
+        <h2 id="history-heading" className={styles.heading}>
+          Historical model boundary
+        </h2>
+        <p className={styles.lede}>
+          138,240 raw tuples and 27,840 model-admitted cases are historical
+          synthetic-model results. Neither is a production CAP Button count.
         </p>
       </section>
 

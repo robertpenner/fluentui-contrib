@@ -95,11 +95,13 @@ export type {
 } from './cap-model/button/CapButtonObservation';
 export type { CapButtonContract } from './cap-model/button/CapButtonContract';
 export {
+  capButtonThemeFixtureNames,
   capButtonThemeInputKeys,
   compareCapButtonThemeInput,
   projectCapButtonThemeInput,
 } from './cap-model/button/CapButtonTheme';
 export type {
+  CapButtonThemeFixtureName,
   CapButtonThemeInput,
   CapButtonThemeInputDifference,
   CapButtonThemeInputKey,
