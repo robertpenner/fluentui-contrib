@@ -5,7 +5,9 @@ import * as CapAuditIntroductionStories from "./index.stories";
 
 <Title>CAP Button audit</Title>
 
-The production CAP Button hook does not define the earlier synthetic model. Its 138,240 raw tuples and 27,840 model-admitted cases are historical synthetic-model results, not production CAP Button counts. This audit derives authored scenarios, normalized states, semantic profiles, and independent environment projections from the replacement production correspondence. Generated class signatures remain a version-sensitive diagnostic, and product support remains unknown.
+This page answers a practical question: when an app chooses Button props, what does Fluent do with those inputs, what styles does CAP apply, and can an independently written implementation reproduce the result?
+
+The audit covers a focused set of Button inputs, compares the visible results, and then checks browser-dependent behavior such as forced colors and reduced motion. These checks tell us what the current code does. They do not establish which combinations a product has committed to support, so product support remains unknown.
 
 <Canvas of={CapAuditIntroductionStories.CapAuditIntroduction} />
 

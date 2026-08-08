@@ -27,40 +27,37 @@ describe('CapAuditIntroduction', () => {
       screen.getByRole('heading', {
         name: `${formatNumber(
           capButtonSemanticProfileCensus.authoredScenarios
-        )} basic authored scenarios`,
+        )} Button input combinations`,
       })
     ).toBeTruthy();
     expectResult(
-      'normalized state tuples',
+      'distinct states after Fluent applies defaults',
       capButtonSemanticProfileCensus.normalizedStateTuples
     );
     expectResult(
-      'semantic style profiles',
+      'distinct visual results',
       capButtonSemanticProfileCensus.semanticProfiles
     );
     expectResult(
-      'generated class profiles (diagnostic)',
+      'CSS class combinations (implementation detail)',
       capButtonSemanticProfileCensus.generatedClassProfiles.count
     );
     expectResult(
-      'product-support profiles',
-      `${capButtonSemanticProfileCensus.productSupport.knownProfiles} known / ${capButtonSemanticProfileCensus.productSupport.unknownProfiles} unknown`
+      'results covered by a product support contract',
+      `${capButtonSemanticProfileCensus.productSupport.knownProfiles} confirmed / ${capButtonSemanticProfileCensus.productSupport.unknownProfiles} not yet confirmed`
     );
     expectResult(
-      'interaction conditions',
+      'interactive states checked',
       capButtonInteractionConditionLedger.length
     );
+    expectResult('forced-colors checks', capButtonForcedColorsMatrix.length);
+    expectResult('reduced-motion checks', capButtonMotionMatrix.length);
     expectResult(
-      'forced-colors observations',
-      capButtonForcedColorsMatrix.length
-    );
-    expectResult('motion observations', capButtonMotionMatrix.length);
-    expectResult(
-      'direction scenario pairs',
+      'LTR/RTL comparisons',
       capButtonDirectionObservedEquivalence.scenarioCount
     );
-    expectResult('theme fixtures', capButtonThemeFixtureNames.length);
-    expect(screen.getAllByLabelText('Production evidence')).toHaveLength(8);
+    expectResult('sample themes', capButtonThemeFixtureNames.length);
+    expect(screen.getAllByLabelText('Evidence source')).toHaveLength(8);
   });
 
   it('keeps production count literals out of the story source', () => {
@@ -74,8 +71,10 @@ describe('CapAuditIntroduction', () => {
     expect(docsSource).not.toMatch(
       /2,592|1,728|\b396\b|\b504\b|twelve results/
     );
-    expect(storySource).toContain(
-      '138,240 raw tuples and 27,840 model-admitted cases are historical'
+    expect(storySource).not.toMatch(/138,240|27,840|synthetic-model/);
+    expect(docsSource).not.toMatch(/138,240|27,840|synthetic model/);
+    expect(storySource).not.toContain(
+      'version-sensitive diagnostic, not semantic identity'
     );
   });
 });

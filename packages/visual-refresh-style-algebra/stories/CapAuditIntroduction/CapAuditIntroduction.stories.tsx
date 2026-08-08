@@ -284,7 +284,7 @@ const productionAxes = [
   },
   { label: 'Icon', values: capButtonScopedChildren },
   { label: 'Children', values: capButtonScopedChildren },
-  { label: 'Authored icon position', values: capButtonAuthoredIconPositions },
+  { label: 'Icon position', values: capButtonAuthoredIconPositions },
 ] as const;
 
 const authoredScenarioEquation = productionAxes
@@ -299,26 +299,26 @@ const environmentProjections: ReadonlyArray<{
 }> = [
   {
     value: capButtonInteractionConditionLedger.length,
-    label: 'interaction conditions',
-    detail: 'Browser-producible ordinary-color conditions.',
+    label: 'interactive states checked',
+    detail: 'States we can trigger in the browser without forced colors.',
     evidence: capButtonInteractionConditionEvidence,
   },
   {
     value: capButtonForcedColorsMatrix.length,
-    label: 'forced-colors observations',
-    detail: 'Appearance, availability, and focus projection.',
+    label: 'forced-colors checks',
+    detail: 'Appearances, disabled states, and keyboard focus.',
     evidence: capButtonForcedColorsRuntimeEvidence,
   },
   {
     value: capButtonMotionMatrix.length,
-    label: 'motion observations',
-    detail: 'Appearance, availability, and preference projection.',
+    label: 'reduced-motion checks',
+    detail: 'Appearances and disabled states with each motion preference.',
     evidence: capButtonMotionRuntimeEvidence,
   },
   {
     value: capButtonDirectionObservedEquivalence.scenarioCount,
-    label: 'direction scenario pairs',
-    detail: 'Each scenario is observed in LTR and RTL.',
+    label: 'LTR/RTL comparisons',
+    detail: 'The same Button inputs in both reading directions.',
     evidence: capButtonDirectionObservedEquivalence.evidence,
   },
 ];
@@ -326,27 +326,27 @@ const environmentProjections: ReadonlyArray<{
 const profileStages = [
   {
     value: capButtonSemanticProfileCensus.authoredScenarios,
-    label: 'basic authored scenarios',
+    label: 'input combinations',
     diagnostic: false,
   },
   {
     value: capButtonSemanticProfileCensus.normalizedStateTuples,
-    label: 'normalized state tuples',
+    label: 'distinct states after Fluent applies defaults',
     diagnostic: false,
   },
   {
     value: capButtonSemanticProfileCensus.semanticProfiles,
-    label: 'semantic style profiles',
+    label: 'distinct visual results',
     diagnostic: false,
   },
   {
     value: capButtonSemanticProfileCensus.generatedClassProfiles.count,
-    label: 'generated class profiles (diagnostic)',
+    label: 'CSS class combinations (implementation detail)',
     diagnostic: true,
   },
   {
-    value: `${capButtonSemanticProfileCensus.productSupport.knownProfiles} known / ${capButtonSemanticProfileCensus.productSupport.unknownProfiles} unknown`,
-    label: 'product-support profiles',
+    value: `${capButtonSemanticProfileCensus.productSupport.knownProfiles} confirmed / ${capButtonSemanticProfileCensus.productSupport.unknownProfiles} not yet confirmed`,
+    label: 'results covered by a product support contract',
     diagnostic: true,
   },
 ] as const;
@@ -386,9 +386,10 @@ const Evidence = ({
   const styles = useStyles();
 
   return (
-    <aside className={styles.evidence} aria-label="Production evidence">
+    <aside className={styles.evidence} aria-label="Evidence source">
       <span className={styles.evidenceTitle}>
-        Evidence · {evidence.productionBaseline} · {evidence.productionSymbol}
+        Source checked: {evidence.productionBaseline} ·{' '}
+        {evidence.productionSymbol}
       </span>
       <p className={styles.evidenceDetail}>{evidence.observation}</p>
     </aside>
@@ -528,13 +529,14 @@ export const CapAuditIntroduction = (): React.ReactElement => {
     <div className={styles.root}>
       <section className={styles.section} aria-labelledby="combination-heading">
         <h2 id="combination-heading" className={styles.heading}>
-          {formatNumber(capButtonSemanticProfileCensus.authoredScenarios)} basic
-          authored scenarios
+          {formatNumber(capButtonSemanticProfileCensus.authoredScenarios)}{' '}
+          Button input combinations
         </h2>
         <p className={styles.lede}>
-          This finite census starts with the inputs that Fluent normalization
-          and the production CAP Button style hook actually read. It varies
-          basic icon and child presence, not arbitrary React content.
+          We vary the finite Button props that affect CAP styling, including
+          appearance, size, shape, disabled state, and basic icon and text
+          content. This gives us a repeatable set of inputs to check against the
+          running component.
         </p>
         <div className={styles.axisGrid}>
           {productionAxes.map((axis) => (
@@ -556,9 +558,7 @@ export const CapAuditIntroduction = (): React.ReactElement => {
         </div>
         <div className={styles.equation}>
           <div className={styles.equationText}>
-            <span className={styles.equationLabel}>
-              Production inputs multiplied
-            </span>
+            <span className={styles.equationLabel}>Combinations checked</span>
             <span className={styles.equationDetail}>
               {authoredScenarioEquation}
             </span>
@@ -568,11 +568,11 @@ export const CapAuditIntroduction = (): React.ReactElement => {
           </span>
         </div>
         <div className={styles.validityQuestion}>
-          <h3 className={styles.questionHeading}>This is a scoped census</h3>
+          <h3 className={styles.questionHeading}>What this count includes</h3>
           <p className={styles.lede}>
-            It is not a count of every possible Button prop. Arbitrary React
-            children, slot objects, user classes, event handlers, ARIA props,
-            and theme values do not form useful finite axes for this audit.
+            This is not a count of every possible Button prop. Free-form React
+            content, event handlers, accessibility labels, custom classes, and
+            arbitrary theme values cannot be usefully counted this way.
           </p>
         </div>
         <Evidence evidence={tracedCapButtonEvidence[0]} />
@@ -580,12 +580,12 @@ export const CapAuditIntroduction = (): React.ReactElement => {
 
       <section className={styles.section} aria-labelledby="profile-heading">
         <h2 id="profile-heading" className={styles.heading}>
-          What production does with them
+          What Fluent and CAP produce
         </h2>
         <p className={styles.lede}>
-          Fluent supplies defaults and derives state before CAP selects style
-          declarations. Profiles compare effective root and icon geometry plus
-          root appearance, never generated class identity.
+          Fluent fills in defaults and derives the final Button state before CAP
+          chooses styles. We count two inputs as the same result when they
+          produce the same appearance, dimensions, and icon layout.
         </p>
         <div className={styles.resultStrip}>
           {profileStages.map((stage) => (
@@ -606,45 +606,47 @@ export const CapAuditIntroduction = (): React.ReactElement => {
           ))}
         </div>
         <p className={styles.lede}>
-          Production observations collapse the authored appearance and
-          availability inputs to{' '}
+          After Fluent applies defaults, the appearance and disabled-state
+          inputs produce{' '}
           {
             capButtonSemanticProfileCensus.semanticFactors
               .rootAppearanceAvailabilityOutputs
           }{' '}
-          effective root appearances. Across{' '}
+          distinct appearances. Combining those with{' '}
           {capButtonSemanticProfileCensus.semanticFactors.sizes} sizes,{' '}
           {capButtonSemanticProfileCensus.semanticFactors.shapes} shapes, and{' '}
           {
             capButtonSemanticProfileCensus.semanticFactors
               .geometryContentOutputs
           }{' '}
-          recurring geometry/content outputs, that produces{' '}
+          recurring size and content layouts produces{' '}
           {formatNumber(capButtonSemanticProfileCensus.semanticProfiles)}{' '}
-          semantic profiles. The pinned implementation also emits{' '}
+          distinct visual results. The current build happens to emit{' '}
           {formatNumber(
             capButtonSemanticProfileCensus.generatedClassProfiles.count
           )}{' '}
-          root-and-icon class signatures. That is a version-sensitive
-          diagnostic, not semantic identity. Product support is unknown for all{' '}
+          root-and-icon CSS class combinations. We track that number only to
+          notice changes when dependencies are updated. Generated class names
+          can change even when the Button looks and behaves exactly the same. We
+          found no product support contract covering these{' '}
           {formatNumber(
             capButtonSemanticProfileCensus.productSupport.unknownProfiles
           )}{' '}
-          profiles;{' '}
+          results, so{' '}
           {capButtonSemanticProfileCensus.productSupport.knownProfiles} are
-          known supported.
+          confirmed and the rest are not yet confirmed.
         </p>
         <Evidence evidence={capButtonAppearanceAvailabilityEvidence[0]} />
       </section>
 
       <section className={styles.section} aria-labelledby="environment-heading">
         <h2 id="environment-heading" className={styles.heading}>
-          Environment conditions are separate projections
+          Checks that depend on browser settings
         </h2>
         <p className={styles.lede}>
-          These observations test runtime context around the authored Button.
-          They are not Button axes and are not summed or multiplied into one
-          ontology count.
+          Hover, focus, forced colors, reduced motion, reading direction, and
+          theme can change the result around a Button. We test them separately
+          instead of pretending they are additional Button props.
         </p>
         <div className={styles.resultStrip}>
           {environmentProjections.map(({ value, label, detail, evidence }) => (
@@ -659,26 +661,26 @@ export const CapAuditIntroduction = (): React.ReactElement => {
             <span className={styles.resultNumber}>
               {capButtonThemeFixtureNames.length}
             </span>
-            <span className={styles.resultLabel}>theme fixtures</span>
+            <span className={styles.resultLabel}>sample themes</span>
             <span className={styles.geometryMetrics}>
               {capButtonThemeFixtureNames.join(' | ')}
             </span>
           </div>
         </div>
         <p className={styles.lede}>
-          Theme remains an open input rather than a finite Button axis. The
-          fixtures pin light and dark correspondence checks; they are not an
-          exhaustive theme census.
+          The light and dark themes are representative samples, not a complete
+          list of every theme an app can provide.
         </p>
       </section>
 
       <section className={styles.section} aria-labelledby="geometry-heading">
         <h2 id="geometry-heading" className={styles.heading}>
-          Geometry evidence
+          Side-by-side size and spacing checks
         </h2>
         <p className={styles.lede}>
-          Each production CAP Button is paired with the same Fluent Button whose
-          root and icon geometry is projected by the clean-room resolver.
+          The left side renders the real Fluent Button with CAP styles. The
+          right side uses a clean-room implementation for the same input. Their
+          size, corner radius, icon size, and spacing should match.
         </p>
         <CapFixtureProvider>
           <div className={styles.geometryCases}>
@@ -698,9 +700,7 @@ export const CapAuditIntroduction = (): React.ReactElement => {
                   <span className={styles.stepName}>{label}</span>
                   <div className={styles.geometryPair}>
                     <div className={styles.geometrySample}>
-                      <span className={styles.geometryLabel}>
-                        Production CAP
-                      </span>
+                      <span className={styles.geometryLabel}>Fluent + CAP</span>
                       <Button
                         appearance="primary"
                         size={scenario.size}
@@ -718,7 +718,7 @@ export const CapAuditIntroduction = (): React.ReactElement => {
                     </div>
                     <div className={styles.geometrySample}>
                       <span className={styles.geometryLabel}>
-                        Clean-room projection
+                        Clean-room implementation
                       </span>
                       <Button
                         appearance="primary"
@@ -729,7 +729,7 @@ export const CapAuditIntroduction = (): React.ReactElement => {
                         style={rootGeometryStyle(contract.geometry.root)}
                         aria-label={
                           scenario.content.children === 'absent'
-                            ? `${label}, clean-room projection`
+                            ? `${label}, clean-room implementation`
                             : undefined
                         }
                       >
@@ -774,38 +774,28 @@ export const CapAuditIntroduction = (): React.ReactElement => {
           ))}
         </div>
         <p className={styles.lede}>
-          {capButtonMotionMatrix.length} observations cover the exported
-          appearance, availability, and preference projection. These factors are
-          not added to the authored scenario census. The pinned evidence is{' '}
+          These {capButtonMotionMatrix.length} checks cover every appearance,
+          disabled state, and motion preference in scope. They are kept separate
+          from the Button input count above. The checks ran in{' '}
           {capButtonInteractionBrowserBaseline.engine}{' '}
           {capButtonInteractionBrowserBaseline.version} through Playwright{' '}
           {capButtonInteractionBrowserBaseline.playwright} on{' '}
-          {capButtonInteractionBrowserBaseline.platform}. Playwright media
-          emulation confirms query matching and computed declarations, not a
-          real operating-system preference, other browser engines, perceived
-          animation, or product support. Product support remains unknown.
+          {capButtonInteractionBrowserBaseline.platform}. Playwright confirms
+          that Chromium selects the expected media query and CSS values. It does
+          not test a real operating-system setting, other browsers, how the
+          motion feels to a person, or product support.
         </p>
         <Evidence evidence={capButtonMotionRuntimeEvidence} />
       </section>
 
-      <section className={styles.section} aria-labelledby="history-heading">
-        <h2 id="history-heading" className={styles.heading}>
-          Historical model boundary
-        </h2>
-        <p className={styles.lede}>
-          138,240 raw tuples and 27,840 model-admitted cases are historical
-          synthetic-model results. Neither is a production CAP Button count.
-        </p>
-      </section>
-
       <section className={styles.section} aria-labelledby="audit-path-heading">
         <h2 id="audit-path-heading" className={styles.heading}>
-          How do we determine which are valid?
+          What can this audit conclude?
         </h2>
         <p className={styles.lede}>
-          First, define what valid means. Public props show what can be
-          expressed, the running component shows what happens, and product
-          intent shows what is deliberately supported.
+          The public API tells us what an app can request. The running component
+          tells us what the current code does. Only a product contract can tell
+          us which results are deliberately supported.
         </p>
         <div className={styles.auditPath}>
           {auditSteps.map((step, index) => (
