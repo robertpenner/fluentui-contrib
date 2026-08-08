@@ -99,6 +99,7 @@ export const surfaceColorProperties = [
  * `appearance` must not move the button, only recolour it.
  */
 export const surfaceGeometryProperties = [
+  'padding',
   'padding-top',
   'padding-right',
   'padding-bottom',
@@ -117,6 +118,8 @@ export const surfaceGeometryProperties = [
   'font-size',
   'font-weight',
   'line-height',
+  'margin-left',
+  'margin-right',
 ] as const;
 
 /** Narrows a surface to the given properties, dropping those never declared. */

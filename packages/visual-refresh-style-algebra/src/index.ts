@@ -80,8 +80,11 @@ export type {
 export { capButtonScenarios } from './cap-model/button/enumerateCapButtonScenarios';
 export type {
   CapButtonAnatomySlot,
+  CapButtonGeometry,
+  CapButtonIconGeometry,
   CapButtonNormalizedState,
   CapButtonObservation,
+  CapButtonRootGeometry,
   CapButtonSemanticObservation,
   CapButtonStyleSelections,
 } from './cap-model/button/CapButtonObservation';
@@ -90,6 +93,7 @@ export { resolveCleanRoomCapButton } from './cap-model/button/resolveCleanRoomCa
 export { compareCapButton } from './cap-model/button/compareCapButton';
 export type { CapButtonDifference } from './cap-model/button/compareCapButton';
 export {
+  capButtonGeometryEvidence,
   capButtonProductionBaseline,
   tracedCapButtonEvidence,
 } from './cap-model/button/evidence';

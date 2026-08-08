@@ -41,10 +41,38 @@ export interface CapButtonStyleSelections {
   };
 }
 
+export interface CapButtonRootGeometry {
+  readonly paddingTop: string;
+  readonly paddingRight: string;
+  readonly paddingBottom: string;
+  readonly paddingLeft: string;
+  readonly borderTopLeftRadius: string;
+  readonly borderTopRightRadius: string;
+  readonly borderBottomRightRadius: string;
+  readonly borderBottomLeftRadius: string;
+  readonly minWidth?: string;
+  readonly maxWidth?: string;
+  readonly fontSize: string;
+  readonly fontWeight: string;
+  readonly lineHeight: string;
+}
+
+export interface CapButtonIconGeometry {
+  readonly fontSize: string;
+  readonly marginLeft?: string;
+  readonly marginRight?: string;
+}
+
+export interface CapButtonGeometry {
+  readonly root: CapButtonRootGeometry;
+  readonly icon?: CapButtonIconGeometry;
+}
+
 export interface CapButtonSemanticObservation {
   readonly normalized: CapButtonNormalizedState;
   readonly anatomy: readonly CapButtonAnatomySlot[];
   readonly styleSelections: CapButtonStyleSelections;
+  readonly geometry: CapButtonGeometry;
 }
 
 export interface CapButtonObservation extends CapButtonSemanticObservation {

@@ -6,8 +6,15 @@ import {
   useButton_unstable,
 } from '@fluentui/react-components';
 import { CAP_STYLE_HOOKS } from '@fluentui-contrib/react-cap-theme';
+import { capTheme } from '../../../fixtures/capButtonFamily';
+import {
+  capGeometry,
+  observeCapSurface,
+} from '../../../observation/capSurface';
+import { resolveThemeValues } from '../../../observation/observeButtonSurface';
 import type {
   CapButtonAnatomySlot,
+  CapButtonGeometry,
   CapButtonNormalizedState,
   CapButtonObservation,
   CapButtonStyleSelections,
@@ -45,6 +52,8 @@ const observationIndexAttribute = 'data-cap-model-observation-index';
 const normalizedAttribute = 'data-cap-model-normalized';
 const styleSelectionsAttribute = 'data-cap-model-style-selections';
 const slotAttribute = 'data-cap-model-slot';
+
+const capThemeValues = capTheme as unknown as Readonly<Record<string, string>>;
 
 const classNames = (className: string | undefined): ReadonlySet<string> =>
   new Set(className?.split(/\s+/).filter(Boolean));
@@ -199,6 +208,98 @@ const observeAnatomy = (
   );
 };
 
+const normalizedGeometryDeclarations = (
+  element: HTMLElement
+): Readonly<Record<string, string>> => {
+  const effective = observeCapSurface(element).effective.ordinary.rest;
+  const themeResolved = resolveThemeValues(effective, capThemeValues);
+  const customProperties = Object.fromEntries(
+    Object.entries(themeResolved)
+      .filter(([property]) => property.startsWith('--'))
+      .map(([property, value]) => [property.slice(2), value])
+  );
+
+  const declarations = resolveThemeValues(capGeometry(effective), {
+    ...capThemeValues,
+    ...customProperties,
+  });
+  const padding = declarations.padding?.split(/\s+/);
+
+  if (padding === undefined) {
+    return declarations;
+  }
+
+  const [top, right = top, bottom = top, left = right] = padding;
+
+  return {
+    ...declarations,
+    'padding-top': declarations['padding-top'] ?? top,
+    'padding-right': declarations['padding-right'] ?? right,
+    'padding-bottom': declarations['padding-bottom'] ?? bottom,
+    'padding-left': declarations['padding-left'] ?? left,
+  };
+};
+
+const requiredDeclaration = (
+  declarations: Readonly<Record<string, string>>,
+  property: string
+): string => {
+  const value = declarations[property];
+
+  if (value === undefined) {
+    throw new Error(`Production Button geometry is missing ${property}`);
+  }
+
+  return value;
+};
+
+const radiusDeclaration = (
+  declarations: Readonly<Record<string, string>>,
+  property: string
+): string =>
+  declarations[property] ?? requiredDeclaration(declarations, 'border-radius');
+
+const observeGeometry = (button: HTMLElement): CapButtonGeometry => {
+  const root = normalizedGeometryDeclarations(button);
+  const iconElement = button.querySelector<HTMLElement>(
+    `[${slotAttribute}="icon"]`
+  )?.parentElement;
+  const icon = iconElement
+    ? normalizedGeometryDeclarations(iconElement)
+    : undefined;
+
+  return {
+    root: {
+      paddingTop: requiredDeclaration(root, 'padding-top'),
+      paddingRight: requiredDeclaration(root, 'padding-right'),
+      paddingBottom: requiredDeclaration(root, 'padding-bottom'),
+      paddingLeft: requiredDeclaration(root, 'padding-left'),
+      borderTopLeftRadius: radiusDeclaration(root, 'border-top-left-radius'),
+      borderTopRightRadius: radiusDeclaration(root, 'border-top-right-radius'),
+      borderBottomRightRadius: radiusDeclaration(
+        root,
+        'border-bottom-right-radius'
+      ),
+      borderBottomLeftRadius: radiusDeclaration(
+        root,
+        'border-bottom-left-radius'
+      ),
+      minWidth: root['min-width'],
+      maxWidth: root['max-width'],
+      fontSize: requiredDeclaration(root, 'font-size'),
+      fontWeight: requiredDeclaration(root, 'font-weight'),
+      lineHeight: requiredDeclaration(root, 'line-height'),
+    },
+    icon: icon
+      ? {
+          fontSize: requiredDeclaration(icon, 'font-size'),
+          marginLeft: icon['margin-left'],
+          marginRight: icon['margin-right'],
+        }
+      : undefined,
+  };
+};
+
 export const observeCapButtonProductionScenarios = (
   scenarios: readonly CapButtonScenario[],
   conditions: CapButtonObservationConditions
@@ -243,6 +344,7 @@ export const observeCapButtonProductionScenarios = (
         button,
         styleSelectionsAttribute
       ),
+      geometry: observeGeometry(button),
     };
   });
 

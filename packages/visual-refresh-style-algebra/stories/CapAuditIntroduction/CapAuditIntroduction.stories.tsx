@@ -1,11 +1,22 @@
 import * as React from 'react';
-import { makeStyles, mergeClasses, tokens } from '@fluentui/react-components';
+import {
+  Button,
+  type ButtonProps,
+  makeStyles,
+  mergeClasses,
+  tokens,
+} from '@fluentui/react-components';
+import { CheckmarkCircleRegular } from '@fluentui/react-icons';
 import {
   buttonContentGroundingCensus,
   capButtonAppearances,
+  type CapButtonGeometry,
+  type CapButtonScenario,
+  CapFixtureProvider,
   productionButtonShapes,
   productionButtonSizes,
   productionButtonStyleCensus,
+  resolveCleanRoomCapButton,
 } from '../../src';
 
 const useStyles = makeStyles({
@@ -165,6 +176,39 @@ const useStyles = makeStyles({
     color: tokens.colorNeutralForeground2,
     fontSize: tokens.fontSizeBase200,
   },
+  geometryCases: {
+    display: 'grid',
+    gap: tokens.spacingVerticalM,
+  },
+  geometryCase: {
+    display: 'grid',
+    gap: tokens.spacingVerticalM,
+    padding: tokens.spacingHorizontalL,
+    borderTop: `${tokens.strokeWidthThick} solid ${tokens.colorPaletteGreenBorder1}`,
+    backgroundColor: tokens.colorNeutralBackground2,
+  },
+  geometryPair: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'end',
+    gap: tokens.spacingHorizontalXL,
+  },
+  geometrySample: {
+    display: 'grid',
+    justifyItems: 'start',
+    gap: tokens.spacingVerticalXS,
+  },
+  geometryLabel: {
+    color: tokens.colorNeutralForeground2,
+    fontSize: tokens.fontSizeBase200,
+    fontWeight: tokens.fontWeightSemibold,
+  },
+  geometryMetrics: {
+    color: tokens.colorNeutralForeground3,
+    fontFamily: tokens.fontFamilyMonospace,
+    fontSize: tokens.fontSizeBase200,
+    lineHeight: tokens.lineHeightBase300,
+  },
 });
 
 const formatNumber = (value: number): string => value.toLocaleString('en-US');
@@ -236,6 +280,121 @@ const auditSteps = [
     detail: 'Use a product contract or decision to establish intended support.',
   },
 ] as const;
+
+const geometryConditions = {
+  hover: false,
+  active: false,
+  focusVisible: false,
+  forcedColors: false,
+  prefersReducedMotion: false,
+  direction: 'ltr',
+} as const;
+
+const geometryEvidenceCases: ReadonlyArray<{
+  readonly label: string;
+  readonly scenario: CapButtonScenario;
+}> = [
+  {
+    label: 'Small circular, icon only',
+    scenario: {
+      appearance: 'primary',
+      size: 'small',
+      shape: 'circular',
+      disabled: false,
+      disabledFocusable: false,
+      content: {
+        icon: 'present',
+        children: 'absent',
+        iconPosition: 'omitted',
+      },
+    },
+  },
+  {
+    label: 'Medium rounded, icon before',
+    scenario: {
+      appearance: 'primary',
+      size: 'medium',
+      shape: 'rounded',
+      disabled: false,
+      disabledFocusable: false,
+      content: {
+        icon: 'present',
+        children: 'present',
+        iconPosition: 'before',
+      },
+    },
+  },
+  {
+    label: 'Large square, icon after',
+    scenario: {
+      appearance: 'primary',
+      size: 'large',
+      shape: 'square',
+      disabled: false,
+      disabledFocusable: false,
+      content: {
+        icon: 'present',
+        children: 'present',
+        iconPosition: 'after',
+      },
+    },
+  },
+];
+
+const rootGeometryStyle = (
+  geometry: CapButtonGeometry['root']
+): React.CSSProperties => ({
+  paddingTop: geometry.paddingTop,
+  paddingRight: geometry.paddingRight,
+  paddingBottom: geometry.paddingBottom,
+  paddingLeft: geometry.paddingLeft,
+  borderTopLeftRadius: geometry.borderTopLeftRadius,
+  borderTopRightRadius: geometry.borderTopRightRadius,
+  borderBottomRightRadius: geometry.borderBottomRightRadius,
+  borderBottomLeftRadius: geometry.borderBottomLeftRadius,
+  minWidth: geometry.minWidth,
+  maxWidth: geometry.maxWidth,
+  fontSize: geometry.fontSize,
+  fontWeight: Number(geometry.fontWeight),
+  lineHeight: geometry.lineHeight,
+});
+
+const iconForScenario = (
+  scenario: CapButtonScenario,
+  geometry?: CapButtonGeometry['icon']
+): ButtonProps['icon'] =>
+  scenario.content.icon === 'present'
+    ? {
+        children: <CheckmarkCircleRegular />,
+        style: geometry
+          ? {
+              fontSize: geometry.fontSize,
+              marginLeft: geometry.marginLeft,
+              marginRight: geometry.marginRight,
+            }
+          : undefined,
+      }
+    : undefined;
+
+const contentForScenario = (scenario: CapButtonScenario): React.ReactNode =>
+  scenario.content.children === 'present' ? 'Action' : undefined;
+
+const geometryMetrics = (geometry: CapButtonGeometry): string => {
+  const root = geometry.root;
+  const icon = geometry.icon;
+
+  return [
+    `padding ${root.paddingTop} ${root.paddingRight} ${root.paddingBottom} ${root.paddingLeft}`,
+    `radius ${root.borderTopLeftRadius}`,
+    root.minWidth ? `width ${root.minWidth}` : undefined,
+    icon ? `icon ${icon.fontSize}` : undefined,
+    icon?.marginLeft ?? icon?.marginRight
+      ? `spacing ${icon.marginLeft ?? icon.marginRight}`
+      : undefined,
+  ]
+    .filter(Boolean)
+    .join(' | ');
+};
 
 export const CapAuditIntroduction = (): React.ReactElement => {
   const styles = useStyles();
@@ -367,6 +526,80 @@ export const CapAuditIntroduction = (): React.ReactElement => {
             </span>
           </div>
         </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="geometry-heading">
+        <h2 id="geometry-heading" className={styles.heading}>
+          Geometry evidence
+        </h2>
+        <p className={styles.lede}>
+          Each production CAP Button is paired with the same Fluent Button whose
+          root and icon geometry is projected by the clean-room resolver.
+        </p>
+        <CapFixtureProvider>
+          <div className={styles.geometryCases}>
+            {geometryEvidenceCases.map(({ label, scenario }) => {
+              const contract = resolveCleanRoomCapButton(
+                scenario,
+                geometryConditions
+              );
+              const iconPosition =
+                scenario.content.iconPosition === 'omitted'
+                  ? undefined
+                  : scenario.content.iconPosition;
+
+              return (
+                <article className={styles.geometryCase} key={label}>
+                  <span className={styles.stepName}>{label}</span>
+                  <div className={styles.geometryPair}>
+                    <div className={styles.geometrySample}>
+                      <span className={styles.geometryLabel}>
+                        Production CAP
+                      </span>
+                      <Button
+                        appearance="primary"
+                        size={scenario.size}
+                        shape={scenario.shape}
+                        icon={iconForScenario(scenario)}
+                        iconPosition={iconPosition}
+                        aria-label={
+                          scenario.content.children === 'absent'
+                            ? label
+                            : undefined
+                        }
+                      >
+                        {contentForScenario(scenario)}
+                      </Button>
+                    </div>
+                    <div className={styles.geometrySample}>
+                      <span className={styles.geometryLabel}>
+                        Clean-room projection
+                      </span>
+                      <Button
+                        appearance="primary"
+                        size={scenario.size}
+                        shape={scenario.shape}
+                        icon={iconForScenario(scenario, contract.geometry.icon)}
+                        iconPosition={iconPosition}
+                        style={rootGeometryStyle(contract.geometry.root)}
+                        aria-label={
+                          scenario.content.children === 'absent'
+                            ? `${label}, clean-room projection`
+                            : undefined
+                        }
+                      >
+                        {contentForScenario(scenario)}
+                      </Button>
+                    </div>
+                  </div>
+                  <span className={styles.geometryMetrics}>
+                    {geometryMetrics(contract.geometry)}
+                  </span>
+                </article>
+              );
+            })}
+          </div>
+        </CapFixtureProvider>
       </section>
 
       <section className={styles.section} aria-labelledby="audit-path-heading">
