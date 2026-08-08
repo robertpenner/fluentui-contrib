@@ -1,5 +1,5 @@
-import { Meta, Stories, Title } from '@storybook/addon-docs/blocks';
-import * as GriffelDiagnosticsStories from './index.stories';
+import { Meta, Stories, Title } from "@storybook/addon-docs/blocks";
+import * as GriffelDiagnosticsStories from "./index.stories";
 
 <Meta of={GriffelDiagnosticsStories} />
 
@@ -25,11 +25,41 @@ dropped declaration carry?
 The CAP Button focus indicator declared its boundary colour three times using the
 `borderColor` shorthand:
 
-| Where                          | Declaration                      | Guarantee lost                                                                                    |
-| ------------------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Focus indicator, resting       | `borderColor: colorStrokeFocus2` | The focus ring's inner boundary kept the resting stroke colour.                                   |
-| Focus indicator, hover         | `borderColor: colorStrokeFocus2` | Hovering a focused button did not hold the focus boundary.                                        |
-| Focus indicator, forced colors | `borderColor: Highlight`         | Under `forced-colors: active`, the focused boundary stayed `ButtonBorder` instead of `Highlight`. |
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Where</th>
+      <th scope="col">Declaration</th>
+      <th scope="col">Guarantee lost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Focus indicator, resting</td>
+      <td>
+        <code>borderColor: colorStrokeFocus2</code>
+      </td>
+      <td>The focus ring's inner boundary kept the resting stroke colour.</td>
+    </tr>
+    <tr>
+      <td>Focus indicator, hover</td>
+      <td>
+        <code>borderColor: colorStrokeFocus2</code>
+      </td>
+      <td>Hovering a focused button did not hold the focus boundary.</td>
+    </tr>
+    <tr>
+      <td>Focus indicator, forced colors</td>
+      <td>
+        <code>borderColor: Highlight</code>
+      </td>
+      <td>
+        Under <code>forced-colors: active</code>, the focused boundary stayed{" "}
+        <code>ButtonBorder</code> instead of <code>Highlight</code>.
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 Each was replaced with `shorthands.borderColor(...)`, which expands to the four
 longhand properties Griffel does resolve. The intended focus, boundary, selected,
