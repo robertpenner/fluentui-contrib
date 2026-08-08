@@ -103,8 +103,14 @@ export interface CapButtonSemanticObservation {
   readonly rootAppearance: CapButtonRootAppearance;
 }
 
+export interface CapButtonGeneratedClassSignature {
+  readonly root: string;
+  readonly icon?: string;
+}
+
 export interface CapButtonObservation extends CapButtonSemanticObservation {
   readonly productionBaseline: string;
   readonly scenario: CapButtonScenario;
   readonly conditions: CapButtonObservationConditions;
+  readonly generatedClassSignature?: CapButtonGeneratedClassSignature;
 }

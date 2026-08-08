@@ -57,6 +57,8 @@ export const tracedCapButtonConditions: CapButtonObservationConditions = {
 const observationIndexAttribute = 'data-cap-model-observation-index';
 const normalizedAttribute = 'data-cap-model-normalized';
 const styleSelectionsAttribute = 'data-cap-model-style-selections';
+const generatedClassSignatureAttribute =
+  'data-cap-model-generated-class-signature';
 const slotAttribute = 'data-cap-model-slot';
 
 const capThemeValues = capTheme as unknown as Readonly<Record<string, string>>;
@@ -183,6 +185,10 @@ const ProductionObservationProbe = (
     [styleSelectionsAttribute]: JSON.stringify(
       observeStyleSelections(scenario, state)
     ),
+    [generatedClassSignatureAttribute]: JSON.stringify({
+      root: state.root.className,
+      icon: state.icon?.className,
+    }),
   });
 
   return renderButton_unstable(state);
@@ -412,6 +418,10 @@ export const observeCapButtonProductionScenarios = (
       rootAppearance: observeRootAppearance(
         rootObservation,
         styleSelections.root.focus
+      ),
+      generatedClassSignature: parseAttribute(
+        button,
+        generatedClassSignatureAttribute
       ),
     };
   });

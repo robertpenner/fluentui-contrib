@@ -13,8 +13,10 @@ it is **not a production-derived CAP Button census**.
 
 A separate, narrower production census is now executable. For the basic finite
 inputs read by Fluent normalization and the CAP Button style hook, it observes
-2,592 authored scenarios, 1,728 normalized state tuples, and 504 distinct CAP
-style-selection profiles for the base CAP Button hook.
+2,592 authored scenarios, 1,728 normalized state tuples, and 396 distinct
+semantic profiles for the base CAP Button hook. It separately records 504
+generated root-and-icon class signatures as a version-sensitive diagnostic.
+Product support remains unknown.
 
 The clean-room model declares eleven arrays, then multiplies their lengths:
 
@@ -107,7 +109,7 @@ code directly defines this exact Cartesian product:
 The remaining mismatches reinforce the same conclusion. They are not needed to
 establish it.
 
-## Production-derived Button style census
+## Production-derived Button semantic census
 
 The corrected census starts from production Button inputs rather than the
 eleven clean-room dimensions:
@@ -136,29 +138,41 @@ position values to two normalized values:
 6 x 3 x 3 x 2 x 2 x 2 x 2 x 2 = 1,728
 ```
 
-The CAP hook then canonicalizes more states through its actual class-selection
-conditions:
+The semantic projection is exactly effective `geometry.root`, optional
+`geometry.icon`, and `rootAppearance`. Normalization, anatomy, style-selection
+labels, generated classes, scenario identity, and provenance remain separate
+context and do not participate in semantic profile identity.
 
-- The four `disabled` and `disabledFocusable` pairs produce three class sets for
-  primary and tint, and two class sets for each other appearance.
-- Basic icon and child inputs produce four recurring style effects: base,
-  icon-only, text-and-icon before, and text-and-icon after.
+Production observations expose two further equivalence reductions:
 
-That produces 14 appearance-and-availability branches and 504 style profiles:
+- The 24 appearance and authored availability inputs produce 11 effective root
+  appearances.
+- The eight normalized icon/child/position states produce four effective
+  geometry/content outputs: base, icon-only, text-and-icon before, and
+  text-and-icon after.
+
+That produces 396 semantic profiles:
 
 ```text
-((2 primary appearances x 3) + (4 other appearances x 2))
-   x 3 sizes x 3 shapes x 4 content effects
-= 14 x 3 x 3 x 4
-= 504
+11 root appearance/availability outputs
+   x 3 sizes x 3 shapes x 4 geometry/content outputs
+= 396
 ```
 
-[productionButtonStyleCensus.ts](../src/grounding/productionButtonStyleCensus.ts)
-records the factors. Its component-level integration test,
-[productionButtonStyleCensus.test.tsx](../src/grounding/productionButtonStyleCensus.test.tsx),
+[semanticProfiles.ts](../src/cap-model/button/semanticProfiles.ts) defines the
+stable projection, comparator, typed observed-equivalence evidence, and census
+builder. Its production integration test,
+[semanticProfiles.test.tsx](../src/cap-model/button/tests/semanticProfiles.test.tsx),
 runs all 2,592 authored scenarios through real Fluent normalization and
-`CAP_STYLE_HOOKS.useButtonStyles_unstable`. The test observes exactly 1,728
-normalized tuples and 504 distinct root-and-icon class signatures.
+`CAP_STYLE_HOOKS.useButtonStyles_unstable`. It observes exactly 1,728 normalized
+tuples and 396 semantic profiles. Every `1,728 -> 396` reduction is attributed
+to an observed-equivalence group whose members have equal semantic projections.
+
+[productionButtonGeneratedClassCensus.ts](../src/grounding/productionButtonGeneratedClassCensus.ts)
+and its
+[integration test](../src/grounding/productionButtonGeneratedClassCensus.test.tsx)
+retain the old count of 504 generated root-and-icon class-selection profiles.
+That number is an implementation-version diagnostic, not semantic identity.
 
 This remains a deliberately finite style census. It does not claim to count
 arbitrary React children, slot objects, user classes, event handlers, ARIA
@@ -201,10 +215,12 @@ with a research validity predicate in [validity.ts](../src/domain/validity.ts).
 3. Exhaustive clean-room enumeration produces exactly 138,240 tuples.
 4. The clean-room validity predicate admits exactly 27,840 of those tuples.
 5. A production integration test constructs all 2,592 scoped basic Button
-   scenarios and observes 1,728 normalized tuples and 504 CAP class signatures.
-6. The content slice maps nine of its twelve authored scenarios into four
+   scenarios and observes 1,728 normalized tuples and 396 semantic profiles.
+6. The same baseline produces 504 generated class signatures as a separate,
+   version-sensitive diagnostic.
+7. The content slice maps nine of its twelve authored scenarios into four
    canonical content configurations; three render empty.
-7. Production source supports several concepts represented by the model,
+8. Production source supports several concepts represented by the model,
    including CAP appearances, Button size, interaction styles, forced-colors
    handling, composite Button variants, and provider direction.
 
@@ -252,6 +268,8 @@ the expected class signatures.
 ## Storybook implication
 
 The introductory page may accurately report **2,592 scoped authored scenarios,
-1,728 normalized tuples, and 504 observed style profiles** for the basic
-production CAP Button census. It must retain that finite scope and must not call
-138,240 a production CAP count or 504 a product-support count.
+1,728 normalized tuples, and 396 observed semantic profiles** for the basic
+production CAP Button census. It may show **504 generated class-selection
+profiles** only as a version-sensitive diagnostic. It must retain that finite
+scope and must not call 138,240 a production CAP count or infer product support
+from either observed profile count.

@@ -82,6 +82,7 @@ export type {
   CapButtonAnatomySlot,
   CapButtonBorderColors,
   CapButtonFocusOutline,
+  CapButtonGeneratedClassSignature,
   CapButtonGeometry,
   CapButtonIconGeometry,
   CapButtonNormalizedState,
@@ -97,6 +98,21 @@ export { resolveCleanRoomCapButton } from './cap-model/button/resolveCleanRoomCa
 export { compareCapButton } from './cap-model/button/compareCapButton';
 export type { CapButtonDifference } from './cap-model/button/compareCapButton';
 export {
+  capButtonSemanticProfileCensus,
+  capButtonSemanticProfileKey,
+  capButtonSemanticProfileProjection,
+  compareCapButtonSemanticProfiles,
+  createCapButtonSemanticProfileCensus,
+  projectCapButtonSemanticProfile,
+} from './cap-model/button/semanticProfiles';
+export type {
+  CapButtonObservedEquivalenceEvidence,
+  CapButtonSemanticProfile,
+  CapButtonSemanticProfileCensus,
+  CapButtonSemanticProfileDifference,
+  CapButtonSemanticProfileGroup,
+} from './cap-model/button/semanticProfiles';
+export {
   capButtonAppearanceAvailabilityEvidence,
   capButtonGeometryEvidence,
   capButtonProductionBaseline,
@@ -110,11 +126,11 @@ export type {
 export {
   productionBooleanValues,
   productionButtonAvailabilityInputs,
+  productionButtonGeneratedClassCensus,
   productionButtonShapes,
   productionButtonSizes,
-  productionButtonStyleCensus,
   productionIconPositionInputs,
-} from './grounding/productionButtonStyleCensus';
+} from './grounding/productionButtonGeneratedClassCensus';
 export type { ButtonAnatomy, ButtonSlot } from './domain/ButtonAnatomy';
 export type {
   ButtonStyleContract,

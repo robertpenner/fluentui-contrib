@@ -40,10 +40,7 @@ const appearanceAvailabilityScenarios = capButtonAppearances.flatMap(
 );
 
 const outputSignature = (observation: CapButtonObservation): string =>
-  JSON.stringify({
-    appearance: observation.normalized.appearance,
-    rootAppearance: observation.rootAppearance,
-  });
+  JSON.stringify(observation.rootAppearance);
 
 const mutateBorder = (
   production: CapButtonObservation,
@@ -90,7 +87,7 @@ describe('CAP Button appearance and availability parity', () => {
     }
   });
 
-  it('derives exactly 14 semantic output branches from production equivalence', () => {
+  it('derives exactly 11 root appearance outputs from production equivalence', () => {
     const production = observeCapButtonProductionScenarios(
       appearanceAvailabilityScenarios,
       tracedCapButtonConditions
@@ -104,12 +101,7 @@ describe('CAP Button appearance and availability parity', () => {
       groups.set(signature, group);
     }
 
-    expect(groups.size).toBe(14);
-    expect(
-      [...groups.values()]
-        .map((group) => group.length)
-        .sort((left, right) => left - right)
-    ).toEqual([1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3]);
+    expect(groups.size).toBe(11);
 
     for (const group of groups.values()) {
       const [reference, ...equivalent] = group;

@@ -46,9 +46,10 @@ const appearanceAvailabilityProfileCount =
   primaryAppearanceCount * primaryAvailabilityProfileCount +
   nonPrimaryAppearanceCount * nonPrimaryAvailabilityProfileCount;
 
-export const productionButtonStyleCensus = {
+export const productionButtonGeneratedClassCensus = {
   scope:
-    'basic Button inputs read by Fluent normalization and CAP style selection',
+    'version-sensitive generated root and icon class selections for basic Button inputs',
+  status: 'version-sensitive-diagnostic',
   factors: {
     appearances: capButtonAppearances.length,
     sizes: productionButtonSizes.length,
@@ -59,19 +60,19 @@ export const productionButtonStyleCensus = {
     childrenPresence: productionBooleanValues.length,
     authoredIconPositions: productionIconPositionInputs.length,
   },
-  authoredScenariosPerVariant:
+  authoredScenarios:
     capButtonAppearances.length *
     productionButtonSizes.length *
     productionButtonShapes.length *
     productionButtonAvailabilityInputs.length *
     buttonContentScenarios.length,
-  normalizedStateTuplesPerVariant:
+  normalizedStateTuples:
     capButtonAppearances.length *
     productionButtonSizes.length *
     productionButtonShapes.length *
     productionButtonAvailabilityInputs.length *
     normalizedContentStateCount,
-  styleProfilesPerVariant:
+  generatedClassSelectionProfiles:
     appearanceAvailabilityProfileCount *
     productionButtonSizes.length *
     productionButtonShapes.length *

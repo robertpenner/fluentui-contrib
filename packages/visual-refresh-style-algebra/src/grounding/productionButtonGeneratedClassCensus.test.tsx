@@ -16,10 +16,10 @@ import {
 } from './contentAnatomyGrounding';
 import {
   productionButtonAvailabilityInputs,
+  productionButtonGeneratedClassCensus,
   productionButtonShapes,
   productionButtonSizes,
-  productionButtonStyleCensus,
-} from './productionButtonStyleCensus';
+} from './productionButtonGeneratedClassCensus';
 
 const contentProps = (scenario: ButtonContentScenario): ButtonProps => ({
   children: scenario.children === 'present' ? 'Action' : undefined,
@@ -28,7 +28,7 @@ const contentProps = (scenario: ButtonContentScenario): ButtonProps => ({
     scenario.iconPosition === 'omitted' ? undefined : scenario.iconPosition,
 });
 
-type StyleProfileProbeProps = {
+type GeneratedClassProfileProbeProps = {
   readonly appearance: CapButtonAppearance;
   readonly size: (typeof productionButtonSizes)[number];
   readonly shape: (typeof productionButtonShapes)[number];
@@ -37,8 +37,8 @@ type StyleProfileProbeProps = {
   readonly content: ButtonContentScenario;
 };
 
-const StyleProfileProbe = (
-  props: StyleProfileProbeProps
+const GeneratedClassProfileProbe = (
+  props: GeneratedClassProfileProbeProps
 ): React.ReactElement => {
   const { appearance, size, shape, disabled, disabledFocusable, content } =
     props;
@@ -58,7 +58,7 @@ const StyleProfileProbe = (
 
   return (
     <output
-      data-testid="style-profile"
+      data-testid="generated-class-profile"
       data-scenario={content.id}
       data-normalized={JSON.stringify({
         appearance: state.appearance,
@@ -79,16 +79,21 @@ const StyleProfileProbe = (
   );
 };
 
-describe('production CAP Button style census', () => {
+describe('production CAP Button generated class census', () => {
   it('derives the finite scenario counts from production-shaped inputs', () => {
-    expect(productionButtonStyleCensus.authoredScenariosPerVariant).toBe(2_592);
-    expect(productionButtonStyleCensus.normalizedStateTuplesPerVariant).toBe(
+    expect(productionButtonGeneratedClassCensus.authoredScenarios).toBe(2_592);
+    expect(productionButtonGeneratedClassCensus.normalizedStateTuples).toBe(
       1_728
     );
-    expect(productionButtonStyleCensus.styleProfilesPerVariant).toBe(504);
+    expect(
+      productionButtonGeneratedClassCensus.generatedClassSelectionProfiles
+    ).toBe(504);
+    expect(productionButtonGeneratedClassCensus.status).toBe(
+      'version-sensitive-diagnostic'
+    );
   });
 
-  it('observes the full normalization and style-profile census from the production CAP hook', () => {
+  it('observes generated class-selection profiles from the production CAP hook', () => {
     render(
       <>
         {capButtonAppearances.flatMap((appearance) =>
@@ -97,7 +102,7 @@ describe('production CAP Button style census', () => {
               productionButtonAvailabilityInputs.flatMap(
                 ({ disabled, disabledFocusable }) =>
                   buttonContentScenarios.map((content) => (
-                    <StyleProfileProbe
+                    <GeneratedClassProfileProbe
                       key={`${appearance}-${size}-${shape}-${disabled}-${disabledFocusable}-${content.id}`}
                       appearance={appearance}
                       size={size}
@@ -114,7 +119,7 @@ describe('production CAP Button style census', () => {
       </>
     );
 
-    const probes = screen.getAllByTestId('style-profile');
+    const probes = screen.getAllByTestId('generated-class-profile');
     const normalizedStates = probes.map((element) =>
       element.getAttribute('data-normalized')
     );
@@ -123,13 +128,13 @@ describe('production CAP Button style census', () => {
     );
 
     expect(probes).toHaveLength(
-      productionButtonStyleCensus.authoredScenariosPerVariant
+      productionButtonGeneratedClassCensus.authoredScenarios
     );
     expect(new Set(normalizedStates).size).toBe(
-      productionButtonStyleCensus.normalizedStateTuplesPerVariant
+      productionButtonGeneratedClassCensus.normalizedStateTuples
     );
     expect(new Set(signatures).size).toBe(
-      productionButtonStyleCensus.styleProfilesPerVariant
+      productionButtonGeneratedClassCensus.generatedClassSelectionProfiles
     );
   });
 });

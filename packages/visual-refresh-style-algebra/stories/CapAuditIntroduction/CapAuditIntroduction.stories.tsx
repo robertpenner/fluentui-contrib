@@ -9,13 +9,14 @@ import {
 import { CheckmarkCircleRegular } from '@fluentui/react-icons';
 import {
   buttonContentGroundingCensus,
+  capButtonSemanticProfileCensus,
   capButtonAppearances,
   type CapButtonGeometry,
   type CapButtonScenario,
   CapFixtureProvider,
+  productionButtonGeneratedClassCensus,
   productionButtonShapes,
   productionButtonSizes,
-  productionButtonStyleCensus,
   resolveCleanRoomCapButton,
 } from '../../src';
 
@@ -241,16 +242,29 @@ const productionAxes = [
 
 const profileStages = [
   {
-    value: productionButtonStyleCensus.authoredScenariosPerVariant,
+    value: capButtonSemanticProfileCensus.authoredScenarios,
     label: 'basic authored scenarios',
+    diagnostic: false,
   },
   {
-    value: productionButtonStyleCensus.normalizedStateTuplesPerVariant,
+    value: capButtonSemanticProfileCensus.normalizedStateTuples,
     label: 'normalized state tuples',
+    diagnostic: false,
   },
   {
-    value: productionButtonStyleCensus.styleProfilesPerVariant,
-    label: 'distinct CAP style profiles',
+    value: capButtonSemanticProfileCensus.semanticProfiles,
+    label: 'semantic style profiles',
+    diagnostic: false,
+  },
+  {
+    value: productionButtonGeneratedClassCensus.generatedClassSelectionProfiles,
+    label: 'generated class profiles (diagnostic)',
+    diagnostic: true,
+  },
+  {
+    value: 'Unknown',
+    label: 'product-support status',
+    diagnostic: true,
   },
 ] as const;
 
@@ -438,9 +452,7 @@ export const CapAuditIntroduction = (): React.ReactElement => {
             </span>
           </div>
           <span className={styles.equationResult}>
-            {formatNumber(
-              productionButtonStyleCensus.authoredScenariosPerVariant
-            )}
+            {formatNumber(capButtonSemanticProfileCensus.authoredScenarios)}
           </span>
         </div>
         <div className={styles.validityQuestion}>
@@ -459,29 +471,34 @@ export const CapAuditIntroduction = (): React.ReactElement => {
         </h2>
         <p className={styles.lede}>
           Fluent supplies defaults and derives state before CAP selects style
-          classes. Inputs that reach the same branch collapse into one profile.
+          declarations. Profiles compare effective root and icon geometry plus
+          root appearance, never generated class identity.
         </p>
         <div className={styles.resultStrip}>
-          {profileStages.map((stage, index) => (
+          {profileStages.map((stage) => (
             <div
               className={mergeClasses(
                 styles.result,
-                index === profileStages.length - 1 && styles.resultGap
+                stage.diagnostic && styles.resultGap
               )}
               key={stage.label}
             >
               <span className={styles.resultNumber}>
-                {formatNumber(stage.value)}
+                {typeof stage.value === 'number'
+                  ? formatNumber(stage.value)
+                  : stage.value}
               </span>
               <span className={styles.resultLabel}>{stage.label}</span>
             </div>
           ))}
         </div>
         <p className={styles.lede}>
-          The production hook collapses the 24 appearance and availability
-          combinations to 14 class branches. Across three sizes, three shapes,
-          and four recurring content effects, that produces 504 observed style
-          profiles. This is not a product-support count.
+          Production observations collapse the 24 appearance and availability
+          inputs to 11 effective root appearances. Across three sizes, three
+          shapes, and four recurring geometry/content outputs, that produces 396
+          semantic profiles. The pinned implementation also emits 504
+          root-and-icon class signatures, a version-sensitive diagnostic rather
+          than semantic identity. Neither count establishes product support.
         </p>
       </section>
 
