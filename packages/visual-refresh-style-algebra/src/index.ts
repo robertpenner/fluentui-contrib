@@ -57,6 +57,41 @@ export type {
   ReactChildEdgeCase,
 } from './grounding/contentAnatomyGrounding';
 export {
+  capButtonAppearances as productionCapButtonAppearances,
+  capButtonShapes as productionCapButtonShapes,
+  capButtonSizes as productionCapButtonSizes,
+} from './cap-model/button/CapButtonScenario';
+export type {
+  CapButtonAppearance as ProductionCapButtonAppearance,
+  CapButtonAuthoredIconPosition,
+  CapButtonContentPresence,
+  CapButtonIconPosition,
+  CapButtonObservationConditions,
+  CapButtonScenario,
+  CapButtonShape as ProductionCapButtonShape,
+  CapButtonSize as ProductionCapButtonSize,
+} from './cap-model/button/CapButtonScenario';
+export type {
+  CapButtonAnatomySlot,
+  CapButtonNormalizedState,
+  CapButtonObservation,
+  CapButtonSemanticObservation,
+  CapButtonStyleSelections,
+} from './cap-model/button/CapButtonObservation';
+export type { CapButtonContract } from './cap-model/button/CapButtonContract';
+export { resolveCleanRoomCapButton } from './cap-model/button/resolveCleanRoomCapButton';
+export { compareCapButton } from './cap-model/button/compareCapButton';
+export type { CapButtonDifference } from './cap-model/button/compareCapButton';
+export {
+  capButtonProductionBaseline,
+  tracedCapButtonEvidence,
+} from './cap-model/button/evidence';
+export type {
+  CapButtonProductionBaseline,
+  CapButtonProductionSource,
+  CapModelEvidence,
+} from './cap-model/button/evidence';
+export {
   productionBooleanValues,
   productionButtonAvailabilityInputs,
   productionButtonShapes,
