@@ -94,9 +94,35 @@ export type {
   CapButtonStyleSelections,
 } from './cap-model/button/CapButtonObservation';
 export type { CapButtonContract } from './cap-model/button/CapButtonContract';
+export type {
+  CapButtonInteractionAvailability,
+  CapButtonInteractionContract,
+  CapButtonInteractionFocusOutline,
+  CapButtonInteractionFocusTreatment,
+  CapButtonInteractionSemanticContract,
+  CapButtonInteractionSurface,
+} from './cap-model/button/CapButtonInteraction';
 export { resolveCleanRoomCapButton } from './cap-model/button/resolveCleanRoomCapButton';
+export {
+  capButtonDisabledFocusableInteractionSurfaces,
+  capButtonDisabledInteractionSurfaces,
+  capButtonEnabledInteractionSurfaces,
+  capButtonInteractionSurfaces,
+  resolveCapButtonInteraction,
+} from './cap-model/button/resolveCapButtonInteraction';
 export { compareCapButton } from './cap-model/button/compareCapButton';
 export type { CapButtonDifference } from './cap-model/button/compareCapButton';
+export { compareCapButtonInteraction } from './cap-model/button/compareCapButtonInteraction';
+export type { CapButtonInteractionDifference } from './cap-model/button/compareCapButtonInteraction';
+export {
+  capButtonInteractionConditionExclusions,
+  capButtonInteractionConditionLedger,
+  capButtonInteractionConditions,
+} from './cap-model/button/enumerateCapButtonInteractionConditions';
+export type {
+  CapButtonInteractionConditionExclusion,
+  CapButtonInteractionConditionLedgerEntry,
+} from './cap-model/button/enumerateCapButtonInteractionConditions';
 export {
   capButtonSemanticProfileCensus,
   capButtonSemanticProfileKey,
@@ -115,6 +141,9 @@ export type {
 export {
   capButtonAppearanceAvailabilityEvidence,
   capButtonGeometryEvidence,
+  capButtonInteractionBrowserBaseline,
+  capButtonInteractionConditionEvidence,
+  capButtonInteractionRuntimeEvidence,
   capButtonProductionBaseline,
   tracedCapButtonEvidence,
 } from './cap-model/button/evidence';

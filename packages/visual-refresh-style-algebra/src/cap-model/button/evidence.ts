@@ -34,6 +34,13 @@ export const capButtonProductionBaseline: CapButtonProductionBaseline = {
   ],
 };
 
+export const capButtonInteractionBrowserBaseline = {
+  engine: 'Chromium',
+  version: '141.0.7390.37',
+  playwright: '1.56.1',
+  platform: 'Linux headless',
+} as const;
+
 export const capButtonGeometryEvidence: readonly CapModelEvidence[] = [
   {
     productionBaseline: capButtonProductionBaseline.id,
@@ -132,6 +139,31 @@ export const capButtonAppearanceAvailabilityEvidence: readonly CapModelEvidence[
       support: 'unknown',
     },
   ];
+
+export const capButtonInteractionConditionEvidence: CapModelEvidence = {
+  productionBaseline: capButtonProductionBaseline.id,
+  productionSymbol:
+    'Chromium :hover, :active, :focus-visible; Button data-fui-focus-visible',
+  scenarioProjection:
+    'hover, active, focusVisible, ordinary colors, ltr, full motion',
+  observation:
+    'Headless Chromium 141.0.7390.37 via Playwright 1.56.1 produces rest, hover, and hover-active pointer states, each independently coexisting with keyboard-origin focus.',
+  interpretation:
+    'The interaction ledger contains six browser-producible conditions; active without hover and pointer-derived focus-visible are excluded.',
+  support: 'unknown',
+};
+
+export const capButtonInteractionRuntimeEvidence: CapModelEvidence = {
+  productionBaseline: capButtonProductionBaseline.id,
+  productionSymbol:
+    'useRootBaseStyles, useRootStyles, useRootDisabledStyles, useRootBaseFocusIndicatorStyles, useRootFocusStyles',
+  scenarioProjection: 'appearance, availability, hover, active, focusVisible',
+  observation:
+    'Headless Chromium 141.0.7390.37 computed styles pin effective foreground, background, four border colors, outline, and inset focus shadow for CAP Button interactions.',
+  interpretation:
+    'Literal dependency-free resolver tables reproduce the pinned ordinary-color Chromium surface while retaining unknown product support.',
+  support: 'unknown',
+};
 
 export const tracedCapButtonEvidence: readonly CapModelEvidence[] = [
   {
