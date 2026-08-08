@@ -9,6 +9,8 @@ import {
 import { CheckmarkCircleRegular } from '@fluentui/react-icons';
 import {
   buttonContentGroundingCensus,
+  capButtonInteractionBrowserBaseline,
+  capButtonMotionMatrix,
   capButtonSemanticProfileCensus,
   capButtonAppearances,
   type CapButtonGeometry,
@@ -19,6 +21,7 @@ import {
   productionButtonShapes,
   productionButtonSizes,
   resolveCleanRoomCapButton,
+  resolveCapButtonMotion,
 } from '../../src';
 import { capTheme } from '../../src/fixtures/capButtonFamily';
 
@@ -359,6 +362,17 @@ const geometryEvidenceCases: ReadonlyArray<{
   },
 ];
 
+const motionEvidence = [
+  {
+    label: 'No preference',
+    contract: resolveCapButtonMotion(false),
+  },
+  {
+    label: 'Reduced motion',
+    contract: resolveCapButtonMotion(true),
+  },
+] as const;
+
 const rootGeometryStyle = (
   geometry: CapButtonGeometry['root']
 ): React.CSSProperties => ({
@@ -622,6 +636,44 @@ export const CapAuditIntroduction = (): React.ReactElement => {
             })}
           </div>
         </CapFixtureProvider>
+      </section>
+
+      <section className={styles.section} aria-labelledby="motion-heading">
+        <h2 id="motion-heading" className={styles.heading}>
+          Reduced-motion evidence
+        </h2>
+        <p className={styles.lede}>
+          Production computed styles preserve the ordered transition properties
+          background, border, and color. The reduced-motion media query changes
+          only their aligned duration; it does not remove or rename them.
+        </p>
+        <div className={styles.resultStrip} aria-labelledby="motion-heading">
+          {motionEvidence.map(({ label, contract }) => (
+            <div className={styles.result} key={label}>
+              <span className={styles.resultNumber}>
+                {contract.transitions[0].durationMs}ms ×{' '}
+                {contract.transitions.length}
+              </span>
+              <span className={styles.resultLabel}>{label}</span>
+              <span className={styles.geometryMetrics}>
+                {contract.transitions
+                  .map((transition) => transition.property)
+                  .join(' | ')}
+              </span>
+            </div>
+          ))}
+        </div>
+        <p className={styles.lede}>
+          {capButtonMotionMatrix.length} observations cover six appearances,
+          three availability states, and both preferences. The pinned evidence
+          is {capButtonInteractionBrowserBaseline.engine}{' '}
+          {capButtonInteractionBrowserBaseline.version} through Playwright{' '}
+          {capButtonInteractionBrowserBaseline.playwright} on{' '}
+          {capButtonInteractionBrowserBaseline.platform}. Playwright media
+          emulation confirms query matching and computed declarations, not a
+          real operating-system preference, other browser engines, perceived
+          animation, or product support. Product support remains unknown.
+        </p>
       </section>
 
       <section className={styles.section} aria-labelledby="audit-path-heading">

@@ -137,6 +137,11 @@ export type {
   CapButtonForcedColorsSemanticContract,
   CapButtonSystemColorKeyword,
 } from './cap-model/button/CapButtonForcedColors';
+export type {
+  CapButtonMotionAvailability,
+  CapButtonMotionContract,
+  CapButtonMotionTransition,
+} from './cap-model/button/CapButtonMotion';
 export { resolveCleanRoomCapButton } from './cap-model/button/resolveCleanRoomCapButton';
 export {
   capButtonDisabledFocusableInteractionSurfaces,
@@ -155,6 +160,10 @@ export { compareCapButtonInteraction } from './cap-model/button/compareCapButton
 export type { CapButtonInteractionDifference } from './cap-model/button/compareCapButtonInteraction';
 export { compareCapButtonForcedColors } from './cap-model/button/compareCapButtonForcedColors';
 export type { CapButtonForcedColorsDifference } from './cap-model/button/compareCapButtonForcedColors';
+export { compareCapButtonMotion } from './cap-model/button/compareCapButtonMotion';
+export type { CapButtonMotionDifference } from './cap-model/button/compareCapButtonMotion';
+export { projectCapButtonMotion } from './cap-model/button/projectCapButtonMotion';
+export { resolveCapButtonMotion } from './cap-model/button/resolveCapButtonMotion';
 export {
   capButtonInteractionConditionExclusions,
   capButtonInteractionConditionLedger,
@@ -169,6 +178,8 @@ export {
   capButtonForcedColorsProjection,
 } from './cap-model/button/enumerateCapButtonForcedColorsMatrix';
 export type { CapButtonForcedColorsMatrixEntry } from './cap-model/button/enumerateCapButtonForcedColorsMatrix';
+export { capButtonMotionMatrix } from './cap-model/button/enumerateCapButtonMotionMatrix';
+export type { CapButtonMotionMatrixEntry } from './cap-model/button/enumerateCapButtonMotionMatrix';
 export {
   capButtonSemanticProfileCensus,
   capButtonSemanticProfileKey,
@@ -192,6 +203,7 @@ export {
   capButtonInteractionBrowserBaseline,
   capButtonInteractionConditionEvidence,
   capButtonInteractionRuntimeEvidence,
+  capButtonMotionRuntimeEvidence,
   capButtonProductionBaseline,
   tracedCapButtonEvidence,
 } from './cap-model/button/evidence';

@@ -178,6 +178,19 @@ export const capButtonForcedColorsRuntimeEvidence: CapModelEvidence = {
   support: 'unknown',
 };
 
+export const capButtonMotionRuntimeEvidence: CapModelEvidence = {
+  productionBaseline: capButtonProductionBaseline.id,
+  productionSymbol:
+    'useRootBaseStyles transition declarations; Chromium prefers-reduced-motion computed styles',
+  scenarioProjection:
+    'prefersReducedMotion over 6 appearances and 3 availability states; theme, direction, and forced colors observed independently',
+  observation:
+    'Playwright 1.56.1 Chromium 141.0.7390.37 on Linux computes background, border, and color transitions at 100ms each for no preference and 0.01ms each for reduced motion.',
+  interpretation:
+    'The dependency-free resolver reproduces 36 scoped production observations; media emulation and computed declarations do not establish cross-engine, operating-system, perceptual, or product support.',
+  support: 'unknown',
+};
+
 export const capButtonDirectionEvidence: CapModelEvidence = {
   productionBaseline: capButtonProductionBaseline.id,
   productionSymbol:

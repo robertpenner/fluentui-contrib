@@ -64,6 +64,36 @@ not a multiplication of the ordinary pointer-state matrix. Direction belongs
 to the separate direction scope, and transition/reduced-motion behavior belongs
 to the separate motion scope.
 
+### CAP Button reduced-motion baseline
+
+The motion projection contains 36 cases: six appearances by enabled, disabled,
+and disabled-focusable availability under `no-preference` and `reduce`. In every
+case Chromium computes the ordered transition properties `background`,
+`border`, and `color`. Their structurally aligned durations are `100ms` each at
+`no-preference` and `0.01ms` each at `reduce`. Normal and reduced motion are
+therefore observed to differ only in duration; the model does not manufacture a
+zero duration or remove transition properties.
+
+The production probe renders real Fluent Buttons with CAP theme/style hooks and
+projects computed `transition-property` and `transition-duration` comma lists
+into ordered `{ property, durationMs }` entries. CSS duration lists are aligned
+to property lists using CSS list-cycling rules, and both `s` and `ms` browser
+serializations are normalized to milliseconds. The clean-room resolver contains
+literal observed values and has no Fluent or CAP imports.
+
+A separate representative matrix repeats both preferences across light and dark
+named theme adapters, LTR and RTL, and forced colors active and inactive. These
+conditions do not change the motion contract and are not inputs to the motion
+resolver. Hover, active, focus-visible, delay, and timing-function axes are not
+needed to observe the effective declarations and are outside this motion scope.
+
+The pinned baseline is Playwright 1.56.1 with Chromium 141.0.7390.37, Linux
+headless. `page.emulateMedia()` proves that Chromium matches the requested media
+query and exposes the resulting computed declarations. It is not a real
+operating-system reduced-motion setting, does not establish animation perception
+or assistive-technology behavior, and provides no Firefox, WebKit, or product
+support claim. Product support remains unknown.
+
 The content-anatomy table is verified primarily by a twelve-scenario component integration test running in the unit-test
 harness, not by a browser-paint assertion. The test invokes public Fluent normalization and rendering APIs, renders public Button components with and without the
 real CAP style hooks, and compares class-effect relationships without publishing generated class identities. The
