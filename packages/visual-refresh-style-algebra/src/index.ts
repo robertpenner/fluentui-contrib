@@ -58,19 +58,26 @@ export type {
 } from './grounding/contentAnatomyGrounding';
 export {
   capButtonAppearances as productionCapButtonAppearances,
+  capButtonAuthoredIconPositions,
+  capButtonBooleanValues,
+  capButtonReactChildInputs,
+  capButtonScopedChildren,
   capButtonShapes as productionCapButtonShapes,
   capButtonSizes as productionCapButtonSizes,
 } from './cap-model/button/CapButtonScenario';
 export type {
   CapButtonAppearance as ProductionCapButtonAppearance,
   CapButtonAuthoredIconPosition,
+  CapButtonChildrenInput,
   CapButtonContentPresence,
   CapButtonIconPosition,
   CapButtonObservationConditions,
+  CapButtonReactChildInput,
   CapButtonScenario,
   CapButtonShape as ProductionCapButtonShape,
   CapButtonSize as ProductionCapButtonSize,
 } from './cap-model/button/CapButtonScenario';
+export { capButtonScenarios } from './cap-model/button/enumerateCapButtonScenarios';
 export type {
   CapButtonAnatomySlot,
   CapButtonNormalizedState,

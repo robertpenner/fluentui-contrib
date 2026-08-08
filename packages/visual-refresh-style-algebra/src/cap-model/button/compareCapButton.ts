@@ -30,6 +30,31 @@ export const compareCapButton = (
   };
 
   compare(
+    'normalized.appearance',
+    production.normalized.appearance,
+    cleanRoom.normalized.appearance
+  );
+  compare(
+    'normalized.size',
+    production.normalized.size,
+    cleanRoom.normalized.size
+  );
+  compare(
+    'normalized.shape',
+    production.normalized.shape,
+    cleanRoom.normalized.shape
+  );
+  compare(
+    'normalized.disabled',
+    production.normalized.disabled,
+    cleanRoom.normalized.disabled
+  );
+  compare(
+    'normalized.disabledFocusable',
+    production.normalized.disabledFocusable,
+    cleanRoom.normalized.disabledFocusable
+  );
+  compare(
     'normalized.iconPosition',
     production.normalized.iconPosition,
     cleanRoom.normalized.iconPosition
@@ -49,7 +74,22 @@ export const compareCapButton = (
     production.normalized.hasChildren,
     cleanRoom.normalized.hasChildren
   );
-  compare('anatomy', production.anatomy.join(','), cleanRoom.anatomy.join(','));
+  compare(
+    'normalized.childrenTruthy',
+    production.normalized.childrenTruthy,
+    cleanRoom.normalized.childrenTruthy
+  );
+  if (
+    production.anatomy.length !== cleanRoom.anatomy.length ||
+    production.anatomy.some((slot, index) => slot !== cleanRoom.anatomy[index])
+  ) {
+    differences.push({
+      path: 'anatomy',
+      production: production.anatomy,
+      cleanRoom: cleanRoom.anatomy,
+      evidence: cleanRoom.provenance,
+    });
+  }
   compare(
     'styleSelections.root.appearance',
     production.styleSelections.root.appearance,

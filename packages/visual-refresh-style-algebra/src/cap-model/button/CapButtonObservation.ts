@@ -10,10 +10,16 @@ import type {
 export type CapButtonAnatomySlot = 'icon' | 'content';
 
 export interface CapButtonNormalizedState {
+  readonly appearance: CapButtonAppearance;
+  readonly size: CapButtonSize;
+  readonly shape: CapButtonShape;
+  readonly disabled: boolean;
+  readonly disabledFocusable: boolean;
   readonly iconPosition: CapButtonIconPosition;
   readonly iconOnly: boolean;
   readonly hasIcon: boolean;
   readonly hasChildren: boolean;
+  readonly childrenTruthy: boolean;
 }
 
 export interface CapButtonStyleSelections {

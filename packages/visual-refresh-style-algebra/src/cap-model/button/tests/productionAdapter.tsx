@@ -1,15 +1,19 @@
 import * as React from 'react';
-import { renderHook } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import {
+  renderButton_unstable,
   type ButtonProps,
   useButton_unstable,
 } from '@fluentui/react-components';
 import { CAP_STYLE_HOOKS } from '@fluentui-contrib/react-cap-theme';
 import type {
+  CapButtonAnatomySlot,
+  CapButtonNormalizedState,
   CapButtonObservation,
   CapButtonStyleSelections,
 } from '../CapButtonObservation';
 import type {
+  CapButtonChildrenInput,
   CapButtonObservationConditions,
   CapButtonScenario,
 } from '../CapButtonScenario';
@@ -37,6 +41,11 @@ export const tracedCapButtonConditions: CapButtonObservationConditions = {
   direction: 'ltr',
 };
 
+const observationIndexAttribute = 'data-cap-model-observation-index';
+const normalizedAttribute = 'data-cap-model-normalized';
+const styleSelectionsAttribute = 'data-cap-model-style-selections';
+const slotAttribute = 'data-cap-model-slot';
+
 const classNames = (className: string | undefined): ReadonlySet<string> =>
   new Set(className?.split(/\s+/).filter(Boolean));
 
@@ -45,16 +54,54 @@ const hasAddedClass = (
   after: ReadonlySet<string>
 ): boolean => [...after].some((className) => !before.has(className));
 
+const childNode = (children: CapButtonChildrenInput): React.ReactNode => {
+  switch (children) {
+    case 'absent':
+      return undefined;
+    case 'present':
+      return <span {...{ [slotAttribute]: 'content' }}>Action</span>;
+    case 'react.null':
+      return null;
+    case 'react.false':
+      return false;
+    case 'react.zero':
+      return 0;
+    case 'react.emptyString':
+      return '';
+    case 'react.emptyFragment':
+      return <></>;
+    case 'react.whitespace':
+      return ' ';
+  }
+};
+
+const scenarioProps = (scenario: CapButtonScenario): ButtonProps => ({
+  appearance: scenario.appearance as ButtonProps['appearance'],
+  size: scenario.size,
+  shape: scenario.shape,
+  disabled: scenario.disabled,
+  disabledFocusable: scenario.disabledFocusable,
+  icon:
+    scenario.content.icon === 'present' ? (
+      <span {...{ [slotAttribute]: 'icon' }} aria-hidden="true" />
+    ) : undefined,
+  children: childNode(scenario.content.children),
+  iconPosition:
+    scenario.content.iconPosition === 'omitted'
+      ? undefined
+      : scenario.content.iconPosition,
+});
+
 const observeStyleSelections = (
   scenario: CapButtonScenario,
   state: ReturnType<typeof useButton_unstable>
 ): CapButtonStyleSelections => {
   const isPrimary =
     scenario.appearance === 'primary' || scenario.appearance === 'tint';
-  const hasChildren = state.root.children !== undefined;
+  const childrenTruthy = Boolean(state.root.children);
   const content = state.iconOnly
     ? 'iconOnly'
-    : state.icon && hasChildren
+    : state.icon && childrenTruthy
     ? (`textAndIcon.${state.iconPosition}` as const)
     : 'base';
 
@@ -71,80 +118,140 @@ const observeStyleSelections = (
     icon: state.icon
       ? {
           size: state.size,
-          position: hasChildren ? state.iconPosition : 'none',
+          position: childrenTruthy ? state.iconPosition : 'none',
         }
       : undefined,
   };
 };
 
-export const observeCapButtonProduction = (
-  scenario: CapButtonScenario,
-  conditions: CapButtonObservationConditions
-): CapButtonObservation => {
-  const props: ButtonProps = {
-    appearance: scenario.appearance as ButtonProps['appearance'],
-    size: scenario.size,
-    shape: scenario.shape,
-    disabled: scenario.disabled,
-    disabledFocusable: scenario.disabledFocusable,
-    icon:
-      scenario.content.icon === 'present' ? (
-        <span aria-hidden="true" />
-      ) : undefined,
-    children: scenario.content.children === 'present' ? 'Action' : undefined,
-    iconPosition:
-      scenario.content.iconPosition === 'omitted'
-        ? undefined
-        : scenario.content.iconPosition,
-  };
-  const { result, unmount } = renderHook(() => {
-    const state = useButton_unstable(props, React.createRef());
-    const rootClassesBeforeCap = classNames(state.root.className);
-    const iconClassesBeforeCap = classNames(state.icon?.className);
+interface ProductionObservationProbeProps {
+  readonly scenario: CapButtonScenario;
+  readonly index: number;
+}
 
-    CAP_STYLE_HOOKS.useButtonStyles_unstable?.(state);
+const ProductionObservationProbe = (
+  props: ProductionObservationProbeProps
+): React.ReactElement => {
+  const { scenario, index } = props;
+  const state = useButton_unstable(scenarioProps(scenario), React.createRef());
+  const rootClassesBeforeCap = classNames(state.root.className);
+  const iconClassesBeforeCap = classNames(state.icon?.className);
 
-    return { state, rootClassesBeforeCap, iconClassesBeforeCap };
-  });
-  const { state, rootClassesBeforeCap, iconClassesBeforeCap } = result.current;
+  CAP_STYLE_HOOKS.useButtonStyles_unstable?.(state);
 
   if (!hasAddedClass(rootClassesBeforeCap, classNames(state.root.className))) {
-    unmount();
     throw new Error('CAP Button styling did not add a root class');
   }
   if (
     state.icon &&
     !hasAddedClass(iconClassesBeforeCap, classNames(state.icon.className))
   ) {
-    unmount();
     throw new Error('CAP Button styling did not add an icon class');
   }
 
-  const hasIcon = state.icon !== undefined;
-  const hasChildren = state.root.children !== undefined;
-  const observation: CapButtonObservation = {
-    productionBaseline: capButtonProductionBaseline.id,
-    scenario,
-    conditions,
-    normalized: {
-      iconPosition: state.iconPosition,
-      iconOnly: state.iconOnly,
-      hasIcon,
-      hasChildren,
-    },
-    anatomy:
-      hasIcon && hasChildren
-        ? state.iconPosition === 'before'
-          ? ['icon', 'content']
-          : ['content', 'icon']
-        : hasIcon
-        ? ['icon']
-        : hasChildren
-        ? ['content']
-        : [],
-    styleSelections: observeStyleSelections(scenario, state),
+  const normalized: CapButtonNormalizedState = {
+    appearance: scenario.appearance,
+    size: state.size,
+    shape: state.shape,
+    disabled: state.disabled,
+    disabledFocusable: state.disabledFocusable,
+    iconPosition: state.iconPosition,
+    iconOnly: state.iconOnly,
+    hasIcon: state.icon !== undefined,
+    hasChildren: state.root.children !== undefined,
+    childrenTruthy: Boolean(state.root.children),
   };
 
-  unmount();
-  return observation;
+  Object.assign(state.root, {
+    [observationIndexAttribute]: String(index),
+    [normalizedAttribute]: JSON.stringify(normalized),
+    [styleSelectionsAttribute]: JSON.stringify(
+      observeStyleSelections(scenario, state)
+    ),
+  });
+
+  return renderButton_unstable(state);
 };
+
+const parseAttribute = <T,>(element: HTMLElement, name: string): T => {
+  const value = element.getAttribute(name);
+
+  if (value === null) {
+    throw new Error(`Production Button observation is missing ${name}`);
+  }
+
+  return JSON.parse(value) as T;
+};
+
+const observeAnatomy = (
+  button: HTMLElement
+): readonly CapButtonAnatomySlot[] => {
+  const icon = button.querySelector(`[${slotAttribute}="icon"]`)?.parentElement;
+
+  return [...button.childNodes].flatMap(
+    (node): readonly CapButtonAnatomySlot[] => {
+      if (node === icon) {
+        return ['icon'];
+      }
+
+      return (node.textContent ?? '').length > 0 ? ['content'] : [];
+    }
+  );
+};
+
+export const observeCapButtonProductionScenarios = (
+  scenarios: readonly CapButtonScenario[],
+  conditions: CapButtonObservationConditions
+): readonly CapButtonObservation[] => {
+  const rendered = render(
+    <>
+      {scenarios.map((scenario, index) => (
+        <ProductionObservationProbe
+          key={`${index}-${scenario.appearance}-${scenario.size}-${scenario.shape}`}
+          scenario={scenario}
+          index={index}
+        />
+      ))}
+    </>
+  );
+  const buttons = [
+    ...rendered.container.querySelectorAll<HTMLElement>(
+      `[${observationIndexAttribute}]`
+    ),
+  ];
+
+  if (buttons.length !== scenarios.length) {
+    rendered.unmount();
+    throw new Error(
+      `Observed ${buttons.length} production Buttons for ${scenarios.length} scenarios`
+    );
+  }
+
+  const observations = buttons.map((button): CapButtonObservation => {
+    const index = Number(button.getAttribute(observationIndexAttribute));
+
+    return {
+      productionBaseline: capButtonProductionBaseline.id,
+      scenario: scenarios[index],
+      conditions,
+      normalized: parseAttribute<CapButtonNormalizedState>(
+        button,
+        normalizedAttribute
+      ),
+      anatomy: observeAnatomy(button),
+      styleSelections: parseAttribute<CapButtonStyleSelections>(
+        button,
+        styleSelectionsAttribute
+      ),
+    };
+  });
+
+  rendered.unmount();
+  return observations;
+};
+
+export const observeCapButtonProduction = (
+  scenario: CapButtonScenario,
+  conditions: CapButtonObservationConditions
+): CapButtonObservation =>
+  observeCapButtonProductionScenarios([scenario], conditions)[0];
