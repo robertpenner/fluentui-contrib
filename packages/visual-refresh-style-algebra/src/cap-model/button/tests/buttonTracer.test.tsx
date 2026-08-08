@@ -6,6 +6,7 @@ import {
   observeCapButtonProduction,
   tracedCapButtonConditions,
   tracedCapButtonScenario,
+  tracedCapButtonTheme,
 } from './productionAdapter';
 
 describe('production-faithful CAP Button tracer', () => {
@@ -16,7 +17,8 @@ describe('production-faithful CAP Button tracer', () => {
     );
     const cleanRoom = resolveCleanRoomCapButton(
       tracedCapButtonScenario,
-      tracedCapButtonConditions
+      tracedCapButtonConditions,
+      tracedCapButtonTheme
     );
 
     expect(capButtonProductionBaseline).toEqual({
@@ -68,7 +70,8 @@ describe('production-faithful CAP Button tracer', () => {
     );
     const cleanRoom = resolveCleanRoomCapButton(
       tracedCapButtonScenario,
-      tracedCapButtonConditions
+      tracedCapButtonConditions,
+      tracedCapButtonTheme
     );
     const mutation: CapButtonObservation = {
       ...production,

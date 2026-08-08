@@ -69,6 +69,32 @@ are not claims about a private specification.
 Provenance explains a result but is excluded from semantic equality. Validation obligations identify work that still
 requires testing; emitting an obligation does not satisfy it.
 
+## Production-faithful CAP Button environment inputs
+
+The production-faithful CAP Button resolver accepts a `CapButtonThemeInput`, not a Fluent `Theme` or a light/dark
+label. Its static paint and focus projection contains exactly these token keys:
+
+- `colorBrandBackground`, `colorBrandBackground2`, `colorBrandStroke2`, and
+  `colorCompoundBrandForeground1`;
+- `colorNeutralBackground3`, `colorNeutralBackgroundDisabled`, `colorNeutralForeground3`,
+  `colorNeutralForegroundDisabled`, and `colorNeutralForegroundOnBrand`;
+- `colorNeutralStroke4`, `colorNeutralStrokeDisabled`, and `colorNeutralStrokeOnBrand`;
+- `colorStrokeFocus1`, `colorStrokeFocus2`, `colorTransparentBackground`, and `colorTransparentStroke`;
+- `strokeWidthThick` and `strokeWidthThin`.
+
+`web-light-with-cap` and `web-dark-with-cap` are evidence fixtures. They project those keys from Fluent's named web
+themes plus `CAP_THEME_TOKENS`; their names never enter `CapButtonScenario` or the resolver. The pinned production
+baseline remains Fluent Button 9.70.0 and CAP theme 0.5.1, and product support is unknown.
+
+Provider direction is also observation context rather than an authored Button input. Physical padding, icon margins,
+and corner radii are projected to logical block/inline fields before comparison. Across the grounded matrix of three
+sizes, three shapes, and five content effects, the LTR and RTL projections are an observed equivalence. This statement
+is scoped to static plain-Button output and does not infer equivalence for composite controls.
+
+Forced colors remains a separate environmental contract. Theme input contains no forced-colors selector, direction
+contains no theme or forced-colors mode, and the static ordinary-color resolver does not select the forced-colors
+contract.
+
 ## Forced-colors accessibility contract
 
 `ForcedColorsContract` is a named semantic sub-resolution for the forced-colors environment. It owns foreground,

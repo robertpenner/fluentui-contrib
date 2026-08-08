@@ -1,19 +1,20 @@
 import * as React from 'react';
 import { render } from '@testing-library/react';
 import {
+  FluentProvider,
   renderButton_unstable,
   type ButtonProps,
+  type Theme,
   useButton_unstable,
 } from '@fluentui/react-components';
 import { CAP_STYLE_HOOKS } from '@fluentui-contrib/react-cap-theme';
 import { capTheme } from '../../../fixtures/capButtonFamily';
+import { observeCapSurface } from '../../../observation/capSurface';
 import {
-  capColors,
-  capGeometry,
-  observeCapSurface,
-} from '../../../observation/capSurface';
-import {
+  projectSurface,
   resolveThemeValues,
+  surfaceColorProperties,
+  surfaceGeometryProperties,
   type ButtonSurfaceObservation,
 } from '../../../observation/observeButtonSurface';
 import type {
@@ -31,6 +32,7 @@ import type {
   CapButtonScenario,
 } from '../CapButtonScenario';
 import { capButtonProductionBaseline } from '../evidence';
+import { capButtonLightThemeFixture } from './themeFixtures';
 
 export const tracedCapButtonScenario: CapButtonScenario = {
   appearance: 'primary',
@@ -60,8 +62,6 @@ const styleSelectionsAttribute = 'data-cap-model-style-selections';
 const generatedClassSignatureAttribute =
   'data-cap-model-generated-class-signature';
 const slotAttribute = 'data-cap-model-slot';
-
-const capThemeValues = capTheme as unknown as Readonly<Record<string, string>>;
 
 const classNames = (className: string | undefined): ReadonlySet<string> =>
   new Set(className?.split(/\s+/).filter(Boolean));
@@ -222,20 +222,20 @@ const observeAnatomy = (
 
 const normalizedGeometryDeclarations = (
   element: HTMLElement,
+  themeValues: Readonly<Record<string, string>>,
   observation: ButtonSurfaceObservation = observeCapSurface(element)
 ): Readonly<Record<string, string>> => {
   const effective = observation.effective.ordinary.rest;
-  const themeResolved = resolveThemeValues(effective, capThemeValues);
+  const themeResolved = resolveThemeValues(effective, themeValues);
   const customProperties = Object.fromEntries(
     Object.entries(themeResolved)
       .filter(([property]) => property.startsWith('--'))
       .map(([property, value]) => [property.slice(2), value])
   );
-
-  const declarations = resolveThemeValues(capGeometry(effective), {
-    ...capThemeValues,
-    ...customProperties,
-  });
+  const declarations = projectSurface(
+    resolveThemeValues(effective, { ...themeValues, ...customProperties }),
+    surfaceGeometryProperties
+  );
   const padding = declarations.padding?.split(/\s+/);
 
   if (padding === undefined) {
@@ -298,14 +298,21 @@ const borderColors = (
 
 const observeRootAppearance = (
   observation: ButtonSurfaceObservation,
-  focusSelection: CapButtonStyleSelections['root']['focus']
+  focusSelection: CapButtonStyleSelections['root']['focus'],
+  themeValues: Readonly<Record<string, string>>
 ): CapButtonRootAppearance => {
   const restSurface = observation.effective.ordinary.rest;
-  const rest = capColors(restSurface);
-  const resolvedRest = resolveThemeValues(restSurface, capThemeValues);
+  const rest = resolveThemeValues(
+    projectSurface(restSurface, surfaceColorProperties),
+    themeValues
+  );
+  const resolvedRest = resolveThemeValues(restSurface, themeValues);
   const focusVisible = observation.effective.ordinary.focusVisible;
-  const focusColors = capColors(focusVisible);
-  const resolvedFocus = resolveThemeValues(focusVisible, capThemeValues);
+  const focusColors = resolveThemeValues(
+    projectSurface(focusVisible, surfaceColorProperties),
+    themeValues
+  );
+  const resolvedFocus = resolveThemeValues(focusVisible, themeValues);
 
   return {
     foreground: requiredDeclaration(rest, 'color'),
@@ -326,14 +333,19 @@ const observeRootAppearance = (
 
 const observeGeometry = (
   button: HTMLElement,
-  rootObservation: ButtonSurfaceObservation
+  rootObservation: ButtonSurfaceObservation,
+  themeValues: Readonly<Record<string, string>>
 ): CapButtonGeometry => {
-  const root = normalizedGeometryDeclarations(button, rootObservation);
+  const root = normalizedGeometryDeclarations(
+    button,
+    themeValues,
+    rootObservation
+  );
   const iconElement = button.querySelector<HTMLElement>(
     `[${slotAttribute}="icon"]`
   )?.parentElement;
   const icon = iconElement
-    ? normalizedGeometryDeclarations(iconElement)
+    ? normalizedGeometryDeclarations(iconElement, themeValues)
     : undefined;
 
   return {
@@ -370,10 +382,14 @@ const observeGeometry = (
 
 export const observeCapButtonProductionScenarios = (
   scenarios: readonly CapButtonScenario[],
-  conditions: CapButtonObservationConditions
+  conditions: CapButtonObservationConditions,
+  providerTheme: Theme = capTheme
 ): readonly CapButtonObservation[] => {
+  const themeValues = providerTheme as unknown as Readonly<
+    Record<string, string>
+  >;
   const rendered = render(
-    <>
+    <FluentProvider theme={providerTheme} dir={conditions.direction}>
       {scenarios.map((scenario, index) => (
         <ProductionObservationProbe
           key={`${index}-${scenario.appearance}-${scenario.size}-${scenario.shape}`}
@@ -381,7 +397,7 @@ export const observeCapButtonProductionScenarios = (
           index={index}
         />
       ))}
-    </>
+    </FluentProvider>
   );
   const buttons = [
     ...rendered.container.querySelectorAll<HTMLElement>(
@@ -414,10 +430,11 @@ export const observeCapButtonProductionScenarios = (
       ),
       anatomy: observeAnatomy(button),
       styleSelections,
-      geometry: observeGeometry(button, rootObservation),
+      geometry: observeGeometry(button, rootObservation, themeValues),
       rootAppearance: observeRootAppearance(
         rootObservation,
-        styleSelections.root.focus
+        styleSelections.root.focus,
+        themeValues
       ),
       generatedClassSignature: parseAttribute(
         button,
@@ -432,6 +449,9 @@ export const observeCapButtonProductionScenarios = (
 
 export const observeCapButtonProduction = (
   scenario: CapButtonScenario,
-  conditions: CapButtonObservationConditions
+  conditions: CapButtonObservationConditions,
+  providerTheme: Theme = capTheme
 ): CapButtonObservation =>
-  observeCapButtonProductionScenarios([scenario], conditions)[0];
+  observeCapButtonProductionScenarios([scenario], conditions, providerTheme)[0];
+
+export const tracedCapButtonTheme = capButtonLightThemeFixture.semanticTokens;

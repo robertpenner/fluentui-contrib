@@ -14,6 +14,7 @@ import type {
   CapButtonShape,
   CapButtonSize,
 } from './CapButtonScenario';
+import type { CapButtonThemeInput } from './CapButtonTheme';
 import { tracedCapButtonEvidence } from './evidence';
 
 interface ChildSemantics {
@@ -40,75 +41,75 @@ interface RestAppearance {
   readonly border: string;
 }
 
-const enabledAppearance: Readonly<
-  Record<CapButtonScenario['appearance'], RestAppearance>
-> = {
+const enabledAppearance = (
+  theme: CapButtonThemeInput
+): Readonly<Record<CapButtonScenario['appearance'], RestAppearance>> => ({
   primary: {
-    foreground: '#ffffff',
-    background: '#0f6cbd',
-    border: 'transparent',
+    foreground: theme.colorNeutralForegroundOnBrand,
+    background: theme.colorBrandBackground,
+    border: theme.colorTransparentStroke,
   },
   tint: {
-    foreground: '#0f6cbd',
-    background: '#ebf3fc',
-    border: '#b4d6fa',
+    foreground: theme.colorCompoundBrandForeground1,
+    background: theme.colorBrandBackground2,
+    border: theme.colorBrandStroke2,
   },
   outline: {
-    foreground: '#616161',
-    background: 'transparent',
-    border: '#ebebeb',
+    foreground: theme.colorNeutralForeground3,
+    background: theme.colorTransparentBackground,
+    border: theme.colorNeutralStroke4,
   },
   secondary: {
-    foreground: '#616161',
-    background: '#f5f5f5',
-    border: '#ebebeb',
+    foreground: theme.colorNeutralForeground3,
+    background: theme.colorNeutralBackground3,
+    border: theme.colorNeutralStroke4,
   },
   subtle: {
-    foreground: '#616161',
-    background: 'transparent',
-    border: 'transparent',
+    foreground: theme.colorNeutralForeground3,
+    background: theme.colorTransparentBackground,
+    border: theme.colorTransparentStroke,
   },
   transparent: {
-    foreground: '#616161',
-    background: 'transparent',
-    border: 'transparent',
+    foreground: theme.colorNeutralForeground3,
+    background: theme.colorTransparentBackground,
+    border: theme.colorTransparentStroke,
   },
-};
+});
 
-const disabledAppearance: Readonly<
-  Record<CapButtonScenario['appearance'], RestAppearance>
-> = {
+const disabledAppearance = (
+  theme: CapButtonThemeInput
+): Readonly<Record<CapButtonScenario['appearance'], RestAppearance>> => ({
   primary: {
-    foreground: '#bdbdbd',
-    background: '#f0f0f0',
-    border: 'transparent',
+    foreground: theme.colorNeutralForegroundDisabled,
+    background: theme.colorNeutralBackgroundDisabled,
+    border: theme.colorTransparentStroke,
   },
   tint: {
-    foreground: '#bdbdbd',
-    background: '#f0f0f0',
-    border: '#e0e0e0',
+    foreground: theme.colorNeutralForegroundDisabled,
+    background: theme.colorNeutralBackgroundDisabled,
+    border: theme.colorNeutralStrokeDisabled,
   },
   outline: {
-    foreground: '#bdbdbd',
-    background: 'transparent',
-    border: '#e0e0e0',
+    foreground: theme.colorNeutralForegroundDisabled,
+    background: theme.colorTransparentBackground,
+    border: theme.colorNeutralStrokeDisabled,
   },
   secondary: {
-    foreground: '#bdbdbd',
-    background: '#f0f0f0',
-    border: '#e0e0e0',
+    foreground: theme.colorNeutralForegroundDisabled,
+    background: theme.colorNeutralBackgroundDisabled,
+    border: theme.colorNeutralStrokeDisabled,
   },
   subtle: {
-    foreground: '#bdbdbd',
-    background: 'transparent',
-    border: 'transparent',
+    foreground: theme.colorNeutralForegroundDisabled,
+    background: theme.colorTransparentBackground,
+    border: theme.colorTransparentStroke,
   },
   transparent: {
-    foreground: '#bdbdbd',
-    background: 'transparent',
-    border: 'transparent',
+    foreground: theme.colorNeutralForegroundDisabled,
+    background: theme.colorTransparentBackground,
+    border: theme.colorTransparentStroke,
   },
-};
+});
 
 const uniformBorder = (color: string): CapButtonBorderColors => ({
   top: color,
@@ -118,12 +119,13 @@ const uniformBorder = (color: string): CapButtonBorderColors => ({
 });
 
 const resolveRootAppearance = (
-  normalized: CapButtonNormalizedState
+  normalized: CapButtonNormalizedState,
+  theme: CapButtonThemeInput
 ): CapButtonRootAppearance => {
   const unavailable = normalized.disabled || normalized.disabledFocusable;
-  const rest = (unavailable ? disabledAppearance : enabledAppearance)[
-    normalized.appearance
-  ];
+  const rest = (
+    unavailable ? disabledAppearance(theme) : enabledAppearance(theme)
+  )[normalized.appearance];
   const isPrimary =
     normalized.appearance === 'primary' || normalized.appearance === 'tint';
 
@@ -134,13 +136,17 @@ const resolveRootAppearance = (
     focusTreatment: {
       selection:
         !normalized.disabledFocusable && isPrimary ? 'primary' : 'base',
-      border: uniformBorder('#000000'),
+      border: uniformBorder(theme.colorStrokeFocus2),
       outline: {
-        color: '#000000',
+        color: theme.colorStrokeFocus2,
         style: 'solid',
-        width: '2px',
+        width: theme.strokeWidthThick,
       },
-      innerShadow: '0 0 0 1px #ffffff inset',
+      innerShadow: `0 0 0 ${theme.strokeWidthThin} ${
+        !normalized.disabledFocusable && isPrimary
+          ? theme.colorNeutralStrokeOnBrand
+          : theme.colorStrokeFocus1
+      } inset`,
     },
   };
 };
@@ -196,19 +202,24 @@ const radiusForShape = (
 };
 
 const resolveGeometry = (
-  normalized: CapButtonNormalizedState
+  normalized: CapButtonNormalizedState,
+  direction: CapButtonObservationConditions['direction']
 ): CapButtonGeometry => {
   const size = geometryBySize[normalized.size];
   const radius = radiusForShape(normalized.shape, size.roundedRadius);
   const textAndIcon = normalized.hasIcon && normalized.childrenTruthy;
-  const paddingLeft =
+  const paddingInlineStart =
     textAndIcon && normalized.iconPosition === 'before'
       ? size.textAndIconPadding
       : size.paddingInline;
-  const paddingRight =
+  const paddingInlineEnd =
     textAndIcon && normalized.iconPosition === 'after'
       ? size.textAndIconPadding
       : size.paddingInline;
+  const paddingLeft =
+    direction === 'rtl' ? paddingInlineEnd : paddingInlineStart;
+  const paddingRight =
+    direction === 'rtl' ? paddingInlineStart : paddingInlineEnd;
 
   return {
     root: {
@@ -230,11 +241,15 @@ const resolveGeometry = (
       ? {
           fontSize: size.iconFontSize,
           marginLeft:
-            textAndIcon && normalized.iconPosition === 'after'
+            textAndIcon &&
+            ((direction === 'ltr' && normalized.iconPosition === 'after') ||
+              (direction === 'rtl' && normalized.iconPosition === 'before'))
               ? size.iconSpacing
               : undefined,
           marginRight:
-            textAndIcon && normalized.iconPosition === 'before'
+            textAndIcon &&
+            ((direction === 'ltr' && normalized.iconPosition === 'before') ||
+              (direction === 'rtl' && normalized.iconPosition === 'after'))
               ? size.iconSpacing
               : undefined,
         }
@@ -331,9 +346,9 @@ const resolveStyleSelections = (
 
 export const resolveCleanRoomCapButton = (
   scenario: CapButtonScenario,
-  conditions: CapButtonObservationConditions
+  conditions: CapButtonObservationConditions,
+  theme: CapButtonThemeInput
 ): CapButtonContract => {
-  void conditions;
   const hasIcon = scenario.content.icon === 'present';
   const childSemantics = resolveChildSemantics(scenario.content.children);
   const normalized: CapButtonNormalizedState = {
@@ -356,8 +371,8 @@ export const resolveCleanRoomCapButton = (
     normalized,
     anatomy: resolveAnatomy(normalized, childSemantics.rendersContent),
     styleSelections: resolveStyleSelections(scenario, normalized),
-    geometry: resolveGeometry(normalized),
-    rootAppearance: resolveRootAppearance(normalized),
+    geometry: resolveGeometry(normalized, conditions.direction),
+    rootAppearance: resolveRootAppearance(normalized, theme),
     provenance: tracedCapButtonEvidence,
   };
 };

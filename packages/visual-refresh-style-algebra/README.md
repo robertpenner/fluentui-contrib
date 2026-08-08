@@ -32,6 +32,11 @@ This package is an experiment, not a production dependency or a statement of pri
 
 `ForcedColorsContract` separately captures system roles, focus, visible boundaries, and disabled distinguishability. `EmittedStyleRule` then represents media, selector, component/slot scope, declarations, precedence, order, specificity, and provenance. A synthetic emission experiment demonstrates safe exact deduplication. A second instrument captures real runtime Griffel output from public CAP Button-family style hooks, feeds it into the same normalizer, and compares enabled, disabled, selected, and alternate-appearance fixtures without conflating emission with browser paint.
 
+The production-faithful CAP Button path accepts only the semantic token values used by its grounded static paint and
+focus rules. Named Fluent light and dark themes are fixture adapters, not Button axes. Provider direction is observed
+separately and physical declarations are normalized to logical geometry; the current 45-case plain-Button matrix
+records LTR and RTL as equivalent after that normalization. Forced colors remains independently resolvable.
+
 ## Run the program
 
 Run commands from the repository root:

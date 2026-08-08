@@ -14,11 +14,15 @@ import {
   type CapButtonGeometry,
   type CapButtonScenario,
   CapFixtureProvider,
+  projectCapButtonThemeInput,
   productionButtonGeneratedClassCensus,
   productionButtonShapes,
   productionButtonSizes,
   resolveCleanRoomCapButton,
 } from '../../src';
+import { capTheme } from '../../src/fixtures/capButtonFamily';
+
+const capButtonStoryTheme = projectCapButtonThemeInput(capTheme);
 
 const useStyles = makeStyles({
   root: {
@@ -558,7 +562,8 @@ export const CapAuditIntroduction = (): React.ReactElement => {
             {geometryEvidenceCases.map(({ label, scenario }) => {
               const contract = resolveCleanRoomCapButton(
                 scenario,
-                geometryConditions
+                geometryConditions,
+                capButtonStoryTheme
               );
               const iconPosition =
                 scenario.content.iconPosition === 'omitted'

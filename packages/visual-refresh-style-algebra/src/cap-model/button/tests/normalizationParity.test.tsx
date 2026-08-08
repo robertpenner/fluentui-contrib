@@ -7,6 +7,7 @@ import {
   observeCapButtonProductionScenarios,
   tracedCapButtonConditions,
   tracedCapButtonScenario,
+  tracedCapButtonTheme,
 } from './productionAdapter';
 
 const semanticProjection = (observation: CapButtonObservation): unknown => ({
@@ -36,7 +37,8 @@ describe('CAP Button normalization and anatomy parity', () => {
     for (const observation of production) {
       const cleanRoom = resolveCleanRoomCapButton(
         observation.scenario,
-        observation.conditions
+        observation.conditions,
+        tracedCapButtonTheme
       );
 
       expect(compareCapButton(observation, cleanRoom)).toEqual([]);
@@ -103,7 +105,8 @@ describe('CAP Button normalization and anatomy parity', () => {
       );
       const cleanRoom = resolveCleanRoomCapButton(
         scenario,
-        tracedCapButtonConditions
+        tracedCapButtonConditions,
+        tracedCapButtonTheme
       );
 
       expect(production.normalized).toMatchObject({
@@ -123,7 +126,8 @@ describe('CAP Button normalization and anatomy parity', () => {
     );
     const cleanRoom = resolveCleanRoomCapButton(
       tracedCapButtonScenario,
-      tracedCapButtonConditions
+      tracedCapButtonConditions,
+      tracedCapButtonTheme
     );
     const mutations: ReadonlyArray<readonly [CapButtonObservation, string]> = [
       [

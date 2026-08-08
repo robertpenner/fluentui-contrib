@@ -13,6 +13,7 @@ import {
   observeCapButtonProductionScenarios,
   tracedCapButtonConditions,
   tracedCapButtonScenario,
+  tracedCapButtonTheme,
 } from './productionAdapter';
 
 const contentEffects = {
@@ -77,7 +78,8 @@ describe('CAP Button geometry parity', () => {
     for (const observation of production) {
       const cleanRoom = resolveCleanRoomCapButton(
         observation.scenario,
-        observation.conditions
+        observation.conditions,
+        tracedCapButtonTheme
       );
 
       expect(compareCapButton(observation, cleanRoom)).toEqual([]);
@@ -149,7 +151,8 @@ describe('CAP Button geometry parity', () => {
     );
     const cleanRoom = resolveCleanRoomCapButton(
       tracedCapButtonScenario,
-      tracedCapButtonConditions
+      tracedCapButtonConditions,
+      tracedCapButtonTheme
     );
     const productionIcon = production.geometry.icon;
 

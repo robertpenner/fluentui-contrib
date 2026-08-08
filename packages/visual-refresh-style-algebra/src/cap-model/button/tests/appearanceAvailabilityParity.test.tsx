@@ -14,6 +14,7 @@ import {
   observeCapButtonProductionScenarios,
   tracedCapButtonConditions,
   tracedCapButtonScenario,
+  tracedCapButtonTheme,
 } from './productionAdapter';
 
 const availabilityPairs = [
@@ -80,7 +81,8 @@ describe('CAP Button appearance and availability parity', () => {
     for (const observation of production) {
       const cleanRoom = resolveCleanRoomCapButton(
         observation.scenario,
-        observation.conditions
+        observation.conditions,
+        tracedCapButtonTheme
       );
 
       expect(compareCapButton(observation, cleanRoom)).toEqual([]);
@@ -173,7 +175,8 @@ describe('CAP Button appearance and availability parity', () => {
     );
     const cleanRoom = resolveCleanRoomCapButton(
       tracedCapButtonScenario,
-      tracedCapButtonConditions
+      tracedCapButtonConditions,
+      tracedCapButtonTheme
     );
     const focus = production.rootAppearance.focusTreatment;
     const mutateFocus = <Field extends keyof CapButtonStaticFocusTreatment>(
@@ -254,7 +257,8 @@ describe('CAP Button appearance and availability parity', () => {
   it('pins appearance evidence without claiming product support', () => {
     const contract = resolveCleanRoomCapButton(
       tracedCapButtonScenario,
-      tracedCapButtonConditions
+      tracedCapButtonConditions,
+      tracedCapButtonTheme
     );
     const appearanceEvidence = contract.provenance.filter((evidence) =>
       evidence.scenarioProjection.includes('appearance')

@@ -94,6 +94,29 @@ export type {
   CapButtonStyleSelections,
 } from './cap-model/button/CapButtonObservation';
 export type { CapButtonContract } from './cap-model/button/CapButtonContract';
+export {
+  capButtonThemeInputKeys,
+  compareCapButtonThemeInput,
+  projectCapButtonThemeInput,
+} from './cap-model/button/CapButtonTheme';
+export type {
+  CapButtonThemeInput,
+  CapButtonThemeInputDifference,
+  CapButtonThemeInputKey,
+} from './cap-model/button/CapButtonTheme';
+export {
+  capButtonDirectionObservedEquivalence,
+  compareCapButtonLogicalGeometry,
+  normalizeCapButtonGeometry,
+} from './cap-model/button/CapButtonDirection';
+export type {
+  CapButtonDirection,
+  CapButtonLogicalGeometry,
+  CapButtonLogicalGeometryDifference,
+  CapButtonLogicalGeometryPath,
+  CapButtonLogicalIconGeometry,
+  CapButtonLogicalRootGeometry,
+} from './cap-model/button/CapButtonDirection';
 export type {
   CapButtonInteractionAvailability,
   CapButtonInteractionContract,
@@ -163,6 +186,7 @@ export type {
 } from './cap-model/button/semanticProfiles';
 export {
   capButtonAppearanceAvailabilityEvidence,
+  capButtonDirectionEvidence,
   capButtonForcedColorsRuntimeEvidence,
   capButtonGeometryEvidence,
   capButtonInteractionBrowserBaseline,

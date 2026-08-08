@@ -178,6 +178,19 @@ export const capButtonForcedColorsRuntimeEvidence: CapModelEvidence = {
   support: 'unknown',
 };
 
+export const capButtonDirectionEvidence: CapModelEvidence = {
+  productionBaseline: capButtonProductionBaseline.id,
+  productionSymbol:
+    'FluentProvider dir, CAP Button root and icon computed declarations',
+  scenarioProjection:
+    'direction over 3 sizes, 3 shapes, and 5 normalized content effects',
+  observation:
+    'LTR and RTL produce equivalent static Button geometry after physical padding, icon margins, and corner radii are projected to logical start/end fields.',
+  interpretation:
+    'Provider direction is independently observed context, not an authored Button axis; the scoped semantic contract records equivalence after normalization.',
+  support: 'unknown',
+};
+
 export const tracedCapButtonEvidence: readonly CapModelEvidence[] = [
   {
     productionBaseline: capButtonProductionBaseline.id,
