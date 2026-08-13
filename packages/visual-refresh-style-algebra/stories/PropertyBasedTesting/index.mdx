@@ -1,14 +1,18 @@
-import { Meta, Title } from '@storybook/addon-docs/blocks';
+import { Meta, Title } from "@storybook/addon-docs/blocks";
 import {
   ChangeSpreadVisual,
   ContractVisual,
   PropertyBasedTestingExamples,
   RequestedChangeVisual,
-} from './PropertyBasedTestingExamples';
+} from "./PropertyBasedTestingExamples";
 
 <Meta title="Packages/visual-refresh-style-algebra/Testing a CAP styling change" />
 
 <Title>From a product styling request to a safe CAP change</Title>
+
+New to property-based testing? Begin with [Property-based testing: taming
+component state explosion](?path=/docs/packages-visual-refresh-style-algebra-property-based-testing-taming-component-state-explosion--docs)
+for a gentler introduction to generated cases and narrowing failures.
 
 A product styling request often sounds small: “change this color,” “tighten this
 spacing,” or “make this state more prominent.” The hard part is not writing the
@@ -134,27 +138,18 @@ the same problem.
   <tbody>
     <tr>
       <td>A clear preservation-law violation</td>
-      <td>
-        Change the implementation and keep the smallest case as a regression
-        test.
-      </td>
+      <td>Change the implementation and keep the smallest case as a regression test.</td>
       <td>Hover now recolors a disabled Button.</td>
     </tr>
     <tr>
       <td>An unclear permission boundary</td>
       <td>Clarify design intent before changing more code.</td>
-      <td>
-        The request says “disabled,” but does not address
-        disabled-but-focusable.
-      </td>
+      <td>The request says “disabled,” but does not address disabled-but-focusable.</td>
     </tr>
     <tr>
       <td>A cross-product or shared-component decision</td>
       <td>Escalate a governance decision and record the owner.</td>
-      <td>
-        Teams and SharePoint need different disabled behavior from one shared
-        CAP hook.
-      </td>
+      <td>Teams and SharePoint need different disabled behavior from one shared CAP hook.</td>
     </tr>
   </tbody>
 </table>
@@ -186,10 +181,7 @@ Bring one proposed component change and fill in this worksheet:
     </tr>
     <tr>
       <th scope="row">Evidence</th>
-      <td>
-        This law comes from production observation / a derived rule / a product
-        decision.
-      </td>
+      <td>This law comes from production observation / a derived rule / a product decision.</td>
     </tr>
     <tr>
       <th scope="row">Owner if unclear</th>

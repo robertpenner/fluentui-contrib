@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
+  "scripts": {
+    "storybook": "nx run visual-refresh-style-algebra:storybook"
+  },
   "dependencies": {
     "@swc/helpers": "~0.5.11"
   },

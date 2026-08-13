@@ -1,0 +1,144 @@
+import { Meta, Title } from '@storybook/addon-docs/blocks';
+import {
+  NarrowingFailure,
+  OneButtonLaws,
+  ValidButtonVariations,
+} from './PropertyBasedTestingIntroduction';
+
+<Meta title="Packages/visual-refresh-style-algebra/Property-based testing: taming component state explosion" />
+
+<Title>Property-based testing: taming component state explosion</Title>
+
+Every component option multiplies the test matrix. Property-based testing helps
+tame that growth by generating valid variations, checking the laws they must
+obey, and shrinking failures to a small example.
+
+Even a simplified Button produces a sizable matrix:
+
+- **Appearance:** Primary, Outline, Subtle, or Transparent
+- **Size:** Small, Medium, or Large
+- **Content layout:** Text only, or icon and text
+- **State:** Enabled or Disabled
+
+**4 appearances × 3 sizes × 2 content layouts × 2 states = 48 combinations**
+
+That is before adding shapes, icon positions, themes, directions, or interaction
+states. This rapid multiplication is the **state explosion**.
+
+Property-based testing does not make the combination space disappear or
+guarantee that every possible combination ran. It gives us a structured way to
+explore valid variations and understand what failed.
+
+## 1. Define the laws
+
+Suppose a team changes the colors used by disabled Buttons. The same change
+reaches different sizes, appearances, shapes, and content arrangements. Before
+testing those variations, we write down what is allowed to change and what must
+remain.
+
+A **law** is an agreed behavior that the Buttons covered by the test must obey.
+Property-based testing calls a law expressed as a pass-or-fail check a
+**property**.
+
+<OneButtonLaws />
+
+For this Primary Button, the disabled colors differ as permitted, while the
+guides show that its height and content alignment stay the same. This comparison
+helps us see the laws before we automate them.
+
+## 2. Turn the laws into an executable property
+
+For property-based testing on the web, we use the
+[`fast-check`](https://fast-check.dev/) library. It integrates with familiar test
+runners such as Jest or Vitest, so generated cases can use the same assertions
+and run alongside example-based tests. Here is the core of a simplified test:
+
+```ts
+import fc from 'fast-check';
+
+// Generate only combinations the Button supports.
+const buttonCases = fc.record({
+  appearance: fc.constantFrom('primary', 'outline', 'subtle', 'transparent'),
+  size: fc.constantFrom('small', 'medium', 'large'),
+  hasIcon: fc.boolean(),
+});
+
+fc.assert(
+  fc.property(buttonCases, (props) => {
+    // Compare the same Button before and after disabling it.
+    const enabled = measureButton(props);
+    const disabled = measureButton({ ...props, disabled: true });
+
+    // Preserve size and content position; colors may change.
+    expect(disabled.height).toBe(enabled.height);
+    expect(disabled.contentOffset).toEqual(enabled.contentOffset);
+  })
+);
+```
+
+`buttonCases` generates valid combinations. For each combination, the property
+renders and measures the enabled and disabled Button. That combination passes
+only when the height and content-position checks pass. There is no color check
+because the permission law allows the disabled colors to change.
+
+Here, `measureButton` is shorthand for a test helper that renders a real Button
+and measures its size and content position. Simulated DOM environments such as
+jsdom do not calculate layout, so these measurements need a real browser test.
+
+## 3. Let the test explore valid variations
+
+The generator picks among choices the Button already supports, such as
+appearance, size, shape, and content. For every generated Button, it asks the
+same question: did disabling the Button change its height or move its content?
+
+Because the generator uses supported Button props, it produces meaningful
+combinations rather than arbitrary or invalid markup. `fast-check` can explore
+more of these combinations than a person would usually write by hand.
+
+The order can vary, but a saved random seed makes a run reproducible.
+
+This does not guarantee that every possible combination ran. It provides broad,
+repeatable exploration without requiring a person to author every example.
+
+<ValidButtonVariations />
+
+## 4. When a failure appears, remove what does not matter
+
+Suppose disabled styling accidentally adds extra vertical padding. This is not
+current CAP behavior, but it shows what happens when a color change also changes
+the Button's size. The color difference is permitted; the extra padding breaks
+the preservation law.
+
+<NarrowingFailure />
+
+State explosion also affects diagnosis: the first failure can carry many details
+that have nothing to do with the cause.
+
+**large + rounded + Primary + icon after + enabled/disabled**
+
+During shrinking, `fast-check` removes one detail at a time and reruns the
+property. If the Button still violates the preservation law, that detail was not
+needed to reproduce the problem. Eventually the useful example becomes:
+
+**enabled/disabled**
+
+Property-based testing calls this automatic narrowing **shrinking**. The exact
+steps may differ, but the goal is the same: keep the failure while removing
+details that do not cause it.
+
+## What this gives the team
+
+- **Explicit permission and preservation laws** instead of an ambiguous snapshot.
+- **One executable property** instead of many nearly identical example tests.
+- **Broader exploration** across valid component inputs.
+- **A small explanation** when something breaks.
+- **A reproducible case** that can become a named regression test.
+
+Property-based testing does not decide whether a color is attractive, approve a
+product request, or replace browser and accessibility testing. Its core value is
+more focused: it checks whether agreed laws survive variation and turns a complex
+failure into a case a person can understand.
+
+Continue to [Testing a CAP styling change](?path=/docs/packages-visual-refresh-style-algebra-testing-a-cap-styling-change--docs)
+to apply this idea to permission boundaries, preservation laws, and production
+CAP evidence.
