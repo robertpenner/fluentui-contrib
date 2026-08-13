@@ -1,0 +1,245 @@
+import { Meta, Title } from '@storybook/addon-docs/blocks';
+import {
+  ChangeSpreadVisual,
+  ContractVisual,
+  PropertyBasedTestingExamples,
+  RequestedChangeVisual,
+} from './PropertyBasedTestingExamples';
+
+<Meta title="Packages/visual-refresh-style-algebra/Testing a CAP styling change" />
+
+<Title>From a product styling request to a safe CAP change</Title>
+
+A product styling request often sounds small: “change this color,” “tighten this
+spacing,” or “make this state more prominent.” The hard part is not writing the
+first CSS rule. It is knowing what else that rule is allowed to affect.
+
+This page follows one change through a repeatable practitioner workflow. It also
+shows where property-based testing helps: the test tool creates many valid cases,
+changes one condition at a time, and checks the same design rule in each case.
+
+## 1. The problem: a product wants to change X
+
+Suppose a product wants a new background color for disabled Buttons in ordinary
+color mode.
+
+Before touching code, make **X** specific:
+
+- Does the request apply to Primary only, or all appearances?
+- Does “disabled” include disabled-but-focusable Buttons?
+- Does it apply to Button only, or also ToggleButton and SplitButton?
+- Is the request limited to ordinary colors, or does it include forced colors?
+
+A precise starting statement might be:
+
+> For this product, change the ordinary-color background of disabled Primary
+> Buttons. Do not change other appearances yet.
+
+That sentence is narrow enough to investigate. It does not pretend the unanswered
+questions are already settled.
+
+<RequestedChangeVisual />
+
+## 2. Why it gets difficult: the effect spreads across Y and Z
+
+The disabled background participates in more than one styling decision:
+
+- **Y, nearby states:** rest, hover, active, disabled-but-focusable, and keyboard
+  focus can share or override surface rules.
+- **Z, surrounding systems:** forced colors, themes, reading direction, derived
+  Button components, and Griffel's generated CSS can take different paths.
+
+A local CSS edit can therefore produce a distant regression. For example, a new
+disabled background might accidentally gain a hover color, overwrite a keyboard
+focus boundary, leak into forced colors, or affect every Button appearance.
+
+This is the complexity property-based testing is good at. It does not decide the
+correct color. It checks whether the requested permission stays inside its stated
+boundary while surrounding guarantees remain intact.
+
+<ChangeSpreadVisual />
+
+## 3. Write the contract: what may change, and what must stay
+
+Write two kinds of laws before editing the implementation.
+
+### Permission law
+
+A permission law says what the change is allowed to alter:
+
+> In ordinary colors, the disabled Primary Button background may change for the
+> target product.
+
+This prevents a preservation test from freezing the very field the product asked
+to change.
+
+### Preservation laws
+
+A preservation law says what the system must keep:
+
+> Hover and active must not restyle a disabled Button.
+
+> The disabled text and boundary treatment must remain distinguishable.
+
+> Forced-colors roles must not change as a side effect of the ordinary-color edit.
+
+> Disabled-but-focusable must retain its keyboard focus treatment.
+
+<ContractVisual />
+
+Good laws name observable outcomes, not implementation details. “Keep class
+`fabc123`” is brittle. “Hover does not recolor a disabled Button” describes the
+behavior we care about even if generated class names change.
+
+## 4. Run the case: expose a violation or a missing decision
+
+The generated test creates a valid Button case, copies it, and changes one
+condition. It then compares only the fields named by the law. If a case fails,
+the test tool removes unrelated details until the report is small enough to
+understand.
+
+<PropertyBasedTestingExamples />
+
+The first example is the preservation law from this workflow. It compares a
+disabled Primary Button at rest with the same Button under hover. The current CAP
+model reports no visual change.
+
+The second example shows why the compared fields must be precise. Keyboard focus
+is allowed to change the focus border, but it must preserve the existing fill and
+text color. Saying “the whole surface must stay the same” would reject correct
+focus behavior.
+
+A run can reveal three useful outcomes:
+
+1. **Violation:** the code changed something the contract says to preserve.
+2. **Ambiguity:** the team cannot say whether a changed field is permitted.
+3. **Missing decision:** the request does not say which appearances, components,
+   environments, or products are in scope.
+
+All three are progress. Only the first is necessarily a code defect.
+
+## 5. Take action
+
+Use the result to choose the next action rather than treating every red test as
+the same problem.
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">What the case exposed</th>
+      <th scope="col">Action</th>
+      <th scope="col">Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A clear preservation-law violation</td>
+      <td>
+        Change the implementation and keep the smallest case as a regression
+        test.
+      </td>
+      <td>Hover now recolors a disabled Button.</td>
+    </tr>
+    <tr>
+      <td>An unclear permission boundary</td>
+      <td>Clarify design intent before changing more code.</td>
+      <td>
+        The request says “disabled,” but does not address
+        disabled-but-focusable.
+      </td>
+    </tr>
+    <tr>
+      <td>A cross-product or shared-component decision</td>
+      <td>Escalate a governance decision and record the owner.</td>
+      <td>
+        Teams and SharePoint need different disabled behavior from one shared
+        CAP hook.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+Property-based testing is valuable here because it produces a focused question.
+It does not make the governance decision for us.
+
+## 6. Try it with one real change
+
+Bring one proposed component change and fill in this worksheet:
+
+<table>
+  <tbody>
+    <tr>
+      <th scope="row">The change</th>
+      <td>A product wants to change ______ for ______.</td>
+    </tr>
+    <tr>
+      <th scope="row">Permission law</th>
+      <td>The product may change ______ when ______.</td>
+    </tr>
+    <tr>
+      <th scope="row">Preservation law</th>
+      <td>When ______ changes, the system must preserve ______.</td>
+    </tr>
+    <tr>
+      <th scope="row">One paired case</th>
+      <td>Compare the same component with ______ off and on.</td>
+    </tr>
+    <tr>
+      <th scope="row">Evidence</th>
+      <td>
+        This law comes from production observation / a derived rule / a product
+        decision.
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">Owner if unclear</th>
+      <td>Ask ______ to resolve the boundary.</td>
+    </tr>
+  </tbody>
+</table>
+
+The permission law keeps the test from blocking intentional change. The
+preservation law keeps the intentional change from spreading silently.
+
+## Where property-based testing fits in this package
+
+The production CAP Button work already has strong finite and browser coverage:
+
+- All 2,592 finite Button input combinations are compared exhaustively. Keep
+  that exhaustive check; random sampling would be weaker.
+- Focused browser tests confirm real hover, focus, forced-colors, and
+  reduced-motion behavior. Keep those checks because pure JavaScript cannot
+  reproduce browser painting and operating-system behavior.
+- Property-based tests currently live in the separate research area. They prove
+  the testing technique can find and simplify deliberate faults, but they do not
+  certify production CAP styling.
+
+The proposed production use is **generated paired checks around the clean-room
+implementation and production-backed rules**. Start with disabled pointer
+suppression, focus composition, LTR/RTL isolation, reduced-motion isolation, and
+equivalent inputs after Fluent applies defaults.
+
+## Guardrails for useful generated tests
+
+1. Generate only inputs the public API or a recorded browser action can produce.
+2. Tie every law to a production observation, a derived rule, or an explicit
+   product decision.
+3. Change one meaningful condition per comparison.
+4. Compare user-visible fields, not generated class names.
+5. Introduce a test-only fault to prove the law can fail.
+6. Keep the random seed and replay path, then save the smallest failure as a
+   named regression test.
+7. Use a modest deterministic run in pull requests and deeper runs on a schedule.
+
+## What this workflow does not replace
+
+It does not replace visual review, accessibility review, real browser and
+operating-system testing, or product governance. It is also not good at deciding
+whether an isolated color or spacing value is aesthetically correct.
+
+Its strength is controlling the spread of a change. It helps a practitioner say,
+“this field may change, these relationships must survive, and this is the smallest
+case that shows where our decision or implementation breaks down.”
+
+Continue to the [CAP Button audit](?path=/docs/packages-visual-refresh-style-algebra-cap-button-audit--docs)
+to inspect the production inputs and evidence behind these contracts.
