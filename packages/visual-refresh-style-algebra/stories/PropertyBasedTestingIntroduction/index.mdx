@@ -1,5 +1,6 @@
 import { Meta, Title } from '@storybook/addon-docs/blocks';
 import {
+  ButtonDimensionMatrix,
   NarrowingFailure,
   OneButtonLaws,
   ValidButtonVariations,
@@ -13,12 +14,10 @@ Every component option multiplies the test matrix. Property-based testing helps
 tame that growth by generating valid variations, checking the laws they must
 obey, and shrinking failures to a small example.
 
-Even a simplified Button produces a sizable matrix:
+Even a simplified Button produces a sizable matrix. Each row below changes one
+dimension while holding the others at the baseline.
 
-- **Appearance:** Primary, Outline, Subtle, or Transparent
-- **Size:** Small, Medium, or Large
-- **Content layout:** Text only, or icon and text
-- **State:** Enabled or Disabled
+<ButtonDimensionMatrix />
 
 **4 appearances × 3 sizes × 2 content layouts × 2 states = 48 combinations**
 

@@ -1,9 +1,33 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
-import { PropertyBasedTestingIntroduction } from './PropertyBasedTestingIntroduction';
+import {
+  ButtonDimensionMatrix,
+  PropertyBasedTestingIntroduction,
+} from './PropertyBasedTestingIntroduction';
 
 describe('PropertyBasedTestingIntroduction', () => {
+  it('shows all 11 matrix values against a shared baseline', () => {
+    render(<ButtonDimensionMatrix />);
+
+    const matrix = screen.getByRole('region', {
+      name: 'Button matrix dimensions',
+    });
+
+    expect(matrix.querySelectorAll('button')).toHaveLength(11);
+    expect(
+      screen.getByRole('list', { name: 'Appearance values' })
+    ).toBeTruthy();
+    expect(screen.getByRole('list', { name: 'Size values' })).toBeTruthy();
+    expect(
+      screen.getByRole('list', { name: 'Content layout values' })
+    ).toBeTruthy();
+    expect(screen.getByRole('list', { name: 'State values' })).toBeTruthy();
+    expect(
+      screen.getByText('Baseline: Primary · Medium · Text only · Enabled')
+    ).toBeTruthy();
+  });
+
   it('shows executable laws, valid variation, and a clearly labeled narrowing demo', () => {
     render(<PropertyBasedTestingIntroduction />);
 

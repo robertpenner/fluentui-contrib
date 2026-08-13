@@ -36,6 +36,61 @@ const useStyles = makeStyles({
     color: tokens.colorNeutralForeground2,
     lineHeight: tokens.lineHeightBase400,
   },
+  matrix: {
+    display: 'grid',
+    gap: tokens.spacingVerticalM,
+    padding: tokens.spacingHorizontalL,
+    backgroundColor: tokens.colorNeutralBackground2,
+    borderTop: `${tokens.strokeWidthThick} solid ${tokens.colorBrandStroke1}`,
+  },
+  matrixIntro: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'baseline',
+    gap: `${tokens.spacingVerticalXXS} ${tokens.spacingHorizontalM}`,
+  },
+  matrixBaseline: {
+    color: tokens.colorNeutralForeground3,
+    fontSize: tokens.fontSizeBase200,
+  },
+  matrixRows: {
+    display: 'grid',
+    gap: tokens.spacingVerticalM,
+  },
+  matrixRow: {
+    display: 'grid',
+    gridTemplateColumns: '7rem minmax(0, 1fr)',
+    alignItems: 'start',
+    gap: tokens.spacingHorizontalM,
+    minWidth: 0,
+    '@media (max-width: 640px)': {
+      gridTemplateColumns: 'minmax(0, 1fr)',
+    },
+  },
+  matrixDimension: {
+    paddingBlockStart: tokens.spacingVerticalS,
+    fontSize: tokens.fontSizeBase300,
+    fontWeight: tokens.fontWeightSemibold,
+  },
+  matrixValues: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'end',
+    gap: tokens.spacingHorizontalM,
+    margin: 0,
+    padding: 0,
+    listStyleType: 'none',
+  },
+  matrixValue: {
+    display: 'grid',
+    justifyItems: 'center',
+    gap: tokens.spacingVerticalXS,
+    minWidth: '5.5rem',
+  },
+  matrixValueLabel: {
+    color: tokens.colorNeutralForeground3,
+    fontSize: tokens.fontSizeBase200,
+  },
   lawGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
@@ -198,6 +253,103 @@ const useStyles = makeStyles({
 const simulatedFaultStyle: React.CSSProperties = {
   paddingBlock: tokens.spacingVerticalXXL,
 };
+
+type MatrixValue = {
+  readonly buttonProps?: React.ComponentProps<typeof Button>;
+  readonly label: string;
+};
+
+type MatrixRowProps = {
+  readonly dimension: string;
+  readonly values: readonly MatrixValue[];
+};
+
+const MatrixRow = ({
+  dimension,
+  values,
+}: MatrixRowProps): React.ReactElement => {
+  const styles = useStyles();
+
+  return (
+    <div className={styles.matrixRow}>
+      <span className={styles.matrixDimension}>{dimension}</span>
+      <ul className={styles.matrixValues} aria-label={`${dimension} values`}>
+        {values.map(({ buttonProps, label }) => (
+          <li className={styles.matrixValue} key={label}>
+            <Button appearance="primary" {...buttonProps}>
+              Save
+            </Button>
+            <span className={styles.matrixValueLabel}>{label}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+MatrixRow.displayName = 'MatrixRow';
+
+const matrixRows: readonly MatrixRowProps[] = [
+  {
+    dimension: 'Appearance',
+    values: [
+      { label: 'Primary' },
+      { label: 'Outline', buttonProps: { appearance: 'outline' } },
+      { label: 'Subtle', buttonProps: { appearance: 'subtle' } },
+      { label: 'Transparent', buttonProps: { appearance: 'transparent' } },
+    ],
+  },
+  {
+    dimension: 'Size',
+    values: [
+      { label: 'Small', buttonProps: { size: 'small' } },
+      { label: 'Medium' },
+      { label: 'Large', buttonProps: { size: 'large' } },
+    ],
+  },
+  {
+    dimension: 'Content layout',
+    values: [
+      { label: 'Text only' },
+      { label: 'Icon + text', buttonProps: { icon: <Add20Regular /> } },
+    ],
+  },
+  {
+    dimension: 'State',
+    values: [
+      { label: 'Enabled' },
+      { label: 'Disabled', buttonProps: { disabled: true } },
+    ],
+  },
+];
+
+export const ButtonDimensionMatrix = (): React.ReactElement => {
+  const styles = useStyles();
+
+  return (
+    <CapFixtureProvider>
+      <section
+        className={styles.matrix}
+        aria-label="Button matrix dimensions"
+        role="region"
+      >
+        <div className={styles.matrixIntro}>
+          <h2 className={styles.heading}>Change one dimension at a time</h2>
+          <span className={styles.matrixBaseline}>
+            Baseline: Primary · Medium · Text only · Enabled
+          </span>
+        </div>
+        <div className={styles.matrixRows}>
+          {matrixRows.map((row) => (
+            <MatrixRow key={row.dimension} {...row} />
+          ))}
+        </div>
+      </section>
+    </CapFixtureProvider>
+  );
+};
+
+ButtonDimensionMatrix.displayName = 'ButtonDimensionMatrix';
 
 type ButtonPairProps = {
   readonly buttonProps?: React.ComponentProps<typeof Button>;
