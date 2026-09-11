@@ -107,7 +107,8 @@
   },
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "!packages/storybook-addon-fluent-inspector"
   ],
   "resolutions": {
     "@storybook/addon-docs/@jest/transform": "^30",
