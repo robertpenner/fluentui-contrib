@@ -10,11 +10,22 @@ export function FluentInspectorPanel() {
   const [snapshot, setSnapshot] = React.useState<FluentInspectorSnapshot>(emptySnapshot);
   const [selectedId, setSelectedId] = React.useState<string>();
 
-  const emit = useChannel({
-    [EVENTS.TREE]: (nextSnapshot: FluentInspectorSnapshot) => {
-      setSnapshot(nextSnapshot);
+  const emit = useChannel(
+    {
+      [EVENTS.TREE]: (nextSnapshot: FluentInspectorSnapshot) => {
+        setSnapshot(nextSnapshot);
+      },
     },
-  });
+    []
+  );
+
+  React.useEffect(() => {
+    emit(EVENTS.REFRESH);
+
+    return () => {
+      emit(EVENTS.SELECT, undefined);
+    };
+  }, [emit]);
 
   const selectedNode = React.useMemo(
     () => (selectedId ? findNode(snapshot.roots, selectedId) : undefined),
