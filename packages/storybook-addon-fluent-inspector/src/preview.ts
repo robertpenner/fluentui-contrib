@@ -15,7 +15,7 @@ interface StoryContextLike {
   id: string;
 }
 
-function ensureChannelListeners() {
+function ensureChannelListeners(): void {
   if (channelInitialized) {
     return;
   }
@@ -33,17 +33,18 @@ function ensureChannelListeners() {
   channelInitialized = true;
 }
 
-function scheduleDiscovery(storyId?: string) {
+function scheduleDiscovery(storyId?: string): void {
   currentStoryId = storyId;
 
   if (scheduledFrame !== undefined) {
-    cancelAnimationFrame(scheduledFrame);
+    globalThis.cancelAnimationFrame(scheduledFrame);
   }
 
-  scheduledFrame = requestAnimationFrame(() => {
+  scheduledFrame = globalThis.requestAnimationFrame(() => {
     scheduledFrame = undefined;
 
-    const root = document.getElementById('storybook-root') ?? document.body;
+    const root =
+      globalThis.document.getElementById('storybook-root') ?? globalThis.document.body;
     const result = discoverFluentTree(root, currentStoryId);
     elementsById = result.elementsById;
 
@@ -51,7 +52,7 @@ function scheduleDiscovery(storyId?: string) {
   });
 }
 
-function withFluentInspector(Story: StoryFn, context: StoryContextLike) {
+function withFluentInspector(Story: StoryFn, context: StoryContextLike): unknown {
   ensureChannelListeners();
   scheduleDiscovery(context.id);
   return Story();
