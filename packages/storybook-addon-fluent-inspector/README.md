@@ -70,11 +70,13 @@ The next important layer is to join these current runtime values with Fluent/doc
 - semantic grouping;
 - eventually, safe editing controls.
 
-## Packaging caveat
+## Prototype loading and packaging
 
-This workspace's shared Nx build executor currently rewrites package exports to only `.` and `./package.json`. Storybook addons require dedicated `./manager` and `./preview` exports.
+The source is deliberately shaped like a publishable Storybook addon, with `manager` and `preview` entry points and an intended package manifest. During this feasibility phase, however, the root Storybook loads those source entries through `.storybook/fluent-inspector-preset.ts` using Storybook's `managerEntries` and `previewAnnotations` preset APIs.
 
-For that reason this package currently exposes its TypeScript workspace source directly and has Storybook targets, but deliberately has no normal package `build` target. The MVP should prove the runtime architecture before changing the shared build executor or adding a package-specific addon bundler.
+The package is excluded from the root Yarn workspace glob for now. This avoids introducing a generated lockfile entry before the addon is actually ready to participate in the repo's normal package lifecycle.
+
+There is a second reason to defer normal packaging: this workspace's shared Nx build executor currently rewrites package exports to only `.` and `./package.json`, while a publishable Storybook addon needs `./manager` and `./preview` exports. Once the runtime experiment is proven, we can either add an addon-specific bundler/build path or safely teach the shared executor to preserve explicit subpath exports.
 
 ## Explicit non-goals for this prototype
 
