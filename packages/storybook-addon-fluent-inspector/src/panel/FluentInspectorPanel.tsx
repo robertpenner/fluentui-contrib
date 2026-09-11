@@ -10,14 +10,11 @@ export function FluentInspectorPanel() {
   const [snapshot, setSnapshot] = React.useState<FluentInspectorSnapshot>(emptySnapshot);
   const [selectedId, setSelectedId] = React.useState<string>();
 
-  const emit = useChannel(
-    {
-      [EVENTS.TREE]: (nextSnapshot: FluentInspectorSnapshot) => {
-        setSnapshot(nextSnapshot);
-      },
+  const emit = useChannel({
+    [EVENTS.TREE]: (nextSnapshot: FluentInspectorSnapshot) => {
+      setSnapshot(nextSnapshot);
     },
-    []
-  );
+  });
 
   React.useEffect(() => {
     emit(EVENTS.REFRESH);
