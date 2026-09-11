@@ -1,4 +1,10 @@
+import { fileURLToPath } from 'node:url';
+
 import type { StorybookConfig } from '@storybook/react-webpack5';
+
+const fluentInspectorPreset = fileURLToPath(
+  new URL('./fluent-inspector-preset.ts', import.meta.url)
+);
 
 const config: StorybookConfig = {
   stories: [],
@@ -7,7 +13,7 @@ const config: StorybookConfig = {
     '@storybook/addon-docs',
     '@nx/react/plugins/storybook',
     '@storybook/addon-webpack5-compiler-babel',
-    './fluent-inspector-preset.ts',
+    fluentInspectorPreset,
   ],
 
   framework: {
