@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 
-export function managerEntries(entry: string[] = []) {
+export function managerEntries(entry: string[] = []): string[] {
   return [
     ...entry,
     fileURLToPath(
@@ -11,7 +11,7 @@ export function managerEntries(entry: string[] = []) {
   ];
 }
 
-export function previewAnnotations(entry: string[] = []) {
+export function previewAnnotations(entry: string[] = []): string[] {
   return [
     ...entry,
     fileURLToPath(
