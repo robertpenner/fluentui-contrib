@@ -6,7 +6,7 @@ import type { FluentInspectorNode, FluentInspectorSnapshot } from '../types';
 
 const emptySnapshot: FluentInspectorSnapshot = { roots: [] };
 
-export function FluentInspectorPanel() {
+export function FluentInspectorPanel(): React.ReactElement {
   const [snapshot, setSnapshot] = React.useState<FluentInspectorSnapshot>(emptySnapshot);
   const [selectedId, setSelectedId] = React.useState<string>();
 
