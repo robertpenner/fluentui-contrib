@@ -253,6 +253,10 @@ function serializeValue(value: unknown): string {
 
     try {
       const json = JSON.stringify(value);
+      if (json === undefined) {
+        return '[Object]';
+      }
+
       return json.length <= 160 ? json : '[Object]';
     } catch {
       return '[Object]';
