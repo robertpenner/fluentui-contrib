@@ -1,0 +1,15 @@
+{
+  "name": "@fluentui-contrib/storybook-addon-fluent-inspector",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Experimental Fluent-aware component inspector for Storybook",
+  "exports": {
+    ".": "./src/index.ts",
+    "./manager": "./src/manager.tsx",
+    "./preview": "./src/preview.ts",
+    "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "storybook": ">=9.1.0 <10.0.0"
+  }
+}
