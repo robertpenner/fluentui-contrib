@@ -1,12 +1,14 @@
 import { fileURLToPath } from 'node:url';
 
+function resolveLocalEntry(relativePath: string): string {
+  return fileURLToPath(new URL(relativePath, import.meta.url));
+}
+
 export function managerEntries(entry: string[] = []): string[] {
   return [
     ...entry,
-    fileURLToPath(
-      import.meta.resolve(
-        '../packages/storybook-addon-fluent-inspector/src/manager.tsx'
-      )
+    resolveLocalEntry(
+      '../packages/storybook-addon-fluent-inspector/src/manager.tsx'
     ),
   ];
 }
@@ -14,10 +16,8 @@ export function managerEntries(entry: string[] = []): string[] {
 export function previewAnnotations(entry: string[] = []): string[] {
   return [
     ...entry,
-    fileURLToPath(
-      import.meta.resolve(
-        '../packages/storybook-addon-fluent-inspector/src/preview.ts'
-      )
+    resolveLocalEntry(
+      '../packages/storybook-addon-fluent-inspector/src/preview.ts'
     ),
   ];
 }
